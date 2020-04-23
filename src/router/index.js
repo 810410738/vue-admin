@@ -12,6 +12,7 @@ import addQuestionnaire from '@/views/Question/addQuestionnaire.vue'
 
 // 数据模块
 import dataStatistics from '@/views/DataAdmin/dataStatistics.vue'
+import statisticsDetails from '@/views/DataAdmin/statisticsDetails.vue'
 
 import userRoleAdmin from '@/views/SystemAdmin/userRoleAdmin.vue'
 import roleAuthorityAdmin from '@/views/SystemAdmin/roleAuthorityAdmin.vue'
@@ -66,6 +67,10 @@ const routes = [{
         path: 'adminQuestionDetail',
         component: adminQuestionDetail,
       },
+      {
+        path: 'statisticsDetails',
+        component: statisticsDetails,
+      }
       
       
     ]

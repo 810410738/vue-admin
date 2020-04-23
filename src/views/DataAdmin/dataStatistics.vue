@@ -5,9 +5,9 @@
       <el-col :span="12" :offset="12">
         <el-row>
           <el-col :span="8">
-            <el-button type="primary" size="mini">全部</el-button>
-            <el-button type="success" size="mini">已完成</el-button>
-            <el-button type="danger" size="mini">待完成</el-button>
+            <el-button type="primary" size="mini" @click="requestQuestionnaire('')">全部</el-button>
+            <el-button type="success" size="mini" @click="requestQuestionnaire('1')">已完成</el-button>
+            <el-button type="danger" size="mini" @click="requestQuestionnaire('0')">待完成</el-button>
           </el-col>
           <el-col :span="8">
             <el-input placeholder="请输入问卷名称" v-model="keyword" size="mini">
@@ -15,7 +15,7 @@
             </el-input>
           </el-col>
           <el-col :span="3">
-            <el-button type="primary" size="mini" @click="find">查找</el-button>
+            <el-button type="primary" size="mini" @click="find()">查找</el-button>
           </el-col>
         </el-row>
       </el-col>
@@ -33,7 +33,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button size="small" @click="showStatisticsDialog(scope.row.questionnaireId)">查看统计信息</el-button>
-          <el-button size="small">排查详情</el-button>
+          <el-button size="small" @click="checkDetails(scope.row.questionnaireId)">排查详情</el-button>
           <el-button size="small" @click="showDeptData(scope.row.questionnaireId)">机构详情</el-button>
           <el-button
             size="small"
@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { getQuestionnaires } from "@/api/getQuestionData";
+import { getQuestionnaires, endQuestionnaire } from "@/api/getQuestionData";
 import { getDeptData } from "@/api/getDataAdminData";
 import selfProgress from "@/components/dataAdmin/selfProgress";
 import selfStatisticsDialog from "@/components/dataAdmin/selfStatisticsDialog";
@@ -105,7 +105,9 @@ export default {
       keyword: "",
       // 请求问卷列表的参数
       requestQuestionnaireData: {
-        publishStatus: ""
+        publishStatus: "1",
+        doneTag: '',
+        questionnaireName: ''
       },
       // 问卷列表
       getQuestionnaireData: [],
@@ -126,9 +128,9 @@ export default {
         questionnaireId: ""
       },
       // 请求查看网点详情对话框的详情
-      requestDepartDetailsData:{
-        questionnaireId:'',
-        deptName:''
+      requestDepartDetailsData: {
+        questionnaireId: "",
+        deptName: ""
       }
     };
   },
@@ -144,12 +146,43 @@ export default {
     /**
      * @description 查找问卷列表
      */
-    find() {},
+    find() {
+      this.requestQuestionnaireData.questionnaireName = this.keyword;
+      this.init();
+    },
     /**
      * @description 关闭问卷
      * @params questionnaireId 问卷id
      */
-    closeQuestionnaire(questionnaireId) {},
+    closeQuestionnaire(questionnaireId) {
+      this.$alert(
+        "结束问卷后，所有用户无法再作答，该问卷终止排查，请慎重选择",
+        "提示",
+        {
+          callback: action => {
+            this.$confirm("请问确定要结束问卷吗？", "提示", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              type: "warning",
+              center: true
+            }).then(() => {
+              // 请求结束问卷接口
+              var jsonData = {};
+              jsonData.questionnaireId = questionnaireId;
+              endQuestionnaire(jsonData).then(res => {
+                // 弹出成功提示
+                this.$message({
+                  message: "结束问卷成功",
+                  type: "success"
+                });
+                // 刷新数据
+                this.init();
+              });
+            });
+          }
+        }
+      );
+    },
     /**
      * @description 查看机构详情
      * @params questionnaireId 问卷id
@@ -187,8 +220,28 @@ export default {
     /**
      * @description 关闭查看网点详情对话框
      */
-    closeDepartDetailsDialog(){
+    closeDepartDetailsDialog() {
       this.departDetailsDialogVisible = false;
+    },
+    /**
+     * @description 根据完成状态筛选问卷
+     * @param doTag
+     */
+    requestQuestionnaire(doTag){
+      this.requestQuestionnaireData.doneTag = doTag;
+      this.init();
+    },
+    /**
+     * @description 查看一张问卷的排查详情
+     * @param questionnaireId 问卷id
+     */
+    checkDetails(questionnaireId){
+      this.$router.push({
+        path:'/index/statisticsDetails',
+        query:{
+          questionnaireId:questionnaireId
+        }
+      })
     }
   }
 };

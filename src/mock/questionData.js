@@ -20,3 +20,13 @@ var getQuestionnairesData = {
   "errMsg": "success"
 }
 Mock.mock(questionUrlRoot + 'getQuestionnaires', 'post', getQuestionnairesData);
+
+/**--------------------------------------------------------------------------------------- */
+// 结束问卷
+var endQuestionnaireData = {
+  "extend": {
+  },
+  "errCode": 0,
+  "errMsg": "success"
+}
+Mock.mock(questionUrlRoot + 'endQuestionnaire', 'post', endQuestionnaireData);
