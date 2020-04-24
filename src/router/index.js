@@ -13,6 +13,8 @@ import addQuestionnaire from '@/views/Question/addQuestionnaire.vue'
 // 数据模块
 import dataStatistics from '@/views/DataAdmin/dataStatistics.vue'
 import statisticsDetails from '@/views/DataAdmin/statisticsDetails.vue'
+import abnormal from '@/views/DataAdmin/abnormal.vue'
+import abnormalDetails from '@/views/DataAdmin/abnormalDetails.vue'
 
 import userRoleAdmin from '@/views/SystemAdmin/userRoleAdmin.vue'
 import roleAuthorityAdmin from '@/views/SystemAdmin/roleAuthorityAdmin.vue'
@@ -70,6 +72,13 @@ const routes = [{
       {
         path: 'statisticsDetails',
         component: statisticsDetails,
+      },{
+        path:'abnormal',
+        component: abnormal
+      },
+      {
+        path:'abnormalDetails',
+        component:abnormalDetails
       }
       
       

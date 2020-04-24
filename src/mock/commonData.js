@@ -128,9 +128,9 @@ var AuthorityByLoginRoleData = {
           },
           {
             "nodeId": "32",
-            "nodeName": "查看历史统计",
+            "nodeName": "查看异常记录",
             "checked": true,
-            "nodeUrl": "/index/"
+            "nodeUrl": "/index/abnormal"
           }
         ]
       }
