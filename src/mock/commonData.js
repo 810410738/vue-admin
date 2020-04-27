@@ -1,5 +1,5 @@
 import Mock from 'mockjs'
-import {urlRoot, commonUrlRoot} from './mock'
+import {urlRoot, commonUrlRoot} from '@/api/http.js'
 /**
  * @description 公共接口
  */
@@ -131,6 +131,21 @@ var AuthorityByLoginRoleData = {
             "nodeName": "查看异常记录",
             "checked": true,
             "nodeUrl": "/index/abnormal"
+          }
+        ]
+      },
+      {
+        "nodeId": "4",
+        "nodeName": "系统管理",
+        "checked": true,
+        "nodeUrl": "",
+        "icon":'el-icon-s-data',
+        "chkDisable": false,
+        "children": [{
+            "nodeId": "41",
+            "nodeName": "表单设计",
+            "checked": true,
+            "nodeUrl": "/index/DesignFormList"
           }
         ]
       }

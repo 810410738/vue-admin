@@ -18,6 +18,12 @@ import abnormalDetails from '@/views/DataAdmin/abnormalDetails.vue'
 
 import userRoleAdmin from '@/views/SystemAdmin/userRoleAdmin.vue'
 import roleAuthorityAdmin from '@/views/SystemAdmin/roleAuthorityAdmin.vue'
+
+// 设计表单模块
+import DesignFormList from '@/views/Form/DesignFormList.vue'
+import editForm from '@/views/Form/editForm.vue'
+import checkForm from '@/views/Form/checkForm.vue'
+
 Vue.use(VueRouter)
 
 const routes = [{
@@ -32,6 +38,14 @@ const routes = [{
     children: [{
         path: '',
         component: questionList,
+      },
+      {
+        path: 'DesignFormList',
+        component: DesignFormList,
+      },
+      {
+        path: 'checkForm',
+        component: checkForm,
       },
       {
         path: 'userList',
@@ -83,7 +97,12 @@ const routes = [{
       
       
     ]
-  }
+  },
+  {
+    path: '/Form',
+    component:editForm,
+  },
+
 ]
 
 const router = new VueRouter({

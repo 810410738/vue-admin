@@ -1,5 +1,5 @@
 <template>
-  <div class="manage_page fillcontain">
+  <div>
     <headTop></headTop>
     <el-row style="height: 100%;">
       <el-col :span="4" style="min-height: 100%; background-color: #324057;">

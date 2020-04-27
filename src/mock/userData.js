@@ -1,5 +1,5 @@
 import Mock from 'mockjs'
-import {userUrlRoot, roleAuthorityUrlRoot, dataHandleUrlRoot} from './mock'
+import {userUrlRoot, roleAuthorityUrlRoot, dataHandleUrlRoot} from '@/api/http.js'
 
 /**--------------------------------------------------------------------------------------- */
 //02-导入用户信息

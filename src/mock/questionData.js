@@ -1,5 +1,5 @@
 import Mock from 'mockjs'
-import {questionUrlRoot} from './mock'
+import {questionUrlRoot} from '@/api/http.js'
 /**
  * @description 问卷模块
  */

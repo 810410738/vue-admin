@@ -2,7 +2,7 @@ import Mock from 'mockjs'
 var Random = Mock.Random
 import {
   dataHandleUrlRoot
-} from './mock'
+} from '@/api/http.js'
 /**
  * @description 数据管理模块
  */

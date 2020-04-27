@@ -8,6 +8,10 @@ import './assets/css/public.css';
 // echarts插件
 import echarts from 'echarts';
 Vue.prototype.$echarts = echarts;
+// 引入FormMaking
+import FormMaking from 'form-making'
+import 'form-making/dist/FormMaking.css'
+Vue.use(FormMaking)
 
 // 开发环境
 if (process.env.NODE_ENV === "development") {
@@ -17,6 +21,7 @@ if (process.env.NODE_ENV === "development") {
   require('./mock/dataAdminData.js');
   require('./mock/systemAdminData.js');
   require('./mock/userData.js');
+  require('./mock/formData.js');
 }
 // 生产环境 
 else {

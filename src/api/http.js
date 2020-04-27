@@ -9,6 +9,7 @@ export const commentUrlRoot = urlRoot + "comment/";
 export const questionUrlRoot = urlRoot + "questionnaire/";
 export const userUrlRoot = urlRoot + "user/";
 export const roleAuthorityUrlRoot = urlRoot + "roleAuthority/";
+export const formDesignUrlRoot = urlRoot + "formDesign/";
 // 引入element-ui 的loading方法
 import {
   showLoading,
