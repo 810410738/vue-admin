@@ -1,4 +1,4 @@
-import {post} from './http'
+import {post, get} from './http'
 import {urlRoot, commonUrlRoot} from './http'
 
 /**
@@ -21,6 +21,9 @@ export const getLoginer = data => post( commonUrlRoot + 'getLoginer', data);
 export const findAuthorityByLoginRole = data => post( commonUrlRoot + 'getMenuByLoginRole', data);
 // 05-获取评议系统启动状态
 export const getCurrentCommentOperate = data => post( commonUrlRoot + 'getCurrentCommentOperate', data);
+
+// 测试跨域请求
+export const testProxy = data => get('/statistics/findLoginer', data);
 
 
 

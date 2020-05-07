@@ -4,6 +4,7 @@ let path = require('path')
 function resolve (dir) {
   return path.join(__dirname, dir)
 }
+
 module.exports = {
   // 关闭eslint规范
   lintOnSave:false,
@@ -11,6 +12,7 @@ module.exports = {
   chainWebpack: config => {
     config.resolve.alias
       .set('@', resolve('src')) // key,value自行定义，比如.set('@@', resolve('src/components'))
+      .set('assets', resolve('src/assets'))
   },
 
   configureWebpack: {
@@ -18,7 +20,22 @@ module.exports = {
   },
 
   lintOnSave: false,
-  publicPath: '/aps3/'
+  publicPath: '/aps3/',
+
+  // devServer:{
+  //   open:true,
+  //   host:"localhost",
+  //   port:'8080',
+  //   https:false,
+  //   hotOnly:true,
+  //   proxy:{
+  //     '/aps3':{
+  //       target:'http://localhost:8081/',
+  //       changOrigin:true,
+  //     }
+  //   }
+  // }
+  
 }
 
   

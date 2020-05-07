@@ -32,7 +32,11 @@ var findAllUserData = {
         "secondaryClass": "中心区支行",
         "userName": "ljl_admin",
         "userId": "1398e8d8d5b34bbab22a6823a6b9ed1f",
-        "primaryClass": "中心区支行"
+        "primaryClass": "中心区支行",
+        "systemIdentify": "",
+        "createTime": "",
+        "updateTime": "",
+        "userStatus": "1"
       }]
     }
   },
@@ -65,6 +69,19 @@ var getUserInfoData = {
   "errMsg": "success"
 }
 Mock.mock(userUrlRoot + 'getUserById', 'post', getUserInfoData);
+
+/**--------------------------------------------------------------------------------------- */
+// 修改用户状态
+var changeUserStatusData = {
+  "extend": {
+    
+
+  },
+  "errCode": 0,
+  "errMsg": "success"
+}
+Mock.mock(userUrlRoot + 'changeUserStatus', 'post', changeUserStatusData);
+
 
 /**--------------------------------------------------------------------------------------- */
 // 05-获取所有角色列表(除系统管理员)

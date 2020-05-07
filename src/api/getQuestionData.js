@@ -11,6 +11,10 @@ export const getQuestionnaires = data => post(questionUrlRoot + 'getQuestionnair
 // 结束问卷
 export const endQuestionnaire = data => post(questionUrlRoot + 'endQuestionnaire', data);
 
+// 查看问卷具体题目
+export const getTempQuestionnaire = data => post(questionUrlRoot + 'getTempQuestionnaire', data);
+
+
 
 
 

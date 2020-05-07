@@ -107,6 +107,7 @@ export default {
   /* position: absolute; */
   margin-top: 90px;
   text-align: center;
+  
 }
 .login-wrapper .logo {
   margin-bottom: 45px;

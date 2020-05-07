@@ -13,7 +13,7 @@
       </el-col>
     </el-row>
     <!-- 问卷数据 -->
-    <el-table :data="getQuestionData.list" highlight-current-row style="width: 100%" stripe>
+    <el-table :data="getQuestionData.questionnaireList" highlight-current-row style="width: 100%" stripe>
       <el-table-column type="index" width="100"></el-table-column>
       <el-table-column property="questionnaireName" label="问卷名称" width="350"></el-table-column>
       <el-table-column property="questionnaireFlagValue" label="分配对象" width="150"></el-table-column>
@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { getAdminQuestionList, deleteQuestionnaire, bindQuestionnaireFlag } from "@/api/getQuestionData";
+import { getQuestionnaires, deleteQuestionnaire, bindQuestionnaireFlag } from "@/api/getQuestionData";
 export default {
   data() {
     return {
@@ -100,8 +100,8 @@ export default {
   },
   methods: {
     initData() {
-      getAdminQuestionList(this.requestData).then(res => {
-        this.getQuestionData = res.extend.page;
+      getQuestionnaires(this.requestData).then(res => {
+        this.getQuestionData = res.extend;
       });
     },
     /**

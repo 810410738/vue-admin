@@ -3,20 +3,39 @@
     <h3 class="headTitle">新增问卷</h3>
     <!-- 操作组件 -->
     <el-row>
-      <el-col :span="4" :offset="20">
+      <el-col :span="6" :offset="1">
+        <el-button type="warning" size="small" >下载导入模板</el-button>
+        <el-button type="success" size="small" >上传模板</el-button>
+
+      </el-col>
+      <el-col :span="4" :offset="10">
         <el-button type="primary" size="small" @click="addQuestion">添加题目</el-button>
       </el-col>
     </el-row>
-    <el-form ref="questionData" :model="questionData" label-width="80px">
-      <el-form-item label="问卷标题">
-        <el-input
-          v-model="questionData.questionnaireName"
-          placeholder="请输入问卷的标题"
-          maxlength="50"
-          show-word-limit
-        ></el-input>
-      </el-form-item>
-    </el-form>
+    <el-row>
+      <el-col :span="18" :offset="1">
+        <el-form ref="questionData" :model="questionData" label-width="80px" class="questionData">
+          <el-form-item label="问卷名称">
+            <el-input
+              v-model="questionData.questionnaireName"
+              placeholder="请输入问卷的标题"
+              maxlength="50"
+              show-word-limit
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="标题内容">
+            <el-input
+              type="textarea"
+              v-model="questionData.questionnaireName"
+              :rows="2"
+              maxlength="100"
+              show-word-limit
+            ></el-input>
+          </el-form-item>
+        </el-form>
+      </el-col>
+    </el-row>
+
     <!-- 用户表格数据 -->
     <div class="table_container">
       <el-table
@@ -28,12 +47,12 @@
         stripe
       >
         <el-table-column type="index" :index="changeIndex" label="序号" width="100"></el-table-column>
-        <el-table-column  label="考评项目" width="200">
+        <el-table-column label="考评项目" width="200">
           <template slot-scope="scope">
             <el-input v-model="scope.row.questionTitle"></el-input>
           </template>
         </el-table-column>
-        <el-table-column  label="考评要点" width="500">
+        <el-table-column label="考评要点" width="500">
           <template slot-scope="scope">
             <el-input type="textarea" v-model="scope.row.questionContent"></el-input>
           </template>
@@ -72,8 +91,7 @@ export default {
     };
   },
   components: {},
-  created() {
-  },
+  created() {},
   methods: {
     handleCurrentChange(val) {},
     /**
@@ -95,7 +113,7 @@ export default {
       this.questionData.questionList.push({
         questionTitle: "",
         questionContent: "",
-        questionNum:""
+        questionNum: ""
       });
     },
     /**
@@ -113,16 +131,15 @@ export default {
       var showTips = "";
       if (this.questionData.questionList.length == 0) {
         showTips = "请添加问题";
-      }
-      else{
-        for(var i in this.questionData.questionList){
-          if(this.questionData.questionList[i].questionTitle == ''){
+      } else {
+        for (var i in this.questionData.questionList) {
+          if (this.questionData.questionList[i].questionTitle == "") {
             showTips = "考评项目不可以为空";
             break;
           }
-          if(this.questionData.questionList[i].questionContent == ''){
-             showTips = "考评要点不可以为空";
-             break;
+          if (this.questionData.questionList[i].questionContent == "") {
+            showTips = "考评要点不可以为空";
+            break;
           }
         }
       }
@@ -152,14 +169,14 @@ export default {
       }).then(() => {
         // 验证通过后提交到服务器
         addQuestionnaire(this.questionData).then(res => {
-          this.$alert('新增问卷成功','提示',{
-            center:true,
-            callback:action =>{
+          this.$alert("新增问卷成功", "提示", {
+            center: true,
+            callback: action => {
               this.$router.push({
-                path:'/index/adminQuestion'
+                path: "/index/adminQuestion"
               });
             }
-          })
+          });
         });
       });
     }
@@ -175,7 +192,9 @@ h3 {
 .table_container {
   padding: 0 0 10px 20px;
 }
-.el-input {
-  width: 80%;
+
+// 新建问卷的表单
+.questionData {
+  margin: 10px;
 }
 </style>

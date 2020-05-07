@@ -1,27 +1,35 @@
 <template>
   <div>
     <h3 class="headTitle">{{questionData.questionnaireName}}</h3>
+    <p> {{questionData.title}} </p>
     <!-- 问卷题目表格数据 -->
     <div class="table_container">
       <el-table
         size="medium"
-        :data="questionData.questionList"
+        :data="questionData.list"
         highlight-current-row
         :row-class-name="tableRowClassName"
         style="width: 100%"
       >
-        <el-table-column property="questionNum" label="序号" width="100"></el-table-column>
-        <el-table-column property="questionTitle" label="考评项目" width="200"></el-table-column>
-        <el-table-column property="questionContent" label="考评要点" width="500"></el-table-column>
-        <el-table-column label="评价意见（A,B,C分别代表履责到位、履责基本到位、履责不到位）">
+        <el-table-column type="index" label="序号" width="100"></el-table-column>
+        <el-table-column property="content" label="主要排查内容" width="400"></el-table-column>
+        <el-table-column label="自查">
           <template slot-scope="scope">
-            <el-radio-group v-model="scope.row.answer">
-              <el-radio-button label="A"></el-radio-button>
-              <el-radio-button label="B"></el-radio-button>
-              <el-radio-button label="C"></el-radio-button>
+            <el-radio-group v-model="scope.row.selfAnswer">
+              <el-radio-button label="是"></el-radio-button>
+              <el-radio-button label="否"></el-radio-button>
             </el-radio-group>
           </template>
         </el-table-column>
+        <el-table-column label="他查">
+          <template slot-scope="scope">
+            <el-radio-group v-model="scope.row.otherAnswer">
+              <el-radio-button label="是"></el-radio-button>
+              <el-radio-button label="否"></el-radio-button>
+            </el-radio-group>
+          </template>
+        </el-table-column>
+        <el-table-column property="remark" label="主要问题描述（非必填）" width="500"></el-table-column>
       </el-table>
     </div>
     <el-button type="info" @click="turnBack">返回上一级</el-button>
@@ -52,16 +60,8 @@ export default {
       var jsonData = {};
       jsonData.questionnaireId = this.$route.query.questionnaireId;
       getTempQuestionnaire(jsonData).then(res => {
-        this.questionData = res.extend.questionnaire;
+        this.questionData = res.extend;
       });
-    },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val;
-      this.offset = (val - 1) * this.limit;
-      this.getUsers();
     },
     /**
      * @description 返回上一级

@@ -3,38 +3,80 @@
     <h3 class="headTitle">用户信息</h3>
     <!-- 操作组件 -->
     <el-row>
-      <!-- 导入用户组件 -->
-      <el-col :span="2">
-        <el-button type="info" size="mini" @click="downloadTemplate">下载导入模板</el-button>
-      </el-col>
-      <el-col :span="8">
-        <el-upload
-          class="upload-demo"
-          action="/EOAS/dataHandle/importUser"
-          name="wenjian"
-          :show-file-list="true"
-          :on-success="uploadDone"
-          :on-error="uploadError"
-          :limit="1"
-        >
-          <el-button type="warning" size="mini">导入用户信息</el-button>
-          <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-        </el-upload>
-      </el-col>
-      <el-col :span="14">
+      <!-- 操作组件 -->
+      <el-button
+        class="button-middle"
+        type="info"
+        size="mini"
+        @click="downloadTemplate"
+        icon="el-icon-download"
+      >下载模板</el-button>
+      <el-upload
+        class="upload-demo"
+        action="/EOAS/dataHandle/importUser"
+        name="wenjian"
+        :show-file-list="true"
+        :on-success="uploadDone"
+        :on-error="uploadError"
+        :limit="1"
+      >
+        <el-button class="button-middle" type="warning" size="mini" icon="el-icon-upload2">导入</el-button>
+        <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+      </el-upload>
+      <el-button
+        class="button-middle"
+        type="success"
+        size="mini"
+        @click="downloadTemplate"
+        icon="el-icon-user"
+      >导出</el-button>
+      <el-button
+        class="button-middle"
+        type="primary"
+        size="mini"
+        @click="downloadTemplate"
+        icon="el-icon-plus"
+      >新增</el-button>
+    </el-row>
+    <el-row>
+      <el-col :span="14" :offset="10">
         <!-- 查找操作组件 -->
         <findComponent @find="find(arguments)"></findComponent>
       </el-col>
     </el-row>
+
     <!-- 用户表格数据 -->
     <el-table :data="getUserData.list" highlight-current-row style="width: 100%" stripe>
       <el-table-column type="index" width="100"></el-table-column>
-      <el-table-column property="userNum" label="用户编号"></el-table-column>
-      <el-table-column property="userName" label="用户姓名"></el-table-column>
-      <el-table-column property="primaryClass" label="所在机构"></el-table-column>
-      <el-table-column property="secondaryClass" label="所在网点"></el-table-column>
-      <el-table-column property="isLeaderValue" label="是否为主要负责人"></el-table-column>
-      <el-table-column property="isPartyMemberValue" label="是否党员"></el-table-column>
+      <el-table-column property="userNum" label="用户编号" width="150"></el-table-column>
+      <el-table-column property="userName" label="用户姓名" width="150"></el-table-column>
+      <el-table-column property="primaryClass" label="所在机构" width="180"></el-table-column>
+      <el-table-column property="secondaryClass" label="所在网点" width="180"></el-table-column>
+      <el-table-column property="userStatus" label="用户状态" width="100">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.userStatus"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            active-value="1"
+            inactive-value="0"
+            @change="changeUserStatus($event, scope.$index, scope.row.userId)"
+          ></el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="300">
+        <template slot-scope="scope">
+          <el-button
+            type="primary"
+            plain
+            size="mini"
+            icon="el-icon-more"
+            @click="checkMore(scope.row.userId)"
+          >查看更多</el-button>
+          <el-button type="success" plain size="mini" icon="el-icon-edit">编辑</el-button>
+          <el-button type="danger" plain size="mini" icon="el-icon-delete">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <div class="Pagination" style="text-align: left;margin-top: 10px;">
@@ -51,7 +93,12 @@
 </template>
 
 <script>
-import { getUserList, getUserInfo, downloadUserTemplate } from "@/api/getUserData";
+import {
+  getUserList,
+  getUserInfo,
+  downloadUserTemplate,
+  changeUserStatus
+} from "@/api/getUserData";
 import findComponent from "@/components/index/findComponent";
 export default {
   components: {
@@ -76,11 +123,17 @@ export default {
     this.initData();
   },
   methods: {
+    /**
+     * @description 初始化分页获取用户数据
+     */
     initData() {
       getUserList(this.requestData).then(res => {
         this.getUserData = res.extend.page;
       });
     },
+    /**
+     * @description 翻页，获取分页用户数据
+     */
     handleCurrentChange(val) {
       this.requestData.pageNumber = val;
       this.initData();
@@ -123,26 +176,54 @@ export default {
         type: typeString
       });
       this.$router.push({
-        path:'/'
-      })
+        path: "/"
+      });
     },
     uploadError() {
       this.$message({
         message: "导入用户信息失败，请重新导入",
         type: "error"
       });
+    },
+    /**
+     * @description 改变用户状态
+     * @param $event 改变后的用户状态值 （0，1）
+     * @param index 用户信息的索引，代表第几个用户
+     * @param userId 用户id
+     */
+    changeUserStatus($event, index, userId) {
+      this.$confirm("请问确定要修改用户状态吗？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true
+      })
+        .then(() => {
+          // 请求修改用户状态接口
+          var jsonData = {};
+          jsonData.userStatus = $event;
+          jsonData.userId = userId;
+          changeUserStatus(jsonData)
+            .then(res => {
+              // 弹出成功提示
+              this.$message({
+                message: "修改用户状态成功",
+                type: "success"
+              });
+              // 刷新数据
+              this.initData();
+            })
+        })
+        .catch(() => {
+          // 恢复状态为未修改之前的
+          this.getUserData.list[index].userStatus = $event == "1" ? "0" : "1";
+        });
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-h3 {
-  font-style: normal;
-  font-weight: normal;
-  color: #696d73;
-  margin-left: 20px;
-}
 .table_container {
   padding: 20px;
 }
@@ -150,5 +231,9 @@ h3 {
   .el-input {
     width: 70%;
   }
+}
+.upload-demo {
+  display: inline-block;
+  margin: 0 1em;
 }
 </style>

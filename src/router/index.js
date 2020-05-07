@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+
 import login from '../views/login.vue'
 import index from '../views/index.vue'
 import userList from '@/views/User/userList.vue'
@@ -23,6 +24,8 @@ import roleAuthorityAdmin from '@/views/SystemAdmin/roleAuthorityAdmin.vue'
 import DesignFormList from '@/views/Form/DesignFormList.vue'
 import editForm from '@/views/Form/editForm.vue'
 import checkForm from '@/views/Form/checkForm.vue'
+
+import test from '@/views/Test/test.vue'
 
 Vue.use(VueRouter)
 
@@ -102,6 +105,10 @@ const routes = [{
     path: '/Form',
     component:editForm,
   },
+  {
+    path:'/test',
+    component:test
+  }
 
 ]
 
