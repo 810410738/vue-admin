@@ -61,7 +61,12 @@ var getUserInfoData = {
       "secondaryClass": "中心区支行",
       "userName": "ljl_user",
       "userId": "1fdf0399a2e8419ca1aa86586b21e556",
-      "primaryClass": "中心区支行"
+      "primaryClass": "中心区支行",
+      "systemIdentify": "",
+      "createTime": "2020-04-27 10:00:21",
+      "updateTime": "2020-05-10 10:00:21",
+      "userStatus": "1",
+      "remark":'12321312321'
     }
 
   },
@@ -82,7 +87,17 @@ var changeUserStatusData = {
 }
 Mock.mock(userUrlRoot + 'changeUserStatus', 'post', changeUserStatusData);
 
+/**--------------------------------------------------------------------------------------- */
+// 删除用户
+var deleteUserData = {
+  "extend": {
+    
 
+  },
+  "errCode": 0,
+  "errMsg": "success"
+}
+Mock.mock(userUrlRoot + 'deleteUser', 'post', deleteUserData);
 /**--------------------------------------------------------------------------------------- */
 // 05-获取所有角色列表(除系统管理员)
 var getAllRoleExceptAdminData = {

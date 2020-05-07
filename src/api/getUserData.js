@@ -17,6 +17,9 @@ export const getUserInfo = data => post(userUrlRoot + 'getUserById', data);
 // 修改用户状态
 export const changeUserStatus = data => post(userUrlRoot + 'changeUserStatus', data);
 
+// 删除用户
+export const deleteUser = data => post(userUrlRoot + 'deleteUser', data);
+
 // 05-获取所有角色列表(除系统管理员)
 export const getAllRoleExceptAdmin = data => post(roleAuthorityUrlRoot + 'getAllRoleExceptAdmin', data);
 // 06-更新用户角色信息

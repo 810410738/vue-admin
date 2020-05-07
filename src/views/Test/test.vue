@@ -1,44 +1,81 @@
 <template>
-  <div id="test">
-    <div>
-      this is a nice test from Mr.jerry, don't I look pretty?
-    </div>
-    
+  <div>
+    <fm-generate-form :data="jsonData" :remote-option="dynamicData" ref="generateForm"></fm-generate-form>
+    <el-button type="primary" @click="handleSubmit">Submit</el-button>
+    <el-button @click="handleLoadOption">Load Option</el-button>
   </div>
 </template>
-
-
 <script>
-import {testProxy} from '@/api/getCommonData'
 export default {
-  components: {},
   data() {
     return {
-      data:''
+      jsonData: {
+        list: [
+          {
+            type: "radio",
+            icon: "icon-radio-active",
+            options: {
+              inline: false,
+              defaultValue: "",
+              showLabel: false,
+              options: [
+                { value: "Option 1", label: "Option 1" },
+                { value: "Option 2", label: "Option 2" },
+                { value: "Option 3", label: "Option 3" }
+              ],
+              required: false,
+              width: "",
+              remote: true,
+              remoteType: "option",
+              remoteOption: "option",
+              remoteOptions: [],
+              props: { value: "value", label: "label" },
+              remoteFunc: "func_1575969479252",
+              customClass: "",
+              labelWidth: 100,
+              isLabelWidth: false,
+              hidden: false,
+              dataBind: true,
+              disabled: false
+            },
+            name: "单选框组",
+            key: "1575969479252",
+            model: "option",
+            rules: []
+          }
+        ],
+        config: {
+          labelWidth: 100,
+          labelPosition: "right",
+          size: "small",
+          customClass: ""
+        }
+      },
+      dynamicData: {
+        option: [] // 单选框组 option data
+      }
     };
   },
-  created() {
-    testProxy().then(res=>{     
-      console.log(res);
-      this.data = res;
-    })
-  },
-  methods: {}
+  methods: {
+    handleSubmit() {
+      this.$refs.generateForm
+        .getData()
+        .then(data => {
+          alert(JSON.stringify(data));
+        })
+        .catch(e => {});
+    },
+
+    handleLoadOption() {
+      // 模拟数据请求
+      setTimeout(() => {
+        this.dynamicData.option = [
+          { value: "1111", label: "1111" },
+          { value: "2222", label: "2222" },
+          { value: "3333", label: "3333" }
+        ];
+      }, 500);
+    }
+  }
 };
 </script>
-
-
-<style lang="scss" scoped>
-div#test {
-  margin:auto;
-  background: url("../../assets/img/gallery1.jpg");
-  width: 14em;
-  height:14em;
-  div{
-   margin:auto;
-   background:hsla(0, 0%, 100%, .3);
-   width: 10em;
-   height:10em;
-  }
-}
-</style>
