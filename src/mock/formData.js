@@ -40,8 +40,7 @@ Mock.mock(formDesignUrlRoot + 'saveFormData', 'post', saveFormData);
 // 获取服务器已经存在的表单数据
 var getFormData = {
   "extend": {
-    "list": [
-      {
+    "list": [{
         "type": "grid",
         "icon": "icon-grid-",
         "columns": [{
@@ -384,3 +383,45 @@ var getFormData = {
   "errMsg": "success"
 }
 Mock.mock(formDesignUrlRoot + 'getFormData', 'post', getFormData);
+
+/**--------------------------------------------------------------------------------------- */
+// 获取新增用户的表单数据
+var getUserFormData = {
+  "extend": {
+    // 表单设置
+    userInfoForm: {
+      // 表单配置项
+      labelPosition: "right",
+      labelWidth: "130px",
+      size: "small",
+      disabled: false,
+      // 表单字段数据
+      Data: {
+        userNum: "",
+        loginAccount: "",
+        userName: "",
+        primaryClass: "",
+        secondaryClass: "",
+        isPartyMember: "",
+        isLeader: "",
+        systemIdentify: "",
+        remark: ""
+      },
+      // 表单验证规则
+      userInfoFormRules: {
+        userNum:[
+          {
+            required: true, message: '请输入8位用户编号', trigger: 'blur'
+          },
+          {
+            pattern: "^[0-9]{8}$", message: '输入格式不符合要求'
+          }
+        ],
+        
+      },
+    }
+  },
+  "errCode": 0,
+  "errMsg": "success"
+}
+Mock.mock(formDesignUrlRoot + 'getUserFormData', 'post', getUserFormData);

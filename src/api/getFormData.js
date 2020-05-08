@@ -15,6 +15,8 @@ export const saveFormData = data => post(formDesignUrlRoot + 'saveFormData', dat
 // 获取服务器已经存在的表单数据
 export const getFormData = data => post(formDesignUrlRoot + 'getFormData', data);
 
+// 获取新增用户的表单数据
+export const getUserFormData = data => post(formDesignUrlRoot + 'getUserFormData', data);
 
 
 

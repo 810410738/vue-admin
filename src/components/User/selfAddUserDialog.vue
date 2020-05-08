@@ -12,10 +12,11 @@
       center
     >
       <el-form
+        :disabled="userInfoForm.disabled"
         :label-position="userInfoForm.labelPosition"
         :label-width="userInfoForm.labelWidth"
         :model="userInfoForm.Data"
-        :rules="userInfoFormRules"
+        :rules="userInfoForm.userInfoFormRules"
         :size="userInfoForm.size"
         ref="userInfoForm"
       >
@@ -60,18 +61,18 @@
         <el-form-item label="备注" prop="remark">
           <el-input type="textarea" v-model="userInfoForm.Data.remark"></el-input>
         </el-form-item>
+        <el-form-item>
+          <!-- <el-button @click="handleClose()" size="medium">关闭</el-button> -->
+          <el-button type="primary" @click="save('userInfoForm')" v-if="type!='2'" size="medium">保存</el-button>
+        </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="handleClose()">关 闭</el-button>
-        <el-button type="primary" @click="save()" v-if="type!='2'">保 存</el-button>
-      </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import { getAllPrimaryClass, getAllSecoByPrim } from "@/api/getCommonData";
-import { getFormData } from "@/api/getFormData";
+import { getUserFormData } from "@/api/getFormData";
 import { getUserInfo } from "@/api/getUserData";
 export default {
   components: {},
@@ -93,27 +94,7 @@ export default {
   data() {
     return {
       // 表单设置
-      userInfoForm: {
-        // 表单配置项
-        labelPosition: "right",
-        labelWidth: "130px",
-        size: "small",
-        // 表单字段数据
-        Data: {
-          userNum: "",
-          loginAccount: "",
-          userName: "",
-          primaryClass: "",
-          secondaryClass: "",
-          isPartyMember: "",
-          isLeader: "",
-          systemIdentify: "",
-          remark: ""
-        }
-      },
-
-      // 表单验证规则
-      userInfoFormRules: {},
+      userInfoForm: {},
       // 一级机构
       primaryAllClass: [],
       // 二级机构
@@ -132,20 +113,19 @@ export default {
      * @description 初始化，获取表单数据，然后如果type为1或2，则获取用户的数据,如果type为2，则禁止编辑
      */
     init() {
-      getFormData(this.requestFormData).then(res => {
-        this.getFormData = res.extend;
+      getUserFormData(this.requestFormData).then(res => {
+        this.userInfoForm = res.extend.userInfoForm;
         if (this.type == "1" || this.type == "2") {
           getUserInfo(this.selfUserData).then(res1 => {
             this.getUserData = res1.extend.user;
+            this.setUserFormData();
           });
         } else {
           this.getUserData = {};
         }
         // 禁止编辑
         if (this.type == 2) {
-          for (var i in this.getFormData.list) {
-            this.getFormData.list[i].options.disabled = true;
-          }
+          this.userInfoForm.disabled = true;
         }
       });
       /**
@@ -156,6 +136,14 @@ export default {
       });
     },
     /**
+     * @description 设置用户表单的用户数据
+     */
+    setUserFormData() {
+      Object.keys(this.getUserData).forEach(key => {
+        this.userInfoForm.Data[key] = this.getUserData[key];
+      });
+    },
+    /**
     @description 关闭对话框
      */
     handleClose() {
@@ -163,14 +151,21 @@ export default {
     },
     /**
      * @description 保存用户信息，提交到服务器
+     * @param formName 表单的名字
      */
-    save() {
-      this.$refs.generateForm
-        .getData()
-        .then(data => {
-          console.log(JSON.stringify(data));
-        })
-        .catch(e => {});
+    save(formName) {
+      this.$refs[formName].validate(valid => {
+        // 通过验证
+        if (valid) {
+          // 提交用户数据到服务器
+          this.$message({
+            message: "提交成功",
+            type: "success"
+          });
+        } else {
+          return false;
+        }
+      });
     },
     /**
      * @description 获取所有二级分类
@@ -200,6 +195,9 @@ export default {
 };
 </script>
 
-
 <style lang="scss" scoped>
+$formItemWidth: 100%;
+.el-select {
+  width: $formItemWidth;
+}
 </style>
