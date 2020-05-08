@@ -40,7 +40,8 @@ Mock.mock(formDesignUrlRoot + 'saveFormData', 'post', saveFormData);
 // 获取服务器已经存在的表单数据
 var getFormData = {
   "extend": {
-    "list": [{
+    "list": [
+      {
         "type": "grid",
         "icon": "icon-grid-",
         "columns": [{
@@ -163,17 +164,18 @@ var getFormData = {
           "requiredMessage": "",
           "showLabel": false,
           "width": "100%",
-          "options": [],
-          "remote": true,
-          "remoteType": "option",
-          "remoteOption": "primaryOption",
+          "options": [
+
+          ],
+          "remote": false,
+          "remoteType": "func",
           "filterable": false,
           "remoteOptions": [],
           "props": {
             "value": "value",
             "label": "label"
           },
-          "remoteFunc": "func_1588845617787",
+          "remoteFunc": "getPrimaryClass",
           "customClass": "",
           "labelWidth": 100,
           "isLabelWidth": false,

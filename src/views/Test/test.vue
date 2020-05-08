@@ -1,46 +1,52 @@
 <template>
   <div>
-    <fm-generate-form :data="jsonData" :remote-option="dynamicData" ref="generateForm"></fm-generate-form>
+    <fm-generate-form
+      :data="jsonData"
+      :remote="remoteFuncs"
+      :value="editData"
+      :remote-option="dynamicData"
+      ref="generateForm"
+    ></fm-generate-form>
     <el-button type="primary" @click="handleSubmit">Submit</el-button>
-    <el-button @click="handleLoadOption">Load Option</el-button>
   </div>
 </template>
+
 <script>
+import { getAllPrimaryClass, getAllSecoByPrim } from "@/api/getCommonData";
 export default {
   data() {
     return {
       jsonData: {
         list: [
           {
-            type: "radio",
-            icon: "icon-radio-active",
+            type: "select",
+            icon: "icon-select",
             options: {
-              inline: false,
               defaultValue: "",
-              showLabel: false,
-              options: [
-                { value: "Option 1", label: "Option 1" },
-                { value: "Option 2", label: "Option 2" },
-                { value: "Option 3", label: "Option 3" }
-              ],
+              multiple: false,
+              disabled: false,
+              clearable: false,
+              placeholder: "",
               required: false,
+              requiredMessage: "",
+              showLabel: false,
               width: "",
+              options: [],
               remote: true,
-              remoteType: "option",
-              remoteOption: "option",
+              remoteType: "func",
+              filterable: false,
               remoteOptions: [],
               props: { value: "value", label: "label" },
-              remoteFunc: "func_1575969479252",
+              remoteFunc: "getPrimaryClass",
               customClass: "",
               labelWidth: 100,
               isLabelWidth: false,
               hidden: false,
-              dataBind: true,
-              disabled: false
+              dataBind: true
             },
-            name: "单选框组",
-            key: "1575969479252",
-            model: "option",
+            name: "一级机构",
+            key: "1588900094391",
+            model: "primaryClass",
             rules: []
           }
         ],
@@ -48,12 +54,30 @@ export default {
           labelWidth: 100,
           labelPosition: "right",
           size: "small",
-          customClass: ""
+          customClass: "",
+          ui: "element",
+          layout: "horizontal",
+          labelCol: 3,
+          width: "100%"
         }
       },
-      dynamicData: {
-        option: [] // 单选框组 option data
-      }
+      editData: {},
+      remoteFuncs: {
+        getPrimaryClass(resolve) {
+          getAllPrimaryClass({}).then(res => {
+            var primaryOption = [];
+            var resultList = res.extend.classList;
+            for (var i in resultList) {
+              primaryOption.push({
+                label: resultList[i],
+                value: resultList[i]
+              });
+            }
+            resolve(primaryOption);
+          });
+        }
+      },
+      dynamicData: {}
     };
   },
   methods: {
@@ -61,20 +85,12 @@ export default {
       this.$refs.generateForm
         .getData()
         .then(data => {
+          // Data verification succeeded
           alert(JSON.stringify(data));
         })
-        .catch(e => {});
-    },
-
-    handleLoadOption() {
-      // 模拟数据请求
-      setTimeout(() => {
-        this.dynamicData.option = [
-          { value: "1111", label: "1111" },
-          { value: "2222", label: "2222" },
-          { value: "3333", label: "3333" }
-        ];
-      }, 500);
+        .catch(e => {
+          // Data verification failed
+        });
     }
   }
 };
