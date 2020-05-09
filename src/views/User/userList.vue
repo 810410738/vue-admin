@@ -102,7 +102,7 @@
       ></el-pagination>
     </div>
 
-    <!-- 新增用户,修改用户信息,查看用户信息的组件，根据type来区分 -->
+    <!-- 新增用户,修改用户信息,查看用户信息的对话框组件，根据type来区分 -->
     <selfAddUserDialog
       :selfUserData="requestUserData"
       :isShow="addUserDialogVisible"

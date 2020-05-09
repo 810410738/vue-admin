@@ -23,52 +23,76 @@
             <div class="controlButton">
               <el-button type="primary" size="small" @click="save" icon="el-icon-upload">保存</el-button>
               <el-button type="danger" size="small" @click="clear" icon="el-icon-delete">清空</el-button>
+              <el-button type="success" size="small" @click="buildJSON" icon="el-icon-check">生成JSON</el-button>
             </div>
           </el-row>
           <el-row>
-            <el-form
-              :label-position="Form.labelPosition"
-              :label-width="Form.labelWidth + 'px'"
-              :model="Form.Data"
-              :rules="Form.rules"
-              :size="Form.size"
-              ref="Form"
-            >
-              <div
-                class="formItem"
-                v-for="(item, index) in Form.Item"
-                :key="item.key"
-                @click="editItem(index)"
-                :class="{'clickFormItem':item.isClick}"
+              <el-form
+                :label-position="Form.labelPosition"
+                :label-width="Form.labelWidth + 'px'"
+                :model="Form.Data"
+                :rules="Form.rules"
+                :size="Form.size"
+                ref="Form"
               >
-              <!-- 各个元素的操作按钮（删除） -->
-              <div class="itemEdit" v-show="item.isClick">
-                <!-- 删除 -->
-                <el-button type="primary" icon="el-icon-delete" circle size="mini" @click="deleteOneItem(index)"></el-button>
-                <!-- 复制多一份 -->
-                <el-button type="success" icon="el-icon-copy-document" circle size="mini" @click="copyOneItem(index)"></el-button>
-                <!-- 上移 -->
-                <el-button icon="el-icon-upload2" circle size="mini" @click="moveOneItem(index,'up')"></el-button>
-                <!-- 下移 -->
-                <el-button icon="el-icon-download" circle size="mini"  @click="moveOneItem(index,'down')"></el-button>
-                
-              </div>
-                <el-form-item :label="item.label" :prop="item.name">
-                  <el-input
-                    v-if="item.type == 'input'"
-                    :placeholder="item.placeholder"
-                    :style="'width:' + item.width + '%'"
-                    :disabled="item.disabled"
-                  ></el-input>
-                  <el-select
-                    v-else-if="item.type == 'select'"
-                    :placeholder="item.placeholder"
-                    :style="'width:' + item.width + '%'"
-                    :disabled="item.disabled"
-                  ></el-select>
-                </el-form-item>
-              </div>
-            </el-form>
+                <transition-group tag="div">
+                <div
+                  class="formItem"
+                  v-for="(item, index) in Form.Item"
+                  :key="item.key"
+                  @click="editItem(index)"
+                  :class="{'clickFormItem':item.isClick}"
+                >
+                  <!-- 各个元素的操作按钮（删除） -->
+                  <div class="itemEdit" v-show="item.isClick">
+                    <!-- 删除 -->
+                    <el-button
+                      type="primary"
+                      icon="el-icon-delete"
+                      circle
+                      size="mini"
+                      @click="deleteOneItem(index)"
+                    ></el-button>
+                    <!-- 复制多一份 -->
+                    <el-button
+                      type="success"
+                      icon="el-icon-copy-document"
+                      circle
+                      size="mini"
+                      @click="copyOneItem(index)"
+                    ></el-button>
+                    <!-- 上移 -->
+                    <el-button
+                      icon="el-icon-upload2"
+                      circle
+                      size="mini"
+                      @click="moveOneItem(index,'up')"
+                    ></el-button>
+                    <!-- 下移 -->
+                    <el-button
+                      icon="el-icon-download"
+                      circle
+                      size="mini"
+                      @click="moveOneItem(index,'down')"
+                    ></el-button>
+                  </div>
+                  <el-form-item :label="item.label" :prop="item.name">
+                    <el-input
+                      v-if="item.type == 'input'"
+                      :placeholder="item.placeholder"
+                      :style="'width:' + item.width + '%'"
+                      :disabled="item.disabled"
+                    ></el-input>
+                    <el-select
+                      v-else-if="item.type == 'select'"
+                      :placeholder="item.placeholder"
+                      :style="'width:' + item.width + '%'"
+                      :disabled="item.disabled"
+                    ></el-select>
+                  </el-form-item>
+                </div>
+                </transition-group>
+              </el-form>
           </el-row>
         </el-col>
         <!-- 右边编辑属性 -->
@@ -117,7 +141,6 @@
                     <el-radio-button label="mini">mini</el-radio-button>
                   </el-radio-group>
                 </el-form-item>
-                
               </el-form>
             </el-tab-pane>
           </el-tabs>
@@ -138,18 +161,29 @@
         </fm-making-form>
       </el-row>
     </el-row>
+
+      <!-- 生成json代码的对话框 -->
+      <selfBuildJsonDialog
+      :selfBuildJsonData="Form"
+      :isShow="selfBuildJsonDialogVisible"
+      @closeDialog="closeBuildJsonDialogrDialog"
+    ></selfBuildJsonDialog>
   </div>
 </template>
 
 <script>
 import headTop from "@/components/headTop";
 import { saveFormData, getFormData, getUserFormData } from "@/api/getFormData";
+import selfBuildJsonDialog from "@/components/Form/selfBuildJsonDialog";
 export default {
   components: {
-    headTop
+    headTop,
+    selfBuildJsonDialog
   },
   data() {
     return {
+      // 控制生成json的对话框是否显示
+      selfBuildJsonDialogVisible:false,
       Form: {},
       // 请求表单数据的数据
       requestFormData: {
@@ -253,19 +287,67 @@ export default {
      * @description 删除指定索引的表单元素
      * @param index 表单元素的索引
      */
-    deleteOneItem(index){
+    deleteOneItem(index) {
       this.Form.Item.splice(index, 1);
+
     },
     /**
-     * @description 复制指定索引的表单元素
+     * @description 复制指定索引的表单元素,重新生成key和name（保证key和name唯一）
      * @param index 表单元素的索引
      */
-    copyOneItem(index){
+    copyOneItem(index) {
       var jsonData = JSON.parse(JSON.stringify(this.Form.Item[index]));
-       // 生成随机且唯一的key值
-      jsonData.key = String(Math.random()).substring(2, 10) + String(Date.now());
-      this.Form.Item.splice(index, 0, jsonData);
-    }
+      // 生成随机且唯一的key值
+      jsonData.key =
+        String(Math.random()).substring(2, 10) + String(Date.now());
+      jsonData.name = jsonData.type + "_" + jsonData.key;
+      this.Form.Item.splice(index + 1, 0, jsonData);
+    },
+    /**
+     * @description 移动表单元素
+     * @parma index 表单元素的索引
+     * @parma type 移动类型（up:上移，down：下移）
+     */
+    moveOneItem(index, type) {
+      var temp = this.Form.Item[index];
+      switch (type) {
+        // 上移
+        case "up":
+          if (index == 0) {
+            this.$message({
+              message: "该元素已经是第一个元素，无法继续上移",
+              type: "error"
+            });
+            return;
+          }
+          this.Form.Item[index] = this.Form.Item[index - 1];
+          this.Form.Item[index - 1] = temp;
+          break;
+        case "down":
+          if (index == this.Form.Item.length - 1) {
+            this.$message({
+              message: "该元素已经是最后一个元素，无法继续下移",
+              type: "error"
+            });
+            return;
+          }
+          this.Form.Item[index] = this.Form.Item[index + 1];
+          this.Form.Item[index + 1] = temp;
+          break;
+      }
+    },
+    /**
+     * @description 把Form生成json输出到前端,打开对话框
+     */
+    buildJSON(){
+      this.selfBuildJsonDialogVisible = true;
+    },
+    /*
+     * @description 关闭新增用户的对话框
+     */
+    closeBuildJsonDialogrDialog() {
+      this.selfBuildJsonDialogVisible = false;
+    },
   }
 };
 </script>
@@ -292,6 +374,8 @@ export default {
     margin-bottom: 1em;
   }
   .formItem {
+    transition: all 1s;
+    height: 80px;
     margin-bottom: 1em;
     border: 2px solid white;
   }
@@ -302,4 +386,13 @@ export default {
     border-color: #409eff;
   }
 }
+// 控制动画
+.v-enter, .v-leave-to{
+  opacity: 0;
+  transform: translateY(30px);
+}
+.v-leave-active{
+   position: absolute;
+}
+
 </style>
