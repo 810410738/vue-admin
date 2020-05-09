@@ -27,15 +27,15 @@
             </div>
           </el-row>
           <el-row>
-              <el-form
-                :label-position="Form.labelPosition"
-                :label-width="Form.labelWidth + 'px'"
-                :model="Form.Data"
-                :rules="Form.rules"
-                :size="Form.size"
-                ref="Form"
-              >
-                <transition-group tag="div">
+            <el-form
+              :label-position="Form.labelPosition"
+              :label-width="Form.labelWidth + 'px'"
+              :model="Form.Data"
+              :rules="Form.rules"
+              :size="Form.size"
+              ref="Form"
+            >
+              <transition-group tag="div">
                 <div
                   class="formItem"
                   v-for="(item, index) in Form.Item"
@@ -88,18 +88,31 @@
                       :placeholder="item.placeholder"
                       :style="'width:' + item.width + '%'"
                       :disabled="item.disabled"
-                    ></el-select>
+                    >
+                      <!-- <el-option
+                        v-for="(item1,index1) in item.options"
+                        :key="index1"
+                        :label="item.label"
+                        :value="item.value"
+                      ></el-option> -->
+                    </el-select>
+
                   </el-form-item>
                 </div>
-                </transition-group>
-              </el-form>
+              </transition-group>
+            </el-form>
           </el-row>
         </el-col>
         <!-- 右边编辑属性 -->
         <el-col :span="5" :offset="1">
           <el-tabs v-model="activeName" type="border-card" :stretch="true">
             <el-tab-pane label="字段属性" name="item">
-              <el-form v-for="item in Form.Item" :key="item.key" v-show="item.isClick">
+              <el-form
+                v-for="(item,index) in Form.Item"
+                :key="item.key"
+                v-show="item.isClick"
+                label-position="top"
+              >
                 <el-form-item label="字段名字">
                   <el-input v-model="item.name"></el-input>
                 </el-form-item>
@@ -114,11 +127,48 @@
                     <template slot="append">%</template>
                   </el-input>
                 </el-form-item>
+                <!-- select特有的操作 -->
+                <el-form-item label="选项" v-if="item.type == 'select'">
+                  <el-tabs v-model="selectActiveName" type="border-card" :stretch="true">
+                    <el-tab-pane label="静态数据" name="static">
+                      <el-card v-for="item1 in item.options" :key="item1">
+                        <el-input size="mini" v-model="item1.label">
+                          <template slot="prepend">Label</template>
+                        </el-input>
+                        <el-input size="mini" v-model="item1.value">
+                          <template slot="prepend">Value</template>
+                        </el-input>
+                      </el-card>
+                      <el-button
+                        plain
+                        icon="el-icon-plus"
+                        size="mini"
+                        @click="changeSelectOption(index,'add')"
+                      ></el-button>
+                      <el-button
+                        type="danger"
+                        plain
+                        icon="el-icon-minus"
+                        size="mini"
+                        @click="changeSelectOption(index,'delete')"
+                      ></el-button>
+                    </el-tab-pane>
+                    <el-tab-pane label="动态数据" name="dynamic"></el-tab-pane>
+                  </el-tabs>
+                </el-form-item>
+                <!--  -->
+
                 <el-form-item label="操作属性">
                   <el-checkbox v-model="item.disabled">禁用</el-checkbox>
                 </el-form-item>
                 <el-form-item label="校验">
-                  <el-input></el-input>
+                  <el-checkbox v-model="item.required">必填</el-checkbox>
+                </el-form-item>
+                <el-form-item v-show="item.type != 'select'">
+                  <el-input v-model="item.pattern" placeholder="请填写正则表达式"></el-input>
+                </el-form-item>
+                <el-form-item label="校验不通过的提示文字" v-show="item.type != 'select'">
+                  <el-input v-model="item.errorText"></el-input>
                 </el-form-item>
               </el-form>
             </el-tab-pane>
@@ -162,8 +212,8 @@
       </el-row>
     </el-row>
 
-      <!-- 生成json代码的对话框 -->
-      <selfBuildJsonDialog
+    <!-- 生成json代码的对话框 -->
+    <selfBuildJsonDialog
       :selfBuildJsonData="Form"
       :isShow="selfBuildJsonDialogVisible"
       @closeDialog="closeBuildJsonDialogrDialog"
@@ -183,7 +233,7 @@ export default {
   data() {
     return {
       // 控制生成json的对话框是否显示
-      selfBuildJsonDialogVisible:false,
+      selfBuildJsonDialogVisible: false,
       Form: {},
       // 请求表单数据的数据
       requestFormData: {
@@ -192,7 +242,9 @@ export default {
       // 表单数据
       getFormData: {},
       // 右边操作属性的标签切换的名字
-      activeName: "item"
+      activeName: "item",
+      // 右边操作属性的选项标签切换的名字
+      selectActiveName: "static"
     };
   },
   mounted() {
@@ -289,7 +341,6 @@ export default {
      */
     deleteOneItem(index) {
       this.Form.Item.splice(index, 1);
-
     },
     /**
      * @description 复制指定索引的表单元素,重新生成key和name（保证key和name唯一）
@@ -339,7 +390,7 @@ export default {
     /**
      * @description 把Form生成json输出到前端,打开对话框
      */
-    buildJSON(){
+    buildJSON() {
       this.selfBuildJsonDialogVisible = true;
     },
     /*
@@ -348,6 +399,24 @@ export default {
     closeBuildJsonDialogrDialog() {
       this.selfBuildJsonDialogVisible = false;
     },
+    /**
+     * @description 改动下拉框的选项值
+     * @param index 元素的索引值
+     * @param type 改动操作的类型（add:添加元素；delete：删除元素）
+     */
+    changeSelectOption(index, type) {
+      switch (type) {
+        case "add":
+          this.Form.Item[index].options.push({
+            label: "",
+            value: ""
+          });
+          break;
+        case "delete":
+          this.Form.Item[index].options.splice(this.Form.Item[index].options.length-1, 1);
+      }
+      console.log(this.Form.Item[index].options);
+    }
   }
 };
 </script>
@@ -387,12 +456,12 @@ export default {
   }
 }
 // 控制动画
-.v-enter, .v-leave-to{
+.v-enter,
+.v-leave-to {
   opacity: 0;
   transform: translateY(30px);
 }
-.v-leave-active{
-   position: absolute;
+.v-leave-active {
+  position: absolute;
 }
-
 </style>

@@ -405,6 +405,9 @@ var getUserFormData = {
           width:'100',
           isClick:false,
           disabled:false,
+          required:true,
+          pattern:'',
+          errorText:'输入数据的格式不正确',
           rules:[
             {
               required: true, message: '请输入8位用户编号', trigger: 'blur'
@@ -423,6 +426,9 @@ var getUserFormData = {
           width:'100',
           isClick:false,
           disabled:false,
+          required:true,
+          pattern:'',
+          errorText:'输入数据的格式不正确',
         },
         {
           key:'123458',
@@ -433,6 +439,12 @@ var getUserFormData = {
           width:'100',
           isClick:false,
           disabled:false,
+          required:true,
+          pattern:'',
+          errorText:'输入数据的格式不正确',
+          options:[
+            
+          ]
         }
       ],
       // 表单字段数据
