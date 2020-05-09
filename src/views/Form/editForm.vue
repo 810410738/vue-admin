@@ -13,58 +13,114 @@
           <span class="primaryText">基础字段</span>
           <div class="aLine"></div>
           <el-row>
-            <el-button type="primary" plain size="mini">普通输入框</el-button>
-            <el-button type="primary" plain size="mini">下拉框</el-button>
+            <el-button type="primary" plain size="mini" @click="addItem('input')">普通输入框</el-button>
+            <el-button type="primary" plain size="mini" @click="addItem('select')">下拉框</el-button>
           </el-row>
         </el-col>
         <!-- 表单效果 -->
         <el-col :span="15" class="mainFrom">
           <el-row>
             <div class="controlButton">
-              <el-button type="primary" size="small">保存</el-button>
-              <el-button type="info" size="small">清空</el-button>
+              <el-button type="primary" size="small" @click="save" icon="el-icon-upload">保存</el-button>
+              <el-button type="danger" size="small" @click="clear" icon="el-icon-delete">清空</el-button>
             </div>
           </el-row>
           <el-row>
             <el-form
               :label-position="Form.labelPosition"
-              :label-width="Form.labelWidth"
+              :label-width="Form.labelWidth + 'px'"
               :model="Form.Data"
               :rules="Form.rules"
               :size="Form.size"
               ref="Form"
             >
-            <div class="formItem" v-for="(item, index) in Form.Item" :key="item.key" @click="editItem(index)" :class="{'clickFormItem':item.isClick}">
-              <el-form-item :label="item.label" :prop="item.name">
-                <el-input  v-if="item.type == 'input'" :placeholder="item.placeholder"></el-input>
-                <el-select v-else-if="item.type == 'select'" :placeholder="item.placeholder"></el-select>
-              </el-form-item>
-            </div>
+              <div
+                class="formItem"
+                v-for="(item, index) in Form.Item"
+                :key="item.key"
+                @click="editItem(index)"
+                :class="{'clickFormItem':item.isClick}"
+              >
+              <!-- 各个元素的操作按钮（删除） -->
+              <div class="itemEdit" v-show="item.isClick">
+                <!-- 删除 -->
+                <el-button type="primary" icon="el-icon-delete" circle size="mini" @click="deleteOneItem(index)"></el-button>
+                <!-- 复制多一份 -->
+                <el-button type="success" icon="el-icon-copy-document" circle size="mini" @click="copyOneItem(index)"></el-button>
+                <!-- 上移 -->
+                <el-button icon="el-icon-upload2" circle size="mini" @click="moveOneItem(index,'up')"></el-button>
+                <!-- 下移 -->
+                <el-button icon="el-icon-download" circle size="mini"  @click="moveOneItem(index,'down')"></el-button>
+                
+              </div>
+                <el-form-item :label="item.label" :prop="item.name">
+                  <el-input
+                    v-if="item.type == 'input'"
+                    :placeholder="item.placeholder"
+                    :style="'width:' + item.width + '%'"
+                    :disabled="item.disabled"
+                  ></el-input>
+                  <el-select
+                    v-else-if="item.type == 'select'"
+                    :placeholder="item.placeholder"
+                    :style="'width:' + item.width + '%'"
+                    :disabled="item.disabled"
+                  ></el-select>
+                </el-form-item>
+              </div>
             </el-form>
           </el-row>
         </el-col>
         <!-- 右边编辑属性 -->
-        <el-col :span="4" :offset="1">
-          <span>
-            字段属性
-          </span>
-          <el-form v-for="item in Form.Item" :key="item.key" v-show="item.isClick">
-            <el-form-item label="字段名字">
-              <el-input v-model="item.name"></el-input>
-            </el-form-item>
-            <el-form-item label="标题">
-              <el-input v-model="item.label"></el-input>
-            </el-form-item>
-            <el-form-item label="输入提示">
-              <el-input v-model="item.placeholder"></el-input>
-            </el-form-item>
-             <el-form-item label="宽度">
-              <el-input></el-input>
-            </el-form-item>
-             <el-form-item label="校验">
-              <el-input></el-input>
-            </el-form-item>
-          </el-form>
+        <el-col :span="5" :offset="1">
+          <el-tabs v-model="activeName" type="border-card" :stretch="true">
+            <el-tab-pane label="字段属性" name="item">
+              <el-form v-for="item in Form.Item" :key="item.key" v-show="item.isClick">
+                <el-form-item label="字段名字">
+                  <el-input v-model="item.name"></el-input>
+                </el-form-item>
+                <el-form-item label="标题">
+                  <el-input v-model="item.label"></el-input>
+                </el-form-item>
+                <el-form-item label="输入提示">
+                  <el-input v-model="item.placeholder"></el-input>
+                </el-form-item>
+                <el-form-item label="宽度">
+                  <el-input v-model="item.width">
+                    <template slot="append">%</template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="操作属性">
+                  <el-checkbox v-model="item.disabled">禁用</el-checkbox>
+                </el-form-item>
+                <el-form-item label="校验">
+                  <el-input></el-input>
+                </el-form-item>
+              </el-form>
+            </el-tab-pane>
+            <el-tab-pane label="表单属性" name="form">
+              <el-form label-position="top">
+                <el-form-item label="标签对齐方式">
+                  <el-radio-group v-model="Form.labelPosition">
+                    <el-radio-button label="left">左对齐</el-radio-button>
+                    <el-radio-button label="right">右对齐</el-radio-button>
+                    <el-radio-button label="top">顶部对齐</el-radio-button>
+                  </el-radio-group>
+                </el-form-item>
+                <el-form-item label="表单标签宽度">
+                  <el-input-number v-model="Form.labelWidth" :step="10"></el-input-number>
+                </el-form-item>
+                <el-form-item label="组件尺寸">
+                  <el-radio-group v-model="Form.size">
+                    <el-radio-button label="medium">medium</el-radio-button>
+                    <el-radio-button label="small">small</el-radio-button>
+                    <el-radio-button label="mini">mini</el-radio-button>
+                  </el-radio-group>
+                </el-form-item>
+                
+              </el-form>
+            </el-tab-pane>
+          </el-tabs>
         </el-col>
       </el-row>
       <el-row>
@@ -87,7 +143,7 @@
 
 <script>
 import headTop from "@/components/headTop";
-import { saveFormData, getFormData,getUserFormData } from "@/api/getFormData";
+import { saveFormData, getFormData, getUserFormData } from "@/api/getFormData";
 export default {
   components: {
     headTop
@@ -100,7 +156,9 @@ export default {
         formId: ""
       },
       // 表单数据
-      getFormData: {}
+      getFormData: {},
+      // 右边操作属性的标签切换的名字
+      activeName: "item"
     };
   },
   mounted() {
@@ -112,7 +170,7 @@ export default {
      */
     init() {
       // formId存在才执行
-      getUserFormData().then(res=>{
+      getUserFormData().then(res => {
         this.Form = res.extend.userInfoForm;
       });
       if (this.$route.query.formId) {
@@ -127,9 +185,9 @@ export default {
      * @description 点击元素，右边可以编辑属性
      * @param index 元素的索引值
      */
-    editItem(index){
+    editItem(index) {
       // 所有元素都重置为未点击的状态
-      for(var i in this.Form.Item){
+      for (var i in this.Form.Item) {
         this.Form.Item[i].isClick = false;
       }
       this.Form.Item[index].isClick = true;
@@ -144,14 +202,69 @@ export default {
      * @description 保存数据
      */
     save() {
-      console.log(this.$refs.makingform.getJSON());
-      saveFormData(this.$refs.makingform.getJSON()).then(res => {
+      saveFormData().then(res => {
         // 上传数据成功
         this.$message({
           message: "保存成功",
           type: "success"
         });
       });
+    },
+    /**
+     * @description 清空整个表单
+     */
+    clear() {
+      this.Form.Item.splice(0);
+    },
+    /**
+     * @description 添加表单元素
+     * @param ItemType 元素类型
+     */
+    addItem(ItemType) {
+      var jsonData = {
+        key: "",
+        name: "",
+        type: "",
+        label: "",
+        placeholder: "",
+        width: "100",
+        isClick: false,
+        disabled: false,
+        rules: []
+      };
+      // 生成随机且唯一的key值
+      jsonData.key =
+        String(Math.random()).substring(2, 10) + String(Date.now());
+      jsonData.name = ItemType + "_" + jsonData.key;
+      jsonData.type = ItemType;
+      switch (ItemType) {
+        // 单行输入框
+        case "input":
+          jsonData.label = "input输入框";
+          break;
+        case "select":
+          jsonData.label = "select下拉框";
+          break;
+      }
+      // 添加新的元素到Form.item
+      this.Form.Item.push(jsonData);
+    },
+    /**
+     * @description 删除指定索引的表单元素
+     * @param index 表单元素的索引
+     */
+    deleteOneItem(index){
+      this.Form.Item.splice(index, 1);
+    },
+    /**
+     * @description 复制指定索引的表单元素
+     * @param index 表单元素的索引
+     */
+    copyOneItem(index){
+      var jsonData = JSON.parse(JSON.stringify(this.Form.Item[index]));
+       // 生成随机且唯一的key值
+      jsonData.key = String(Math.random()).substring(2, 10) + String(Date.now());
+      this.Form.Item.splice(index, 0, jsonData);
     }
   }
 };
@@ -173,21 +286,20 @@ export default {
   }
 }
 // 表单界面
-.mainFrom{
-  .controlButton{
+.mainFrom {
+  .controlButton {
     margin-left: 4em;
     margin-bottom: 1em;
   }
-  .formItem{
+  .formItem {
     margin-bottom: 1em;
-    border:2px solid white;
+    border: 2px solid white;
   }
-  .formItem:hover{
-    border-color: #409EFF;
+  .formItem:hover {
+    border-color: #409eff;
   }
-  .clickFormItem{
-    border-color: #409EFF;
+  .clickFormItem {
+    border-color: #409eff;
   }
 }
-
 </style>

@@ -392,7 +392,7 @@ var getUserFormData = {
     userInfoForm: {
       // 表单配置项
       labelPosition: "right",
-      labelWidth: "130px",
+      labelWidth: "130",
       size: "small",
       disabled: false,
       Item:[
@@ -402,7 +402,17 @@ var getUserFormData = {
           type:'input',
           label:'用户编号',
           placeholder:'请输入8位用户编号',
-          isClick:false
+          width:'100',
+          isClick:false,
+          disabled:false,
+          rules:[
+            {
+              required: true, message: '请输入8位用户编号', trigger: 'blur'
+            },
+            {
+              pattern: "^[0-9]{8}$", message: '输入格式不符合要求'
+            }
+          ]
         },
         {
           key:'123457',
@@ -410,7 +420,9 @@ var getUserFormData = {
           type:'input',
           label:'登录账号',
           placeholder:'请输入UASS账号（非必填）',
-          isClick:false
+          width:'100',
+          isClick:false,
+          disabled:false,
         },
         {
           key:'123458',
@@ -418,7 +430,9 @@ var getUserFormData = {
           type:'select',
           label:'所属一级机构',
           placeholder:'请选择所属一级机构',
-          isClick:false
+          width:'100',
+          isClick:false,
+          disabled:false,
         }
       ],
       // 表单字段数据
