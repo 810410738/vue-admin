@@ -7,7 +7,7 @@
         <h3>{{this.$route.query.formName}} - 表单设计</h3>
       </el-row>
       <!-- 自己写的表单生成器 -->
-      <el-row>
+      <el-row class="mainEditForm">
         <!-- 基础控件 -->
         <el-col :span="3" class="primaryButton">
           <span class="primaryText">基础字段</span>
@@ -23,6 +23,12 @@
             <div class="controlButton">
               <el-button type="primary" size="small" @click="save" icon="el-icon-upload">保存</el-button>
               <el-button type="danger" size="small" @click="clear" icon="el-icon-delete">清空</el-button>
+              <el-button
+                type="warning"
+                size="small"
+                @click="previewForm"
+                icon="el-icon-folder-checked"
+              >预览</el-button>
               <el-button type="success" size="small" @click="buildJSON" icon="el-icon-check">生成JSON</el-button>
             </div>
           </el-row>
@@ -94,9 +100,8 @@
                         :key="index1"
                         :label="item.label"
                         :value="item.value"
-                      ></el-option> -->
+                      ></el-option>-->
                     </el-select>
-
                   </el-form-item>
                 </div>
               </transition-group>
@@ -130,8 +135,9 @@
                 <!-- select特有的操作 -->
                 <el-form-item label="选项" v-if="item.type == 'select'">
                   <el-tabs v-model="selectActiveName" type="border-card" :stretch="true">
+                    <!--  静态数据的页面 -->
                     <el-tab-pane label="静态数据" name="static">
-                      <el-card v-for="item1 in item.options" :key="item1">
+                      <el-card v-for="(item1, index1) in item.options" :key="index1">
                         <el-input size="mini" v-model="item1.label">
                           <template slot="prepend">Label</template>
                         </el-input>
@@ -153,7 +159,16 @@
                         @click="changeSelectOption(index,'delete')"
                       ></el-button>
                     </el-tab-pane>
-                    <el-tab-pane label="动态数据" name="dynamic"></el-tab-pane>
+                    <!--  动态数据的页面 -->
+                    <el-tab-pane label="动态数据" name="dynamic">
+                      <el-form>
+                        <el-form-item label="接口URL">
+                          <el-input v-model="item.remoteURL">
+                            <template slot="prepend">http://</template>
+                          </el-input>
+                        </el-form-item>
+                      </el-form>
+                    </el-tab-pane>
                   </el-tabs>
                 </el-form-item>
                 <!--  -->
@@ -196,20 +211,6 @@
           </el-tabs>
         </el-col>
       </el-row>
-      <el-row>
-        <fm-making-form
-          ref="makingform"
-          style="height: 600px;"
-          preview
-          generate-code
-          generate-json
-          clearable
-        >
-          <template slot="action">
-            <el-button type="primary" icon="el-icon-upload" size="small" @click="save">保存</el-button>
-          </template>
-        </fm-making-form>
-      </el-row>
     </el-row>
 
     <!-- 生成json代码的对话框 -->
@@ -218,6 +219,20 @@
       :isShow="selfBuildJsonDialogVisible"
       @closeDialog="closeBuildJsonDialogrDialog"
     ></selfBuildJsonDialog>
+
+    <!-- 预览表单的对话框 -->
+    <el-dialog
+      title="预览表单"
+      :visible.sync="previewFormDialogVissible"
+      v-if="previewFormDialogVissible"
+      width="40%"
+      :before-close="closePreviewFormDialog"
+      ref="perviewFormDialog"
+      center
+    >
+      <!-- 自定义的表单渲染器 -->
+      <selfGenerateForm :formJson="Form"></selfGenerateForm>
+    </el-dialog>
   </div>
 </template>
 
@@ -225,15 +240,19 @@
 import headTop from "@/components/headTop";
 import { saveFormData, getFormData, getUserFormData } from "@/api/getFormData";
 import selfBuildJsonDialog from "@/components/Form/selfBuildJsonDialog";
+import selfGenerateForm from "@/components/Form/selfGenerateForm";
 export default {
   components: {
     headTop,
-    selfBuildJsonDialog
+    selfBuildJsonDialog,
+    selfGenerateForm
   },
   data() {
     return {
       // 控制生成json的对话框是否显示
       selfBuildJsonDialogVisible: false,
+      // 控制预览表单的对话框是否显示
+      previewFormDialogVissible: false,
       Form: {},
       // 请求表单数据的数据
       requestFormData: {
@@ -261,10 +280,7 @@ export default {
       });
       if (this.$route.query.formId) {
         this.requestFormData.formId = this.$route.query.formId;
-        getFormData(this.requestFormData).then(res => {
-          this.getFormData = res.extend;
-          this.$refs.makingform.setJSON(this.getFormData);
-        });
+        
       }
     },
     /**
@@ -413,9 +429,23 @@ export default {
           });
           break;
         case "delete":
-          this.Form.Item[index].options.splice(this.Form.Item[index].options.length-1, 1);
+          this.Form.Item[index].options.splice(
+            this.Form.Item[index].options.length - 1,
+            1
+          );
       }
-      console.log(this.Form.Item[index].options);
+    },
+    /**
+     * @description 打开预览表单的对话框
+     */
+    previewForm() {
+      this.previewFormDialogVissible = true;
+    },
+    /**
+     * @description 关闭预览表单的对话框
+     */
+    closePreviewFormDialog() {
+      this.previewFormDialogVissible = false;
     }
   }
 };

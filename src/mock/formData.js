@@ -442,6 +442,8 @@ var getUserFormData = {
           required:true,
           pattern:'',
           errorText:'输入数据的格式不正确',
+          remote:false,
+          remoteURL:'',
           options:[
             
           ]
