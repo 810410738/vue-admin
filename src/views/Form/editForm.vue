@@ -94,14 +94,8 @@
                       :placeholder="item.placeholder"
                       :style="'width:' + item.width + '%'"
                       :disabled="item.disabled"
-                    >
-                      <!-- <el-option
-                        v-for="(item1,index1) in item.options"
-                        :key="index1"
-                        :label="item.label"
-                        :value="item.value"
-                      ></el-option>-->
-                    </el-select>
+                    ></el-select>
+                    <span class="itemName">{{item.name}}</span>
                   </el-form-item>
                 </div>
               </transition-group>
@@ -133,46 +127,63 @@
                   </el-input>
                 </el-form-item>
                 <!-- select特有的操作 -->
-                <el-form-item label="选项" v-if="item.type == 'select'">
-                  <el-tabs v-model="selectActiveName" type="border-card" :stretch="true">
-                    <!--  静态数据的页面 -->
-                    <el-tab-pane label="静态数据" name="static">
-                      <el-card v-for="(item1, index1) in item.options" :key="index1">
-                        <el-input size="mini" v-model="item1.label">
-                          <template slot="prepend">Label</template>
-                        </el-input>
-                        <el-input size="mini" v-model="item1.value">
-                          <template slot="prepend">Value</template>
-                        </el-input>
-                      </el-card>
-                      <el-button
-                        plain
-                        icon="el-icon-plus"
-                        size="mini"
-                        @click="changeSelectOption(index,'add')"
-                      ></el-button>
-                      <el-button
-                        type="danger"
-                        plain
-                        icon="el-icon-minus"
-                        size="mini"
-                        @click="changeSelectOption(index,'delete')"
-                      ></el-button>
-                    </el-tab-pane>
-                    <!--  动态数据的页面 -->
-                    <el-tab-pane label="动态数据" name="dynamic">
-                      <el-form>
-                        <el-form-item label="接口URL">
-                          <el-input v-model="item.remoteURL">
-                            <template slot="prepend">http://</template>
+                <div v-if="item.type == 'select'">
+                  <el-form-item label="选项">
+                    <el-tabs v-model="selectActiveName" type="border-card" :stretch="true">
+                      <!--  静态数据的页面 -->
+                      <el-tab-pane label="静态数据" name="static">
+                        <el-card v-for="(item1, index1) in item.options" :key="index1">
+                          <el-input size="mini" v-model="item1.label">
+                            <template slot="prepend">Label</template>
                           </el-input>
-                        </el-form-item>
-                      </el-form>
-                    </el-tab-pane>
-                  </el-tabs>
-                </el-form-item>
+                          <el-input size="mini" v-model="item1.value">
+                            <template slot="prepend">Value</template>
+                          </el-input>
+                        </el-card>
+                        <el-button
+                          plain
+                          icon="el-icon-plus"
+                          size="mini"
+                          @click="changeSelectOption(index,'add')"
+                        ></el-button>
+                        <el-button
+                          type="danger"
+                          plain
+                          icon="el-icon-minus"
+                          size="mini"
+                          @click="changeSelectOption(index,'delete')"
+                        ></el-button>
+                      </el-tab-pane>
+                      <!--  动态数据的页面 -->
+                      <el-tab-pane label="动态数据" name="dynamic">
+                        <el-form>
+                          <el-form-item label="接口URL">
+                            <el-input v-model="item.remoteURL">
+                              <template slot="prepend">http://</template>
+                            </el-input>
+                          </el-form-item>
+                        </el-form>
+                      </el-tab-pane>
+                    </el-tabs>
+                    <el-checkbox v-model="item.isLinkOptions">联动获取数据</el-checkbox>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-select
+                      v-if="item.isLinkOptions"
+                      placeholder="请选择联动数据的下拉框"
+                      v-model="item.linkOptionsKey"
+                    >
+                      <el-option
+                        v-for="option_item in Form.Item"
+                        v-show="option_item.type == 'select' && option_item.key!=item.key"
+                        :key="option_item.key"
+                        :label="option_item.name"
+                        :value="option_item.key"
+                      ></el-option>
+                    </el-select>
+                  </el-form-item>
+                </div>
                 <!--  -->
-
                 <el-form-item label="操作属性">
                   <el-checkbox v-model="item.disabled">禁用</el-checkbox>
                 </el-form-item>
@@ -280,7 +291,6 @@ export default {
       });
       if (this.$route.query.formId) {
         this.requestFormData.formId = this.$route.query.formId;
-        
       }
     },
     /**
@@ -332,6 +342,8 @@ export default {
         width: "100",
         isClick: false,
         disabled: false,
+        required: false,
+        errorText: "输入数据的格式不正确",
         rules: []
       };
       // 生成随机且唯一的key值
@@ -346,6 +358,13 @@ export default {
           break;
         case "select":
           jsonData.label = "select下拉框";
+          jsonData.remote = false;
+          jsonData.remoteURL = "";
+          jsonData.options = [];
+          // 是否联动获取下拉数据
+          jsonData.isLinkOptions = false;
+          // 联动选项的id
+          jsonData.linkOptionsKey = "";
           break;
       }
       // 添加新的元素到Form.item
@@ -474,9 +493,13 @@ export default {
   }
   .formItem {
     transition: all 1s;
-    height: 80px;
+    height: 6em;
     margin-bottom: 1em;
     border: 2px solid white;
+    span.itemName {
+      float: right;
+      color: #82dc29;
+    }
   }
   .formItem:hover {
     border-color: #409eff;

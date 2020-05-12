@@ -4,7 +4,7 @@
     :label-position="Form.labelPosition"
     :label-width="Form.labelWidth + 'px'"
     :model="Form.Data"
-    :rules="Form.rules"
+    :rules="Form.Rules"
     :size="Form.size"
     ref="Form"
   >
@@ -14,14 +14,14 @@
         :placeholder="item.placeholder"
         :style="'width:' + item.width + '%'"
         :disabled="item.disabled"
-        v-model="item[item.name]"
+        v-model="Form.Data[item.name]"
       ></el-input>
       <el-select
         v-else-if="item.type == 'select'"
         :placeholder="item.placeholder"
         :style="'width:' + item.width + '%'"
         :disabled="item.disabled"
-        v-model="item[item.name]"
+        v-model="Form.Data[item.name]"
       >
         <el-option
           v-for="(item1,index1) in item.options"
@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { post } from "@/api/http";
 export default {
   components: {},
   props: {
@@ -70,16 +71,31 @@ export default {
       for (var i in this.Form.Item) {
         // 往每个元素添加绑定的属性值
         var ItemNode = this.Form.Item[i];
-        this.Form.Item[i][ItemNode.name] = "";
-        if(ItemNode.type == "select"){
-          if(ItemNode.remoteURL == ''){
+        this.$set(this.Form.Data, ItemNode.name, "");
+        // this.Form.Data[ItemNode.name] = "";
+        // 为每个元素添加校验规则
+        if (ItemNode.required == true) {
+          this.Form.Item[i].rules.push({
+            required: true,
+            message: ItemNode.placeholder,
+            trigger: "blur"
+          });
+        }
+        if (ItemNode.pattern != "") {
+          this.Form.Item[i].rules.push({
+            pattern: ItemNode.pattern,
+            message: ItemNode.errorText
+          });
+        }
+        this.$set(this.Form.Rules, ItemNode.name, ItemNode.rules);
+        // 元素类型为下拉框
+        if (ItemNode.type == "select") {
+          if (ItemNode.remoteURL == "") {
             ItemNode.remote = false;
-          }
-          else{
+          } else {
             ItemNode.remote = true;
             // 调用远程方法
-            this.Form.Item[i].options = [];
-            this.Form.Item[i].options = remoteSelectDataFunction('ItemNode.remoteURL')
+            this.remoteSelectDataFunction(ItemNode.remoteURL, i);
           }
         }
       }
@@ -106,9 +122,12 @@ export default {
     /**
      * @description 根据url访问接口，返回下拉列表数据
      * @param remoteURL 接口访问的url
+     * @param index 元素索引
      */
-    remoteSelectDataFunction(remoteURL){
-      return [];
+    remoteSelectDataFunction(remoteURL,index) {
+      post(remoteURL, {}).then(res => {
+        this.Form.Item[index].options =  res.extend.classList;
+      });
     }
   }
 };

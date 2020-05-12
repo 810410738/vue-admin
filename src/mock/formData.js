@@ -408,14 +408,7 @@ var getUserFormData = {
           required:true,
           pattern:'',
           errorText:'输入数据的格式不正确',
-          rules:[
-            {
-              required: true, message: '请输入8位用户编号', trigger: 'blur'
-            },
-            {
-              pattern: "^[0-9]{8}$", message: '输入格式不符合要求'
-            }
-          ]
+          rules:[]
         },
         {
           key:'123457',
@@ -429,6 +422,7 @@ var getUserFormData = {
           required:true,
           pattern:'',
           errorText:'输入数据的格式不正确',
+          rules:[]
         },
         {
           key:'123458',
@@ -443,35 +437,25 @@ var getUserFormData = {
           pattern:'',
           errorText:'输入数据的格式不正确',
           remote:false,
-          remoteURL:'',
+          remoteURL:'/aps3/common/getAllPrimaryClass',
+          // 是否联动获取下拉数据
+          isLinkOptions:false,
+          // 联动选项的id
+          linkOptionsKey:'',
+          // 是否被联动
+          isLinked:false,
+          // 被联动获取到的参数
+          linkedParmas:{},
+          rules:[],
           options:[
             
           ]
         }
       ],
       // 表单字段数据
-      Data: {
-        userNum: "",
-        loginAccount: "",
-        userName: "",
-        primaryClass: "",
-        secondaryClass: "",
-        isPartyMember: "",
-        isLeader: "",
-        systemIdentify: "",
-        remark: ""
-      },
+      Data: {},
       // 表单验证规则
-      userInfoFormRules: {
-        userNum:[
-          {
-            required: true, message: '请输入8位用户编号', trigger: 'blur'
-          },
-          {
-            pattern: "^[0-9]{8}$", message: '输入格式不符合要求'
-          }
-        ],
-        
+      Rules: {  
       },
     }
   },
