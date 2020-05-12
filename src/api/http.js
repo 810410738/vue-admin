@@ -27,6 +27,10 @@ if (process.env.NODE_ENV == 'development') {
 axios.defaults.timeout = 20000;
 // 设置post请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+export function setHeader(key, value){
+  axios.defaults.headers.post[key] = value;
+  axios.defaults.headers.get[key] = value;
+}
 //定义一个请求拦截器
 axios.interceptors.request.use(
   config => {

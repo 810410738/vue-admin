@@ -40,7 +40,7 @@ var getAllPrimaryClassData = {
   "errMsg": "success"
 
 }
-Mock.mock(commonUrlRoot + 'getAllPrimaryClass', 'post', getAllPrimaryClassData);
+Mock.mock(commonUrlRoot + 'getPrimaryClass', 'post', getAllPrimaryClassData);
 
 /**--------------------------------------------------------------------------------------- */
 // 02-封装“所属网点”
@@ -62,7 +62,7 @@ var getAllSecoByPrimData = {
   "errMsg": "success"
 
 }
-Mock.mock(commonUrlRoot + 'getAllSecoByPrim', 'post', getAllSecoByPrimData);
+Mock.mock(commonUrlRoot + 'getSecByPrim', 'post', getAllSecoByPrimData);
 
 /**--------------------------------------------------------------------------------------- */
 //  03-获取当前登录用户信息
@@ -162,6 +162,16 @@ var AuthorityByLoginRoleData = {
           "nodeName": "表单设计",
           "checked": true,
           "nodeUrl": "/index/DesignFormList"
+        },{
+          "nodeId": "42",
+          "nodeName": "权限管理",
+          "checked": true,
+          "nodeUrl": "/index/roleAuthorityAdmin"
+        },{
+          "nodeId": "43",
+          "nodeName": "角色管理",
+          "checked": true,
+          "nodeUrl": "/index/userRoleAdmin"
         }]
       }
     ]

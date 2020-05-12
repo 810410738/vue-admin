@@ -9,9 +9,9 @@ import './assets/css/public.css';
 import echarts from 'echarts';
 Vue.prototype.$echarts = echarts;
 // 引入FormMaking
-import FormMaking from 'form-making'
-import 'form-making/dist/FormMaking.css'
-Vue.use(FormMaking)
+// import FormMaking from 'form-making'
+// import 'form-making/dist/FormMaking.css'
+// Vue.use(FormMaking)
 
 // 开发环境
 if (process.env.NODE_ENV === "development") {

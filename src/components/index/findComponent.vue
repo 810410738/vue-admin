@@ -61,13 +61,7 @@ export default {
        * @description 获取所有一级分类
        */
       getAllPrimaryClass({}).then(res => {
-        var resultList = res.extend.classList;
-        for(var i in resultList){
-          this.primaryClass.push({
-            label:resultList[i],
-            value:resultList[i]
-          })
-        }
+        this.primaryClass = res.extend.classList;
       });
     },
     /**
@@ -86,7 +80,7 @@ export default {
       var jsonData = {};
       jsonData.primaryClass = value;
       getAllSecoByPrim(jsonData).then(res => {
-        var resultList = res.extend.classList;
+         this.secondClass =  this.secondClass.concat(res.extend.classList);
         for(var i in resultList){
           this.secondClass.push({
             label:resultList[i],

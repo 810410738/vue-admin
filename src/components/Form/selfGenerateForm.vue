@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { post } from "@/api/http";
+import { get } from "@/api/http";
 export default {
   components: {},
   props: {
@@ -107,7 +107,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          
+
         } else {
           return false;
         }
@@ -127,7 +127,15 @@ export default {
      * @param index 元素索引
      */
     remoteSelectDataFunction(requestData, remoteURL,index) {
-      post(remoteURL, requestData).then(res => {
+       // 重置
+      this.Form.Item[index].options =[
+         {
+          label:'',
+          value:''
+        }
+      ];
+      this.Form.Data[this.Form.Item[index].name] = '';
+      get(remoteURL, requestData).then(res => {
         this.Form.Item[index].options =  res.extend.classList;
       });
     },

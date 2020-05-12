@@ -12,9 +12,9 @@ export const toLogin = data => post(urlRoot + 'toLogin', data);
 export const logout = data => post(urlRoot + 'logout', data);
 
 // 01-封装“所属机构”
-export const getAllPrimaryClass = data => post( commonUrlRoot + 'getAllPrimaryClass', data);
+export const getAllPrimaryClass = data => get( commonUrlRoot + 'getPrimaryClass', data);
 // 02-封装“所属网点”
-export const getAllSecoByPrim = data => post( commonUrlRoot + 'getAllSecoByPrim', data);
+export const getAllSecoByPrim = data => get( commonUrlRoot + 'getSecByPrim', data);
 // 03-获取当前登录用户信息
 export const getLoginer = data => post( commonUrlRoot + 'getLoginer', data);
 // 04-获取当前登录用户访问菜单

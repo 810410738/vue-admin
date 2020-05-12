@@ -17,6 +17,7 @@ import statisticsDetails from '@/views/DataAdmin/statisticsDetails.vue'
 import abnormal from '@/views/DataAdmin/abnormal.vue'
 import abnormalDetails from '@/views/DataAdmin/abnormalDetails.vue'
 
+// 系统管理模块
 import userRoleAdmin from '@/views/SystemAdmin/userRoleAdmin.vue'
 import roleAuthorityAdmin from '@/views/SystemAdmin/roleAuthorityAdmin.vue'
 
