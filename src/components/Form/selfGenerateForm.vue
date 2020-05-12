@@ -22,6 +22,7 @@
         :style="'width:' + item.width + '%'"
         :disabled="item.disabled"
         v-model="Form.Data[item.name]"
+        @change="changeSelect(Form.Data[item.name], item.isLinkOptions,item.linkOptionsKey)"
       >
         <el-option
           v-for="(item1,index1) in item.options"
@@ -35,7 +36,6 @@
     <!-- 提交表单 -->
     <el-form-item>
       <el-button type="primary" @click="submitForm('Form')">提交</el-button>
-      <el-button @click="resetForm('Form')">重置</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -88,14 +88,14 @@ export default {
           });
         }
         this.$set(this.Form.Rules, ItemNode.name, ItemNode.rules);
-        // 元素类型为下拉框
-        if (ItemNode.type == "select") {
+        // 元素类型为下拉框且不是被联动
+        if (ItemNode.type == "select" && ItemNode.isLinked == false) {
           if (ItemNode.remoteURL == "") {
             ItemNode.remote = false;
           } else {
             ItemNode.remote = true;
             // 调用远程方法
-            this.remoteSelectDataFunction(ItemNode.remoteURL, i);
+            this.remoteSelectDataFunction({},ItemNode.remoteURL, i);
           }
         }
       }
@@ -107,6 +107,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          
         } else {
           return false;
         }
@@ -121,14 +122,35 @@ export default {
     },
     /**
      * @description 根据url访问接口，返回下拉列表数据
+     * @param requestData 请求数据
      * @param remoteURL 接口访问的url
      * @param index 元素索引
      */
-    remoteSelectDataFunction(remoteURL,index) {
-      post(remoteURL, {}).then(res => {
+    remoteSelectDataFunction(requestData, remoteURL,index) {
+      post(remoteURL, requestData).then(res => {
         this.Form.Item[index].options =  res.extend.classList;
       });
-    }
+    },
+    /**
+     * @description 选择下拉框数据后触发的事件
+     * 如果该下拉框为联动类型，则调用方法获取联动的下拉框的数据，否则什么也不做
+     * @param value 下拉框选择的数据
+     * @param isLinkOptions 是否为联动类型的下拉框
+     * @param linkOptionsKey 联动的下拉框的key值
+     */
+    changeSelect(value, isLinkOptions,linkOptionsKey){
+      if(!isLinkOptions){
+        return ;
+      }
+      var requestData = {};
+      requestData.parentClass = value;
+      // 根据key寻找联动的下拉框
+      for(var i in this.Form.Item){
+        if(this.Form.Item[i].key == linkOptionsKey){
+          this.remoteSelectDataFunction(requestData, this.Form.Item[i].remoteURL, i);
+        }
+      }
+    },
   }
 };
 </script>

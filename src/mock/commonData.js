@@ -25,13 +25,13 @@ Mock.mock(urlRoot + 'logout', 'post', logoutData);
 var getAllPrimaryClassData = {
   "extend": {
     "classList": [{
-        label: "龙岗支行",
-        value: "龙岗支行",
+        "label": "龙岗支行",
+        "value": "龙岗支行",
       },
 
       {
-        label: "中心区支行",
-        value: "中心区支行",
+        "label": "中心区支行",
+        "value": "中心区支行",
       }
 
     ]
@@ -47,8 +47,15 @@ Mock.mock(commonUrlRoot + 'getAllPrimaryClass', 'post', getAllPrimaryClassData);
 var getAllSecoByPrimData = {
   "extend": {
     "classList": [
-      "龙岗网点",
-      "中心区网点"
+      {
+        "label": "龙岗网点",
+        "value": "龙岗网点",
+      },
+      {
+        "label": "中心区网点",
+        "value": "中心区网点",
+      }
+      
     ]
   },
   "errCode": 0,

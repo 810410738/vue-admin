@@ -29,7 +29,8 @@
                 @click="previewForm"
                 icon="el-icon-folder-checked"
               >预览</el-button>
-              <el-button type="success" size="small" @click="buildJSON" icon="el-icon-check">生成JSON</el-button>
+              <el-button type="success" size="small" @click="publish" icon="el-icon-check">发布</el-button>
+              <el-button type="info" size="small" @click="buildJSON" icon="el-icon-check">生成JSON</el-button>
             </div>
           </el-row>
           <el-row>
@@ -249,7 +250,7 @@
 
 <script>
 import headTop from "@/components/headTop";
-import { saveFormData, getFormData, getUserFormData } from "@/api/getFormData";
+import { saveFormData, getFormData } from "@/api/getFormData";
 import selfBuildJsonDialog from "@/components/Form/selfBuildJsonDialog";
 import selfGenerateForm from "@/components/Form/selfGenerateForm";
 export default {
@@ -264,13 +265,23 @@ export default {
       selfBuildJsonDialogVisible: false,
       // 控制预览表单的对话框是否显示
       previewFormDialogVissible: false,
-      Form: {},
+      // 表单数据
+      Form: {
+        // 表单配置项
+        labelPosition: "right",
+        labelWidth: "130",
+        size: "small",
+        disabled: false,
+        Item: [],
+        // 表单字段数据
+        Data: {},
+        // 表单验证规则
+        Rules: {}
+      },
       // 请求表单数据的数据
       requestFormData: {
         formId: ""
       },
-      // 表单数据
-      getFormData: {},
       // 右边操作属性的标签切换的名字
       activeName: "item",
       // 右边操作属性的选项标签切换的名字
@@ -286,11 +297,11 @@ export default {
      */
     init() {
       // formId存在才执行
-      getUserFormData().then(res => {
-        this.Form = res.extend.userInfoForm;
-      });
       if (this.$route.query.formId) {
         this.requestFormData.formId = this.$route.query.formId;
+        getFormData(this.requestFormData).then(res => {
+          this.Form = res.extend.FormInfo;
+        });
       }
     },
     /**

@@ -22,7 +22,6 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="small" type="primary" plain @click="checkForm(scope.row.formId, scope.row.formName)">预览</el-button>
           <el-button size="small" type="success"  plain @click="editForm(scope.row.formId, scope.row.formName)">修改</el-button>
           <el-button size="small" type="danger" plain  @click="deleteForm(scope.row.formId)" >删除</el-button>
         </template>
@@ -66,20 +65,6 @@ export default {
      editForm(formId, formName){
        this.$router.push({
          path:'/Form',
-         query:{
-           formId:formId,
-           formName:formName,
-         }
-       })
-     },
-     /**
-      * @description 点击查看按钮，进入查看表单（不能修改）
-      * @param formId 表单id
-      * @param formName 表单名称
-      */
-     checkForm(formId,formName){
-       this.$router.push({
-         path:'/index/checkForm',
          query:{
            formId:formId,
            formName:formName,

@@ -23,7 +23,6 @@ import roleAuthorityAdmin from '@/views/SystemAdmin/roleAuthorityAdmin.vue'
 // 设计表单模块
 import DesignFormList from '@/views/Form/DesignFormList.vue'
 import editForm from '@/views/Form/editForm.vue'
-import checkForm from '@/views/Form/checkForm.vue'
 
 import test from '@/views/Test/test.vue'
 
@@ -45,10 +44,6 @@ const routes = [{
       {
         path: 'DesignFormList',
         component: DesignFormList,
-      },
-      {
-        path: 'checkForm',
-        component: checkForm,
       },
       {
         path: 'userList',
