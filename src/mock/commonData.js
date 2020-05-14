@@ -164,14 +164,14 @@ var AuthorityByLoginRoleData = {
           "nodeUrl": "/index/DesignFormList"
         },{
           "nodeId": "42",
-          "nodeName": "权限管理",
+          "nodeName": "角色管理",
           "checked": true,
           "nodeUrl": "/index/roleAuthorityAdmin"
         },{
           "nodeId": "43",
-          "nodeName": "角色管理",
+          "nodeName": "权限管理",
           "checked": true,
-          "nodeUrl": "/index/userRoleAdmin"
+          "nodeUrl": "/index/authorityAdmin"
         }]
       }
     ]
