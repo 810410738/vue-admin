@@ -2,3 +2,8 @@ h3 {
   text-align: center;
   color: #696d73;
 }
+/* el-table的行样式 */
+.el-table .table-green-row{
+  background: #f0f9eb;
+  background-image: linear-gradient(to right, #f0f9eb , rgb(255, 255, 255));
+}

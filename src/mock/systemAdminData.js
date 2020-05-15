@@ -171,23 +171,27 @@ var getAuthorityListData = {
         "chkDisable": false,
         "checked": true,
         "icon": "el-icon-edit-outline",
+        "pId":"-1",
         "children": [{
             "nodeId": "11",
             "nodeName": "发布问卷排查",
             "nodeUrl": "/index/adminQuestion",
-            "checked": true
+            "checked": true,
+            "pId":"1"
           },
           {
             "nodeId": "12",
             "nodeName": "参与问卷排查",
             "nodeUrl": "/index/questionList",
-            "checked": true
+            "checked": true,
+            "pId":"1"
           },
           {
             "nodeId": "13",
             "nodeName": "查看历史问卷",
             "nodeUrl": "/index/history",
-            "checked": true
+            "checked": true,
+            "pId":"1"
           }
         ]
       },
@@ -198,11 +202,13 @@ var getAuthorityListData = {
         "checked": true,
         "chkDisable": false,
         "icon": "el-icon-user",
+        "pId":"-1",
         "children": [{
           "nodeId": "21",
           "nodeName": "查看用户列表",
           "checked": true,
-          "nodeUrl": "/index/userList"
+          "nodeUrl": "/index/userList",
+          "pId":"2"
         }]
       },
       {
@@ -212,17 +218,20 @@ var getAuthorityListData = {
         "nodeUrl": "",
         "icon": "el-icon-s-data",
         "chkDisable": false,
+        "pId":"-1",
         "children": [{
             "nodeId": "31",
             "nodeName": "数据统计",
             "checked": true,
-            "nodeUrl": "/index/dataStatistics"
+            "nodeUrl": "/index/dataStatistics",
+            "pId":"3"
           },
           {
             "nodeId": "32",
             "nodeName": "查看异常记录",
             "checked": true,
-            "nodeUrl": "/index/abnormal"
+            "nodeUrl": "/index/abnormal",
+            "pId":"3"
           }
         ]
       },
@@ -233,38 +242,45 @@ var getAuthorityListData = {
         "nodeUrl": "",
         "icon": "el-icon-s-data",
         "chkDisable": false,
+        "pId":"-1",
         "children": [{
           "nodeId": "41",
           "nodeName": "表单设计",
           "checked": true,
-          "nodeUrl": "/index/DesignFormList"
+          "nodeUrl": "/index/DesignFormList",
+          "pId":"4"
         }, {
           "nodeId": "42",
           "nodeName": "权限管理",
           "checked": true,
-          "nodeUrl": "/index/roleAuthorityAdmin"
+          "nodeUrl": "/index/roleAuthorityAdmin",
+          "pId":"4"
         }, {
           "nodeId": "43",
           "nodeName": "角色管理",
           "checked": true,
-          "nodeUrl": "/index/userRoleAdmin"
+          "nodeUrl": "/index/userRoleAdmin",
+          "pId":"4"
         },{
           "nodeId": "44",
           "nodeName": "用户管理",
           "checked": true,
           "nodeUrl": "",
+          "pId":"4",
           "children":[
             {
               "nodeId": "441",
               "nodeName": "用户查询",
               "checked": false,
               "nodeUrl": "",
+              "pId":"44",
             },
             {
               "nodeId": "442",
               "nodeName": "用户新增",
               "checked": false,
               "nodeUrl": "",
+              "pId":"44",
             }
           ]
         }]
