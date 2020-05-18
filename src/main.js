@@ -13,6 +13,11 @@ Vue.prototype.$echarts = echarts;
 // import 'form-making/dist/FormMaking.css'
 // Vue.use(FormMaking)
 
+// 引入codemirror
+import { codemirror } from 'vue-codemirror'
+import 'codemirror/lib/codemirror.css'
+Vue.use(codemirror)
+
 // 开发环境
 if (process.env.NODE_ENV === "development") {
   // 引入mock

@@ -44,6 +44,7 @@ var getFormData = {
     // 表单设置
     FormInfo: {
       // 表单配置项
+      submitText:'提交',
       labelPosition: "right",
       labelWidth: "130",
       size: "small",
@@ -90,7 +91,7 @@ var getFormData = {
           pattern:'',
           errorText:'输入数据的格式不正确',
           remote:false,
-          remoteURL:'/aps3/common/getAllPrimaryClass',
+          remoteURL:'/aps3/common/getPrimaryClass',
           // 是否联动获取下拉数据
           isLinkOptions:false,
           // 联动选项的id

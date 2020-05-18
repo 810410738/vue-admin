@@ -35,7 +35,7 @@
 
     <!-- 提交表单 -->
     <el-form-item>
-      <el-button type="primary" @click="submitForm('Form')">提交</el-button>
+      <el-button type="primary" @click="submitForm('Form')">{{Form.submitText}}</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -95,7 +95,7 @@ export default {
           } else {
             ItemNode.remote = true;
             // 调用远程方法
-            this.remoteSelectDataFunction({},ItemNode.remoteURL, i);
+            this.remoteSelectDataFunction({}, ItemNode.remoteURL, i);
           }
         }
       }
@@ -106,8 +106,9 @@ export default {
      */
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
+        // 验证规则通过
         if (valid) {
-
+          this.$emit("submit", this.Form.Data);
         } else {
           return false;
         }
@@ -126,17 +127,17 @@ export default {
      * @param remoteURL 接口访问的url
      * @param index 元素索引
      */
-    remoteSelectDataFunction(requestData, remoteURL,index) {
-       // 重置
-      this.Form.Item[index].options =[
-         {
-          label:'',
-          value:''
+    remoteSelectDataFunction(requestData, remoteURL, index) {
+      // 重置
+      this.Form.Item[index].options = [
+        {
+          label: "",
+          value: ""
         }
       ];
-      this.Form.Data[this.Form.Item[index].name] = '';
+      this.Form.Data[this.Form.Item[index].name] = "";
       get(remoteURL, requestData).then(res => {
-        this.Form.Item[index].options =  res.extend.classList;
+        this.Form.Item[index].options = res.extend.classList;
       });
     },
     /**
@@ -146,19 +147,35 @@ export default {
      * @param isLinkOptions 是否为联动类型的下拉框
      * @param linkOptionsKey 联动的下拉框的key值
      */
-    changeSelect(value, isLinkOptions,linkOptionsKey){
-      if(!isLinkOptions){
-        return ;
+    changeSelect(value, isLinkOptions, linkOptionsKey) {
+      if (!isLinkOptions) {
+        return;
       }
       var requestData = {};
       requestData.parentClass = value;
       // 根据key寻找联动的下拉框
-      for(var i in this.Form.Item){
-        if(this.Form.Item[i].key == linkOptionsKey){
-          this.remoteSelectDataFunction(requestData, this.Form.Item[i].remoteURL, i);
+      for (var i in this.Form.Item) {
+        if (this.Form.Item[i].key == linkOptionsKey) {
+          this.remoteSelectDataFunction(
+            requestData,
+            this.Form.Item[i].remoteURL,
+            i
+          );
         }
       }
     },
+    /**
+     * @description 根据传入的对象，给表单的各个元素赋值
+     */
+    setFormData(row) {
+      try {
+        for (var key in this.Form.Data) {
+          this.Form.Data[key] = row[key];
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
   }
 };
 </script>

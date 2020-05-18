@@ -30,6 +30,7 @@
                 icon="el-icon-folder-checked"
               >预览</el-button>
               <el-button type="success" size="small" @click="publish" icon="el-icon-check">发布</el-button>
+              <el-button type="primary" size="small" @click="selfImportJsonDialogVisible=true" icon="el-icon-upload2">导入JSON</el-button>
               <el-button type="info" size="small" @click="buildJSON" icon="el-icon-check">生成JSON</el-button>
             </div>
           </el-row>
@@ -201,6 +202,9 @@
             </el-tab-pane>
             <el-tab-pane label="表单属性" name="form">
               <el-form label-position="top">
+                <el-form-item label="提交表单按钮的文字内容">
+                  <el-input v-model="Form.submitText" :step="10"></el-input>
+                </el-form-item>
                 <el-form-item label="标签对齐方式">
                   <el-radio-group v-model="Form.labelPosition">
                     <el-radio-button label="left">左对齐</el-radio-button>
@@ -232,6 +236,13 @@
       @closeDialog="closeBuildJsonDialogrDialog"
     ></selfBuildJsonDialog>
 
+     <!-- 导入json代码的对话框 -->
+    <selfImportJsonDialog
+      :isShow="selfImportJsonDialogVisible"
+      @closeDialog="closeImportJsonDialogrDialog"
+      @generateJsonData="importJsonData(arguments)"
+    ></selfImportJsonDialog>
+
     <!-- 预览表单的对话框 -->
     <el-dialog
       title="预览表单"
@@ -252,15 +263,19 @@
 import headTop from "@/components/headTop";
 import { saveFormData, getFormData } from "@/api/getFormData";
 import selfBuildJsonDialog from "@/components/Form/selfBuildJsonDialog";
+import selfImportJsonDialog from "@/components/Form/selfImportJsonDialog";
 import selfGenerateForm from "@/components/Form/selfGenerateForm";
 export default {
   components: {
     headTop,
     selfBuildJsonDialog,
-    selfGenerateForm
+    selfGenerateForm,
+    selfImportJsonDialog
   },
   data() {
     return {
+      // 控制导入json的对话框是否显示
+      selfImportJsonDialogVisible:false,
       // 控制生成json的对话框是否显示
       selfBuildJsonDialogVisible: false,
       // 控制预览表单的对话框是否显示
@@ -268,6 +283,7 @@ export default {
       // 表单数据
       Form: {
         // 表单配置项
+        submitText:'提交',
         labelPosition: "right",
         labelWidth: "130",
         size: "small",
@@ -440,7 +456,7 @@ export default {
       this.selfBuildJsonDialogVisible = true;
     },
     /*
-     * @description 关闭新增用户的对话框
+     * @description 关闭生成json的对话框
      */
     closeBuildJsonDialogrDialog() {
       this.selfBuildJsonDialogVisible = false;
@@ -466,6 +482,17 @@ export default {
       }
     },
     /**
+     * @description 导入json数据
+     */
+    importJsonData(arg){
+      this.Form = arg[0];
+      this.$message({
+        type:'success',
+        message:"导入成功！"
+      })
+      this.closeImportJsonDialogrDialog();
+    },
+    /**
      * @description 打开预览表单的对话框
      */
     previewForm() {
@@ -476,6 +503,12 @@ export default {
      */
     closePreviewFormDialog() {
       this.previewFormDialogVissible = false;
+    },
+    /**
+     * @description 关闭导入json的对话框
+     */
+    closeImportJsonDialogrDialog(){
+      this.selfImportJsonDialogVisible = false;
     }
   }
 };

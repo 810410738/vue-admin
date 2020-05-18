@@ -2,53 +2,65 @@
   <div class="table_container">
     <h3 class="headTitle">权限管理</h3>
     <!-- 操作组件 -->
-    <el-row>
-      <!-- 查找操作组件 -->
-      <el-col :span="14">
-        <!-- 查找操作组件 -->
-        <findComponent @find="find(arguments)"></findComponent>
-      </el-col>
-    </el-row>
-    <!-- 用户表格数据 -->
-    <el-table
-      :data="getAuthorityData"
-      style="width: 100%"
-      row-key="nodeId"
-      :key="nodeId"
-      :tree-props="{children:'children',hasChildren: 'hasChildren'}"
-      default-expand-all
-      size="mini"
-      :row-class-name="tableRowClassName"
-    >
-      <el-table-column property="nodeName" label="权限名称"></el-table-column>
-      <el-table-column property="nodeUrl" label="请求地址"></el-table-column>
-      <el-table-column property label="类型"></el-table-column>
-      <el-table-column property label="权限标识"></el-table-column>
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button type="success" plain size="mini" @click="edit(scope.row)">编辑</el-button>
-          <el-popover placement="left-start" trigger="hover" class="moreButton">
-            <div>
-              <el-button size="mini" type="text" icon="el-icon-top" @click="moveNode(scope,'up')">上移</el-button>
-              <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-bottom"
-                @click="moveNode(scope,'down')"
-              >下移</el-button>
-              <el-button size="mini" type="text" icon="el-icon-plus" @click="newNode">新增</el-button>
-              <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-minus"
-                @click="deleteOneAuthority(scope.row.nodeId)"
-              >删除</el-button>
-            </div>
-            <el-button slot="reference" size="mini" type="primary" plain>更多操作</el-button>
-          </el-popover>
-        </template>
-      </el-table-column>
-    </el-table>
+    <el-card class="findCard">
+      <el-row>
+        <el-col :span="6">
+          <!-- 所有子系统 -->
+          <selfFindSystemComponent ref="findSystem"></selfFindSystemComponent>
+        </el-col>
+        <el-col :span="6">
+          <el-button type="success" size="small" @click="save">保存修改</el-button>
+        </el-col>
+      </el-row>
+    </el-card>
+    <el-card>
+      <!-- 用户表格数据 -->
+      <el-table
+        :data="getAuthorityData"
+        style="width: 100%"
+        row-key="nodeId"
+        :key="nodeId"
+        :tree-props="{children:'children',hasChildren: 'hasChildren'}"
+        default-expand-all
+        size="mini"
+        :row-class-name="tableRowClassName"
+      >
+        <el-table-column property="nodeName" label="权限名称"></el-table-column>
+        <el-table-column property="nodeUrl" label="请求地址"></el-table-column>
+        <el-table-column property label="类型"></el-table-column>
+        <el-table-column property label="权限标识"></el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button type="success" plain size="mini" @click="edit(scope.row)">编辑</el-button>
+            <el-popover placement="left-start" trigger="hover" class="moreButton">
+              <div>
+                <el-button
+                  size="mini"
+                  type="text"
+                  icon="el-icon-top"
+                  @click="moveNode(scope,'up')"
+                >上移</el-button>
+                <el-button
+                  size="mini"
+                  type="text"
+                  icon="el-icon-bottom"
+                  @click="moveNode(scope,'down')"
+                >下移</el-button>
+                <el-button size="mini" type="text" icon="el-icon-plus" @click="newNode">新增</el-button>
+                <el-button
+                  size="mini"
+                  type="text"
+                  icon="el-icon-minus"
+                  @click="deleteOneAuthority(scope.row.nodeId)"
+                >删除</el-button>
+              </div>
+              <el-button slot="reference" size="mini" type="primary" plain>更多操作</el-button>
+            </el-popover>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+
     <!-- 编辑的对话框 -->
     <el-dialog title="修改权限信息" :visible.sync="dialogVisible" width="30%">
       <el-form
@@ -73,7 +85,7 @@
               :label="item.label"
               :value="item.value"
               v-for="item in iconOption"
-              :key="item"
+              :key="item.value"
             >
               <i :class="item.value" class="icon"></i>
             </el-option>
@@ -95,12 +107,13 @@ import {
   getUserInfo,
   getAllRoleExceptAdmin
 } from "@/api/getUserData";
+import {getIconOption} from '@/api/getCommonData';
 import { getAuthorityList, deleteAuthority } from "@/api/getSystemAdminData";
 import { isFirstChild, isLastChild, exchange } from "@/util/HandleTreeData";
-import findComponent from "@/components/index/findComponent";
+import selfFindSystemComponent from "@/components/SystemAdmin/selfFindSystemComponent";
 export default {
   components: {
-    findComponent
+    selfFindSystemComponent
   },
   data() {
     return {
@@ -114,7 +127,9 @@ export default {
       // 获取的用户数据
       getAuthorityData: [],
       // 请求权限列表数据的参数
-      requestData: {}
+      requestData: {},
+      // 标志已经移动过节点元素
+      isMoved: false
     };
   },
   created() {
@@ -126,6 +141,9 @@ export default {
       getAuthorityList(this.requestData).then(res => {
         this.getAuthorityData = res.extend.authorityList;
       });
+      getIconOption().then(res=>{
+        this.iconOption = res.extend.classList;
+      })
     },
     /**
      * @description 移动表单元素
@@ -156,6 +174,8 @@ export default {
             return;
           }
           exchange(this.getAuthorityData, currentNode, type);
+          // 操作成功过的标志
+          this.isMoved = true;
           break;
       }
     },
@@ -213,27 +233,27 @@ export default {
         });
       });
     },
+    
     /**
-     * @description 获取图标的下拉数据
+     * @description 新增一个节点,请求服务器
      */
-    getIconOption() {
-      for (var i = 0; i < 100; i++) {
-        this.iconOption.push({
-          label: "el-icon-platform-eleme",
-          value: "el-icon-platform-eleme"
-        });
-      }
-    },
-    /**
-     * @description 新增一个节点
-     */
-    newNode(){
-
-    },
+    newNode() {},
     /**
      * @description 保存修改
      */
-    save() {}
+    save() {
+      if (!this.isMoved) {
+        this.$message({
+          type: "warning",
+          message: "当前没有改动，无需保存修改"
+        });
+        return;
+      }
+      // 向服务器发送保存请求
+      var jsonData = {};
+
+      this.isMoved = false;
+    }
   }
 };
 </script>

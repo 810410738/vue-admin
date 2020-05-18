@@ -7,7 +7,7 @@
     </el-card>
     <el-card>
       <el-row>
-        <el-button type="warning" size="small" icon="el-icon-plus">新增</el-button>
+        <el-button type="warning" size="small" icon="el-icon-plus" @click="newRole">新增</el-button>
       </el-row>
       <!-- 用户表格数据 -->
       <el-table :data="tableData.records" highlight-current-row style="width: 100%" stripe>
@@ -44,8 +44,37 @@
       </div>
     </el-card>
 
+    <!-- 新增角色的对话框 -->
+    <el-dialog
+      title="新增角色"
+      :visible.sync="newRoleDialogVisible"
+      width="30%"
+      center
+      v-if="newRoleDialogVisible"
+      :before-close="closeNewRoleDialog"
+    >
+      <!-- 自定义的表单渲染器 -->
+      <selfGenerateForm :formJson="newRoleFormData" @submit="submitNewRole(arguments)"></selfGenerateForm>
+    </el-dialog>
+
+    <!-- 编辑角色的对话框 -->
+    <el-dialog
+      title="编辑角色信息"
+      :visible.sync="editRoleDialogVisible"
+      width="30%"
+      center
+      :before-close="closeEditRoleDialog"
+    >
+      <!-- 自定义的表单渲染器 -->
+      <selfGenerateForm ref="editRoleForm" :formJson="newRoleFormData" @submit="submitEditRole(arguments)"></selfGenerateForm>
+    </el-dialog>
+
     <!-- 修改角色权限的对话框 -->
-    <el-dialog :title="form.roleName +'-权限修改'" :visible.sync="dialogVisible" width="30%">
+    <el-dialog
+      :title="form.roleName +'-权限修改'"
+      :visible.sync="changeAuthorityDialogVisible"
+      width="30%"
+    >
       <el-tree
         ref="tree"
         :data="authorityList"
@@ -57,7 +86,7 @@
         :check-strictly="true"
       ></el-tree>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button @click="changeAuthorityDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="submit">确 定</el-button>
       </div>
     </el-dialog>
@@ -65,14 +94,26 @@
 </template>
 
 <script>
-import { getAllRoleByPage, deleteRoleById,getChangeAuthorityList,updateRoleAuthority } from "@/api/getSystemAdminData";
+import {
+  getAllRoleByPage,
+  deleteRoleById,
+  getChangeAuthorityList,
+  updateRoleAuthority
+} from "@/api/getSystemAdminData";
+import { getFormData } from "@/api/getFormData";
 import selfFindRoleListComponent from "@/components/SystemAdmin/RoleAdmin/selfFindRoleListComponent";
+import selfGenerateForm from "@/components/Form/selfGenerateForm";
 selfFindRoleListComponent;
 export default {
   data() {
     return {
-      // 控制对话框是否可见
-      dialogVisible: false,
+      newRoleFormData:{},
+      // 控制编辑角色信息的对话框是否可见
+      editRoleDialogVisible:false,
+      // 控制分配权限的对话框是否可见
+      changeAuthorityDialogVisible: false,
+      // 控制新增角色的对话框是否可见
+      newRoleDialogVisible: false,
       // 角色表单的数据
       form: {},
       findUserInput: "",
@@ -99,22 +140,38 @@ export default {
     };
   },
   components: {
-    selfFindRoleListComponent
+    selfFindRoleListComponent,
+    selfGenerateForm
   },
   created() {
     this.initData();
   },
   methods: {
     initData() {
+      // 获取所有角色列表
       getAllRoleByPage(this.requestAllRoleData).then(res => {
         this.tableData = res.extend.pageData;
       });
+      // 获取新增角色的表单数据
+      getFormData({}).then(res=>{
+        this.newRoleFormData =  res.extend.FormInfo;
+      })
+    },
+    /**
+     * @description 点击新增角色的按钮
+     */
+    newRole(){
+      this.newRoleDialogVisible = true;
     },
     /**
      * @description 点击编辑按钮
      * @param
      */
-    edit(row){
+    edit(row) {
+      this.editRoleDialogVisible = true;
+      this.$nextTick(()=>{
+        this.$refs.editRoleForm.setFormData(row);
+      })
       
     },
     /**
@@ -125,7 +182,7 @@ export default {
       // 设置对话框的标题
       this.form.roleName = row.roleName;
       // 显示对话框
-      this.dialogVisible = true;
+      this.changeAuthorityDialogVisible = true;
       // 获取菜单数据
       var jsonData = {};
       jsonData.roleId = row.roleId;
@@ -147,14 +204,31 @@ export default {
       });
     },
     /**
+     * @description 提交新增角色的申请
+     */
+    submitNewRole(arg){
+      console.log(arg[0]);
+    },
+    /**
+     * @description 关闭新增角色的对话框
+     */
+    closeNewRoleDialog(){
+      this.newRoleDialogVisible = false;
+    },
+    /**
+     * @description 关闭编辑角色信息的对话框
+     */
+    closeEditRoleDialog(){
+      this.editRoleDialogVisible = false;
+    },
+    /**
      * @todo
      * @description 当复选框被点击的时候触发的事件
      * @param currentNode 该节点所对应的对象
      * @param isChecked 节点本身是否被选中
      * @param isChildHasChecked 节点的子树中是否有被选中的节点
      */
-    clickTree(currentNode,isChecked,isChildHasChecked) {
-    },
+    clickTree(currentNode, isChecked, isChildHasChecked) {},
     /**
      * @description 提交数据，更新角色权限信息
      */
@@ -178,7 +252,7 @@ export default {
       }).then(() => {
         updateRoleAuthority(this.requestData).then(res => {
           // 请求成功后关闭对话框，弹出提示
-          this.dialogVisible = false;
+          this.changeAuthorityDialogVisible = false;
           this.$message({
             message: "修改权限成功",
             type: "success"
@@ -242,7 +316,7 @@ h3 {
     width: 70%;
   }
 }
-.findCard{
+.findCard {
   margin-bottom: 1em;
 }
 </style>

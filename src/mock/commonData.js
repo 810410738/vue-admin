@@ -40,7 +40,7 @@ var getAllPrimaryClassData = {
   "errMsg": "success"
 
 }
-Mock.mock(commonUrlRoot + 'getPrimaryClass', 'post', getAllPrimaryClassData);
+Mock.mock(commonUrlRoot + 'getPrimaryClass', 'get', getAllPrimaryClassData);
 
 /**--------------------------------------------------------------------------------------- */
 // 02-封装“所属网点”
@@ -62,7 +62,7 @@ var getAllSecoByPrimData = {
   "errMsg": "success"
 
 }
-Mock.mock(commonUrlRoot + 'getSecByPrim', 'post', getAllSecoByPrimData);
+Mock.mock(commonUrlRoot + 'getSecByPrim', 'get', getAllSecoByPrimData);
 
 /**--------------------------------------------------------------------------------------- */
 //  03-获取当前登录用户信息
@@ -172,7 +172,14 @@ var AuthorityByLoginRoleData = {
           "nodeName": "权限管理",
           "checked": true,
           "nodeUrl": "/index/authorityAdmin"
-        }]
+        },
+        {
+          "nodeId": "44",
+          "nodeName": "日志管理",
+          "checked": true,
+          "nodeUrl": "/index/logAdmin"
+        },
+      ]
       }
     ]
   },
@@ -192,3 +199,17 @@ var getCurrentCommentOperateData = {
   "errMsg": "success"
 }
 Mock.mock(commonUrlRoot + 'getCurrentCommentOperate', 'post', getCurrentCommentOperateData);
+
+/**--------------------------------------------------------------------------------------- */
+// 获取所有icon
+var getIconOptionData = {
+  "errCode": 0,
+  "errMsg": "[响应成功]",
+  "extend": {
+      "classList": [{
+          "label": "el-icon-platform-eleme",
+          "value": "el-icon-platform-eleme"
+      }]
+  }
+}
+Mock.mock(commonUrlRoot + 'getIconOption', 'post', getIconOptionData);

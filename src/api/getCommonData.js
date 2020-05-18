@@ -22,6 +22,8 @@ export const findAuthorityByLoginRole = data => post( commonUrlRoot + 'getMenuBy
 // 05-获取评议系统启动状态
 export const getCurrentCommentOperate = data => post( commonUrlRoot + 'getCurrentCommentOperate', data);
 
+export const getIconOption = data => post( commonUrlRoot + 'getIconOption', data);
+
 // 测试跨域请求
 export const testProxy = data => get('/statistics/findLoginer', data);
 

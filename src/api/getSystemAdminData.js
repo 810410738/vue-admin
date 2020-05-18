@@ -18,3 +18,6 @@ export const getAuthorityList = data => post( roleAuthorityUrlRoot+ 'getAuthorit
 
 // 删除一个权限
 export const deleteAuthority = data => post( roleAuthorityUrlRoot+ 'deleteAuthority', data);
+
+// 获取所有日志列表
+export const getLogData = data => post( roleAuthorityUrlRoot+ 'getLogData', data);

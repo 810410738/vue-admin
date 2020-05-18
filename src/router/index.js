@@ -20,6 +20,8 @@ import abnormalDetails from '@/views/DataAdmin/abnormalDetails.vue'
 // 系统管理模块
 import authorityAdmin from '@/views/SystemAdmin/authorityAdmin.vue'
 import roleAuthorityAdmin from '@/views/SystemAdmin/roleAuthorityAdmin.vue'
+// 日志管理模块
+import logAdmin from '@/views/SystemAdmin/logAdmin.vue'
 
 // 设计表单模块
 import DesignFormList from '@/views/Form/DesignFormList.vue'
@@ -72,7 +74,11 @@ const routes = [{
       },
       {
         path: 'roleAuthorityAdmin',
-        component: roleAuthorityAdmin,
+        component: roleAuthorityAdmin
+      },
+      {
+        path:'logAdmin',
+        component:logAdmin
       },
       {
         path: 'addQuestionnaire',

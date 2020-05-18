@@ -2,19 +2,7 @@
   <el-row :gutter="2">
     <el-col :span="6">
       <!-- 所有子系统 -->
-      <label>子系统：</label>
-      <el-select
-        size="small"
-        @change="getAllSecoByPrimData"
-        v-model="findComponentData.systemIdentify"
-      >
-        <el-option
-          v-for="item in systemIdentifyClass"
-          :key="item.label"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
+      <selfFindSystemComponent ref="findSystem"></selfFindSystemComponent>
     </el-col>
     <el-col :span="6">
       <!-- 角色状态 -->
@@ -44,7 +32,11 @@
 
 <script>
 import {} from "@/api/getCommonData";
+import selfFindSystemComponent from "@/components/SystemAdmin/selfFindSystemComponent"
 export default {
+  components: {
+    selfFindSystemComponent
+  },
   data() {
     return {
       // 查找数据输入的文本

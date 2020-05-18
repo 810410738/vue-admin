@@ -304,4 +304,32 @@ var deleteAuthorityData = {
 }
 Mock.mock(RegExp(roleAuthorityUrlRoot + 'deleteAuthority'), 'post', deleteAuthorityData);
 
+/**--------------------------------------------------------------------------------------- */
+//获取所有日志列表
+var getLogDataData = {
+  "errCode": 0,
+  "errMsg": "[响应成功]",
+  "extend": {
+      "pageData": {
+          "total": 1,
+          "size": 10,
+          "pages": 1,
+          "current": 1,
+          "records|10": [{
+              "rocordId":"sdfsdfsdf",
+              "logNum": "1",
+              "systemIdentify": "用户管理模块",
+              "type": "修改",
+              "userName": "小明",
+              "department": "金融科技部",
+              "status": "0",
+              "systemIdentify": "ADMIN",
+              "time": "2020-05-09",
+          }]
+      }
+  }
+}
+Mock.mock(RegExp(roleAuthorityUrlRoot + 'getLogData'), 'post', getLogDataData);
+
+
 
