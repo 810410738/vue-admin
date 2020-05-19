@@ -34,7 +34,7 @@
         class="button-middle"
         type="primary"
         size="mini"
-        @click="showAddUserDialog"
+        @click="addUserDialogVisible = true"
         icon="el-icon-plus"
       >新增</el-button>
     </el-row>
@@ -71,14 +71,14 @@
             plain
             size="mini"
             icon="el-icon-more"
-            @click="checkMore(scope.row.userId)"
+            @click="checkMore(scope.row)"
           >查看更多</el-button>
           <el-button
             type="success"
             plain
             size="mini"
             icon="el-icon-edit"
-            @click="editUserInfo(scope.row.userId)"
+            @click="editUserInfo(scope.row)"
           >编辑</el-button>
           <el-button
             type="danger"
@@ -102,13 +102,36 @@
       ></el-pagination>
     </div>
 
-    <!-- 新增用户,修改用户信息,查看用户信息的对话框组件，根据type来区分 -->
-    <selfAddUserDialog
-      :selfUserData="requestUserData"
-      :isShow="addUserDialogVisible"
-      @closeDialog="closeAddUserDialog"
-      :type="selfUserDialogType"
-    ></selfAddUserDialog>
+    <!-- 新增用户的对话框 -->
+    <el-dialog
+      title="新增用户"
+      :visible.sync="addUserDialogVisible"
+      width="40%"
+      :destroy-on-close="true"
+      center
+    >
+      <selfGenerateForm :formJson="addUserFormData" @submit="addUserSubmit(arguments)"></selfGenerateForm>
+    </el-dialog>
+    <!-- 查看用户的对话框 -->
+    <el-dialog
+      title="查看用户信息"
+      :visible.sync="checkUserDialogVisible"
+      width="40%"
+      :destroy-on-close="true"
+      center
+    >
+      <selfGenerateForm :formJson="checkUserFormData" ref="checkUserFrom"></selfGenerateForm>
+    </el-dialog>
+    <!-- 编辑用户的对话框 -->
+    <el-dialog
+      title="修改用户信息"
+      :visible.sync="editUserDialogVisible"
+      width="40%"
+      :destroy-on-close="true"
+      center
+    >
+      <selfGenerateForm :formJson="editUserFormData" ref="editUserFrom" @submit="editUserSubmit(arguments)"></selfGenerateForm>
+    </el-dialog>
   </div>
 </template>
 
@@ -120,20 +143,20 @@ import {
   changeUserStatus,
   deleteUser
 } from "@/api/getUserData";
+import { getFormData } from "@/api/getFormData";
 import findComponent from "@/components/index/findComponent";
-import selfAddUserDialog from "@/components/User/selfAddUserDialog";
+import selfGenerateForm from "@/components/Form/selfGenerateForm";
 export default {
   components: {
     findComponent,
-    selfAddUserDialog
+    selfGenerateForm
   },
   data() {
     return {
-      // 新增用户,修改用户信息,查看用户信息的组件，根据selfUserDialogType来区分
-      // 0:新增用户；1：修改用户；2：查看用户
-      selfUserDialogType: "",
-      // 一位用户表单的数据
-      form: {},
+      // 用户表单的配置数据
+      addUserFormData: {},
+      checkUserFormData: {},
+      editUserFormData: {},
       // 获取的用户数据
       getUserData: {},
       // 分页请求用户数据的参数,pageNumber默认为1，其余参数默认为空
@@ -143,12 +166,10 @@ export default {
         keyword: "",
         pageNumber: "1"
       },
-      // 请求一个用户的所有信息的参数
-      requestUserData: {
-        userId: ""
-      },
       // 控制新增用户的对话框是否出现
-      addUserDialogVisible: false
+      addUserDialogVisible: false,
+      checkUserDialogVisible: false,
+      editUserDialogVisible: false
     };
   },
   created() {
@@ -161,6 +182,18 @@ export default {
     initData() {
       getUserList(this.requestData).then(res => {
         this.getUserData = res.extend.page;
+      });
+      // 获取新增用户表单数据
+      getFormData({}).then(res => {
+        this.addUserFormData = res.extend.FormInfo;
+      });
+      // 获取查看用户表单数据
+      getFormData({}).then(res => {
+        this.checkUserFormData = res.extend.FormInfo;
+      });
+      // 获取编辑用户表单数据
+      getFormData({}).then(res => {
+        this.editUserFormData = res.extend.FormInfo;
       });
     },
     /**
@@ -181,29 +214,6 @@ export default {
       this.requestData.primaryClass = arg[0].primaryClass;
       this.requestData.secondaryClass = arg[0].secondaryClass;
       this.initData();
-    },
-    /**
-     * @description 点击新增用户按钮，显示新增用户的对话框,selfUserDialogType=0
-     */
-    showAddUserDialog() {
-      this.selfUserDialogType = "0";
-      this.addUserDialogVisible = true;
-    },
-    /**
-     * @description 点击查看更多，显示用户信息的对话框，selfUserDialogType = 2
-     * @param userId 用户id
-     */
-    checkMore(userId) {
-      this.selfUserDialogType = "2";
-      this.addUserDialogVisible = true;
-    },
-    /**
-     * @description 点击编辑按钮，显示用户信息的对话框，selfUserDialogType = 1
-     * @param userId 用户id
-     */
-    editUserInfo(userId) {
-      this.selfUserDialogType = "1";
-      this.addUserDialogVisible = true;
     },
     /**
      * @description 下载用户模板
@@ -274,10 +284,25 @@ export default {
         });
     },
     /**
-     * @description 关闭新增用户的对话框
+     * @description 点击查看更多，显示用户信息的对话框
+     * @param row 用户信息组
      */
-    closeAddUserDialog() {
-      this.addUserDialogVisible = false;
+    checkMore(row) {
+      this.checkUserDialogVisible = true;
+      this.$nextTick(()=>{
+        this.$refs.checkUserFrom.setFormData(row);
+      })
+    },
+    /**
+     * @description 点击编辑按钮，显示用户信息的对话框
+     * @param row 用户信息组
+     */
+    editUserInfo(row) {
+      this.editUserDialogVisible = true;
+      this.$nextTick(()=>{
+        this.$refs.editUserFrom.setFormData(row);
+        this.$refs.editUserFrom.setParams("userId",row.userId);
+      })
     },
     /**
      * @description 删除用户
@@ -303,6 +328,29 @@ export default {
           this.initData();
         });
       });
+    },
+    /**
+     * @description 提交新增用户的请求
+     * @param arg[0] 包含表单所有元素的值的对象
+     */
+    addUserSubmit(arg) {
+      var jsonData = {};
+      for (var key in arg[0]) {
+        jsonData[key] = arg[0][key];
+      }
+      console.log(jsonData);
+    },
+     /**
+     * @description 提交修改用户信息的请求
+     * @param arg[0] 包含表单所有元素的值的对象
+     */
+    editUserSubmit(arg){
+      var jsonData = {};
+      for (var key in arg[0]) {
+        jsonData[key] = arg[0][key];
+      }
+      jsonData.userId =  this.$refs.editUserFrom.getParams("userId");
+      console.log(jsonData);
     }
   }
 };

@@ -44,6 +44,8 @@ var getFormData = {
     // 表单设置
     FormInfo: {
       // 表单配置项
+      disabled:false,
+      isShowButton:true,
       submitText:'提交',
       labelPosition: "right",
       labelWidth: "130",

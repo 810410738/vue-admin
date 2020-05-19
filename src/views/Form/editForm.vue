@@ -202,9 +202,10 @@
             </el-tab-pane>
             <el-tab-pane label="表单属性" name="form">
               <el-form label-position="top">
-                <el-form-item label="提交表单按钮的文字内容">
-                  <el-input v-model="Form.submitText" :step="10"></el-input>
+                 <el-form-item>
+                  <el-checkbox v-model="Form.disabled">禁用表单</el-checkbox>
                 </el-form-item>
+                
                 <el-form-item label="标签对齐方式">
                   <el-radio-group v-model="Form.labelPosition">
                     <el-radio-button label="left">左对齐</el-radio-button>
@@ -221,6 +222,12 @@
                     <el-radio-button label="small">small</el-radio-button>
                     <el-radio-button label="mini">mini</el-radio-button>
                   </el-radio-group>
+                </el-form-item>
+                <el-form-item label="显示提交按钮">
+                  <el-switch v-model="Form.isShowButton"></el-switch>
+                </el-form-item>
+                <el-form-item label="提交按钮的文字内容" v-show="Form.isShowButton">
+                  <el-input v-model="Form.submitText"></el-input>
                 </el-form-item>
               </el-form>
             </el-tab-pane>
@@ -283,6 +290,8 @@ export default {
       // 表单数据
       Form: {
         // 表单配置项
+         disabled:false,
+        isShowButton:true,
         submitText:'提交',
         labelPosition: "right",
         labelWidth: "130",

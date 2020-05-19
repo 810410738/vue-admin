@@ -8,9 +8,13 @@ import {
  */
 // 登陆接口
 var toLoginData = {
-  'errCode': "0"
+  "errCode": 0,
+  "errMsg": "[响应成功]",
+  "extend": {
+      "tokenId": "5b32ec2b-e052-4a4e-b598-75b7f263d57b"
+  }
 }
-Mock.mock(urlRoot + 'toLogin', 'post', toLoginData);
+Mock.mock(urlRoot + 'login/toLogin', 'post', toLoginData);
 
 // 退出登录
 var logoutData = {

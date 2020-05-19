@@ -47,7 +47,6 @@ axios.interceptors.response.use(
     hideLoading();
     // 服务器正常返回数据
     if (response.status === 200) {
-      // 用户尚未登录或登录信息已过期
       // 成功
       if (response.data.errCode == 0 || response.data.errCode == "0") {
         return Promise.resolve(response);
@@ -60,12 +59,13 @@ axios.interceptors.response.use(
     } 
     // 服务器不正常返回数据
     else {
-      MessageBox.alert("网络连接失败，请稍候再试" , "请求失败");
+      MessageBox.alert(err+"网络连接失败，请稍候再试" , "请求失败");
       // return Promise.reject(response);
       return;
     }
   },
   err => {
+    MessageBox.alert(err+"请求失败，请稍候再试" , "请求失败");
     hideLoading();
     return Promise.reject(err);
   })

@@ -7,7 +7,7 @@ import {urlRoot, commonUrlRoot} from './http'
  */
 
 // 登陆
-export const toLogin = data => post(urlRoot + 'toLogin', data);
+export const toLogin = data => post(urlRoot + 'login/toLogin', data);
 // 退出登录
 export const logout = data => post(urlRoot + 'logout', data);
 

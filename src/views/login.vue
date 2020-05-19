@@ -37,6 +37,7 @@
 </template>
  
 <script>
+import {setHeader} from '@/api/http.js'
 import { toLogin } from "@/api/getCommonData";
 import {b64_md5} from "@/util/MD5";
 export default {
@@ -72,19 +73,21 @@ export default {
         return false;
       }
       var params = {};
-      params.account = this.userName;
+      params.loginAccount = this.userName;
       // 超级管理员的密码加密传输
       if(this.userName == "admin"){
-        params.password = b64_md5(this.password);
+        params.loginPassword = b64_md5(this.password);
       }
       else{
-        params.password = this.password;
+        params.loginPassword = this.password;
       }
       toLogin(params).then(response => {
         this.loginSuccess(response);
       });
     },
-    loginSuccess() {
+    loginSuccess(response) {
+      // 把token设置到请求头
+      setHeader("authToken",response.extend.tokenId);
       this.$router.push({
         path: "/index"
       });

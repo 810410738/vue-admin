@@ -1,6 +1,7 @@
  <template>
   <!-- 根据json生成表单 -->
   <el-form
+    :disabled="Form.disabled"
     :label-position="Form.labelPosition"
     :label-width="Form.labelWidth + 'px'"
     :model="Form.Data"
@@ -32,9 +33,8 @@
         ></el-option>
       </el-select>
     </el-form-item>
-
     <!-- 提交表单 -->
-    <el-form-item>
+    <el-form-item v-if="Form.isShowButton">
       <el-button type="primary" @click="submitForm('Form')">{{Form.submitText}}</el-button>
     </el-form-item>
   </el-form>
@@ -52,7 +52,8 @@ export default {
   },
   data() {
     return {
-      Form: {}
+      Form: {},
+      params:{}
     };
   },
   mounted() {
@@ -175,6 +176,15 @@ export default {
       } catch (e) {
         console.log(e);
       }
+    },
+    /**
+     * @description 设置参数，存放临时参数
+     */
+    setParams(key,value){
+      this.params[key] = value;
+    },
+    getParams(key){
+      return this.params[key];
     }
   }
 };
