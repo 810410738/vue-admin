@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import {} from "@/api/getCommonData";
+import { getLeafDictByCond } from "@/api/getCommonData";
 export default {
   data() {
     return {
@@ -25,8 +25,12 @@ export default {
           value: ""
         }
       ],
+      requestClassData: {
+        selectedParam: "1",
+        dictType: "system_identify"
+      },
       // 查找组件封装数据
-      systemIdentify: "",
+      systemIdentify: ""
     };
   },
   created() {
@@ -37,14 +41,23 @@ export default {
       /**
        * @description 获取所有子系统分类
        */
-      // getAllPrimaryClass({}).then(res => {
-      //   this.primaryClass = res.extend.classList;
-      // });
+      getLeafDictByCond(this.requestClassData).then(res => {
+        this.systemIdentifyClass = [
+          {
+            label: "默认全部",
+            value: ""
+          }
+        ];
+        this.systemIdentifyClass.push.apply(
+          this.systemIdentifyClass,
+          res.extend.classList
+        );
+      });
     },
     /**
      * @description 获取选择的子系统
      */
-    getSystemIdentify(){
+    getSystemIdentify() {
       return this.systemIdentify;
     }
   }

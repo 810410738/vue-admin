@@ -7,42 +7,41 @@ import {
  */
 
 /**--------------------------------------------------------------------------------------- */
-//获取所有表单列表
-var getAllFormDesignData = {
-  "extend": {
-    "list": [{
-      "formGroupId": "23fdgdg",
-      "formGroup": "对公信息系统",
-      "formName": "76-维护法定名称和证件信息模板",
-      "time": "2020-03-20 17:43:01",
-      "status": "1",
-      "statusLabel": "已发布",
-      "formId": "sfaf23423r"
-    }]
-  },
-  "errCode": 0,
-  "errMsg": "success"
-}
-Mock.mock(formDesignUrlRoot + 'getAllFormDesign', 'post', getAllFormDesignData);
-
-/**--------------------------------------------------------------------------------------- */
-// 保存表单数据
-var saveFormData = {
+// 01-编辑表单模板数据（新增、修改-基本属性）
+var editFormData = {
   "extend": {
 
   },
   "errCode": 0,
   "errMsg": "success"
 }
-Mock.mock(formDesignUrlRoot + 'saveFormData', 'post', saveFormData);
-
-
+Mock.mock(formDesignUrlRoot + 'editForm', 'post', editFormData);
 /**--------------------------------------------------------------------------------------- */
-// 获取服务器已经存在的表单数据
-var getFormData = {
+// 02-编辑表单数据(formData)
+var updateFromDataByIdData = {
+  "extend": {
+
+  },
+  "errCode": 0,
+  "errMsg": "success"
+}
+Mock.mock(formDesignUrlRoot + 'updateFromDataById', 'post', updateFromDataByIdData);
+/**--------------------------------------------------------------------------------------- */
+// 03-根据formId删除表单数据
+var deleteFormByIdData = {
+  "extend": {
+
+  },
+  "errCode": 0,
+  "errMsg": "success"
+}
+Mock.mock(formDesignUrlRoot + 'deleteFormById', 'post', deleteFormByIdData);
+/**--------------------------------------------------------------------------------------- */
+// 05-根据formId查看表单数据(formData)
+var getFormDataByIdData = {
   "extend": {
     // 表单设置
-    FormInfo: {
+    formData: {
       // 表单配置项
       disabled:false,
       isShowButton:true,
@@ -94,6 +93,9 @@ var getFormData = {
           errorText:'输入数据的格式不正确',
           remote:false,
           remoteURL:'/aps3/common/getPrimaryClass',
+          remoteParmas:[
+
+          ],
           // 是否联动获取下拉数据
           isLinkOptions:false,
           // 联动选项的id
@@ -103,6 +105,7 @@ var getFormData = {
           // 被联动获取到的参数
           linkedParmas:{},
           rules:[],
+          // 下拉数据
           options:[
             
           ]
@@ -118,4 +121,29 @@ var getFormData = {
   "errCode": 0,
   "errMsg": "success"
 }
-Mock.mock(formDesignUrlRoot + 'getFormData', 'post', getFormData);
+Mock.mock(formDesignUrlRoot + 'getFormDataById', 'post', getFormDataByIdData);
+/**--------------------------------------------------------------------------------------- */
+//06-根据筛选条件分页获取表单列表(表单管理中列举表单信息)
+var getFormByPageData = {
+  "errCode": 0,
+  "errMsg": "[响应成功]",
+  "extend": {
+      "pageData": {
+          "total": 2,
+          "size": 3,
+          "pages": 1,
+          "current": 1,
+          "records|5":[ {
+              "formId": "2d606095ae114d1ab72a1589441072234",
+              "formName": "测试表单",
+              "remark": "表单备注",
+              "formData": "",
+              "publishStatus": "0",
+              "systemIdentify": "ADMIN",
+              "createTime": "2020-05-14T07:24:32.000+0000",
+              "modifyTime": "2020-05-14T07:24:32.000+0000"
+          }]
+      }
+  }
+}
+Mock.mock(formDesignUrlRoot + 'getFormByPage', 'post', getFormByPageData);

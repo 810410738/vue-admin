@@ -14,7 +14,7 @@ var toLoginData = {
       "tokenId": "5b32ec2b-e052-4a4e-b598-75b7f263d57b"
   }
 }
-Mock.mock(urlRoot + 'login/toLogin', 'post', toLoginData);
+Mock.mock(urlRoot + 'framework/rest/login/toLogin', 'post', toLoginData);
 
 // 退出登录
 var logoutData = {
@@ -44,7 +44,7 @@ var getAllPrimaryClassData = {
   "errMsg": "success"
 
 }
-Mock.mock(commonUrlRoot + 'getPrimaryClass', 'get', getAllPrimaryClassData);
+Mock.mock(commonUrlRoot + 'getPrimaryClass', 'post', getAllPrimaryClassData);
 
 /**--------------------------------------------------------------------------------------- */
 // 02-封装“所属网点”
@@ -66,7 +66,22 @@ var getAllSecoByPrimData = {
   "errMsg": "success"
 
 }
-Mock.mock(commonUrlRoot + 'getSecByPrim', 'get', getAllSecoByPrimData);
+Mock.mock(commonUrlRoot + 'getSecByPrim', 'post', getAllSecoByPrimData);
+
+/**--------------------------------------------------------------------------------------- */
+// 02-获取数据字典数据(下拉框或者多级列表)
+var getLeafDictByCondData = {
+  "errCode": 0,
+  "errMsg": "[响应成功]",
+  "extend": {
+      "classList": [{
+          "label": "APS-员工线上排查系统",
+          "value": "4"
+      }]
+  }
+}
+Mock.mock(commonUrlRoot + 'getLeafDictByCond', 'post', getLeafDictByCondData);
+
 
 /**--------------------------------------------------------------------------------------- */
 //  03-获取当前登录用户信息

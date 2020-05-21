@@ -39,14 +39,14 @@
       >新增</el-button>
     </el-row>
     <el-row>
-      <el-col :span="14" :offset="10">
+      <el-col :span="18" :offset="6">
         <!-- 查找操作组件 -->
         <findComponent @find="find(arguments)"></findComponent>
       </el-col>
     </el-row>
 
     <!-- 用户表格数据 -->
-    <el-table :data="getUserData.list" highlight-current-row style="width: 100%" stripe>
+    <el-table :data="getUserData.records" highlight-current-row style="width: 100%" stripe>
       <el-table-column type="index" width="100"></el-table-column>
       <el-table-column property="userNum" label="用户编号" width="150"></el-table-column>
       <el-table-column property="userName" label="用户姓名" width="150"></el-table-column>
@@ -94,14 +94,13 @@
     <div class="Pagination" style="text-align: left;margin-top: 10px;">
       <el-pagination
         @current-change="handleCurrentChange"
-        :current-page="this.getUserData.pageNumber"
-        :page-size="this.getUserData.pageSize"
+        :current-page="this.getUserData.current"
+        :page-size="this.getUserData.size"
         layout="total, prev, pager, next"
-        :page-count="this.getUserData.totalPage"
-        :total="this.getUserData.totalRow"
+        :page-count="this.getUserData.pages"
+        :total="this.getUserData.total"
       ></el-pagination>
     </div>
-
     <!-- 新增用户的对话框 -->
     <el-dialog
       title="新增用户"
@@ -137,13 +136,16 @@
 
 <script>
 import {
-  getUserList,
-  getUserInfo,
-  downloadUserTemplate,
+  editUser,
+  deleteUserById,
+  getUserById,
+  getUserByPage,
   changeUserStatus,
-  deleteUser
+  getRoleByUserId,
+  updateUserRole,
+  downloadUserTemplate,
 } from "@/api/getUserData";
-import { getFormData } from "@/api/getFormData";
+import { getFormDataById } from "@/api/getFormData";
 import findComponent from "@/components/index/findComponent";
 import selfGenerateForm from "@/components/Form/selfGenerateForm";
 export default {
@@ -163,8 +165,12 @@ export default {
       requestData: {
         primaryClass: "",
         secondaryClass: "",
+        // 用户编号或名称
         keyword: "",
-        pageNumber: "1"
+        // 当前指定页数
+        pageNumber: "1",
+        // 系统唯一标识
+        systemIdentify:""
       },
       // 控制新增用户的对话框是否出现
       addUserDialogVisible: false,
@@ -180,20 +186,20 @@ export default {
      * @description 初始化分页获取用户数据
      */
     initData() {
-      getUserList(this.requestData).then(res => {
-        this.getUserData = res.extend.page;
+      getUserByPage(this.requestData).then(res => {
+        this.getUserData = res.extend.pageData;
       });
       // 获取新增用户表单数据
-      getFormData({}).then(res => {
-        this.addUserFormData = res.extend.FormInfo;
+      getFormDataById({formId:'42d1cc97f23a4cb594ac1589945419935'}).then(res => {
+        this.addUserFormData = JSON.parse(res.extend.formData);
       });
       // 获取查看用户表单数据
-      getFormData({}).then(res => {
-        this.checkUserFormData = res.extend.FormInfo;
+      getFormDataById({formId:'b22238626a7a4e0c98681589969123974'}).then(res => {
+        this.checkUserFormData = JSON.parse(res.extend.formData);
       });
       // 获取编辑用户表单数据
-      getFormData({}).then(res => {
-        this.editUserFormData = res.extend.FormInfo;
+      getFormDataById({formId:'42d1cc97f23a4cb594ac1589945419935'}).then(res => {
+        this.editUserFormData = JSON.parse(res.extend.formData);
       });
     },
     /**
@@ -213,6 +219,7 @@ export default {
       this.requestData.keyword = arg[0].keyword;
       this.requestData.primaryClass = arg[0].primaryClass;
       this.requestData.secondaryClass = arg[0].secondaryClass;
+      this.requestData.systemIdentify = arg[0].systemIdentify;
       this.initData();
     },
     /**
@@ -318,7 +325,7 @@ export default {
         // 请求删除用户接口
         var jsonData = {};
         jsonData.userId = userId;
-        deleteUser(jsonData).then(res => {
+        deleteUserById(jsonData).then(res => {
           // 弹出成功提示
           this.$message({
             message: "删除成功",
@@ -338,7 +345,15 @@ export default {
       for (var key in arg[0]) {
         jsonData[key] = arg[0][key];
       }
-      console.log(jsonData);
+      editUser(jsonData).then(res=>{
+        this.$message({
+          type:'success',
+          message:'新增用户成功'
+        });
+        // 刷新数据
+        this.initData();
+        this.addUserDialogVisible = false;
+      });
     },
      /**
      * @description 提交修改用户信息的请求
@@ -350,7 +365,15 @@ export default {
         jsonData[key] = arg[0][key];
       }
       jsonData.userId =  this.$refs.editUserFrom.getParams("userId");
-      console.log(jsonData);
+      editUser(jsonData).then(res=>{
+        this.$message({
+          type:'success',
+          message:'修改用户信息成功'
+        });
+        // 刷新数据
+        this.initData();
+        this.editUserDialogVisible = false;
+      });
     }
   }
 };

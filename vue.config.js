@@ -20,7 +20,7 @@ module.exports = {
   },
 
   lintOnSave: false,
-  publicPath: '/aps3/',
+  publicPath: '/mip/',
 
   // devServer:{
   //   open:true,
@@ -29,8 +29,8 @@ module.exports = {
   //   https:false,
   //   hotOnly:true,
   //   proxy:{
-  //     '/aps3':{
-  //       target:'http://localhost:8081/',
+  //     '/mip':{
+  //       target:'http://192.168.43.14:8080/',
   //       changOrigin:true,
   //     }
   //   }

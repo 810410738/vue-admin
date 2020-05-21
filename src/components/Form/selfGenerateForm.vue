@@ -17,6 +17,46 @@
         :disabled="item.disabled"
         v-model="Form.Data[item.name]"
       ></el-input>
+      <!-- 多行输入框 -->
+      <el-input
+        v-if="item.type == 'inputTextarea'"
+        type="textarea"
+        :rows="item.rows"
+        :placeholder="item.placeholder"
+        :style="'width:' + item.width + '%'"
+        :disabled="item.disabled"
+        v-model="Form.Data[item.name]"
+      ></el-input>
+      <!-- radio单选框 -->
+      <el-radio-group
+        v-else-if="item.type == 'radio'"
+        v-model="Form.Data[item.name]"
+        :disabled="item.disabled"
+        :style="'width:' + item.width + '%'"
+      >
+        <div v-if="item.radioType == 'primary'">
+          <el-radio
+            v-for="item1 in item.options"
+            :key="item1.value"
+            :label="item1.value"
+          >{{item1.label}}</el-radio>
+        </div>
+        <div v-else-if="item.radioType == 'button'">
+          <el-radio-button
+            v-for="item1 in item.options"
+            :key="item1.value"
+            :label="item1.value"
+          >{{item1.label}}</el-radio-button>
+        </div>
+        <div v-else-if="item.radioType == 'borderButton'">
+          <el-radio
+            border
+            v-for="item1 in item.options"
+            :key="item1.value"
+            :label="item1.value"
+          >{{item1.label}}</el-radio>
+        </div>
+      </el-radio-group>
       <el-select
         v-else-if="item.type == 'select'"
         :placeholder="item.placeholder"
@@ -41,7 +81,7 @@
 </template>
 
 <script>
-import { get } from "@/api/http";
+import { post } from "@/api/http";
 export default {
   components: {},
   props: {
@@ -53,7 +93,7 @@ export default {
   data() {
     return {
       Form: {},
-      params:{}
+      params: {}
     };
   },
   mounted() {
@@ -89,14 +129,29 @@ export default {
           });
         }
         this.$set(this.Form.Rules, ItemNode.name, ItemNode.rules);
-        // 元素类型为下拉框且不是被联动
+        // 遍历查找被联动的下拉框
+        if (ItemNode.isLinkOptions) {
+          var key = ItemNode.linkOptionsKey;
+          for (var j in this.Form.Item) {
+            if (this.Form.Item[j].key == key) {
+              this.Form.Item[j].isLinked = true;
+            }
+          }
+        }
+        // 元素类型为下拉框且不是被联动，获取数据
         if (ItemNode.type == "select" && ItemNode.isLinked == false) {
           if (ItemNode.remoteURL == "") {
             ItemNode.remote = false;
           } else {
             ItemNode.remote = true;
+            // 设置远程方法的参数
+            var jsonData = {};
+            for (var j in ItemNode.remoteParmas) {
+              jsonData[ItemNode.remoteParmas[j].key] =
+                ItemNode.remoteParmas[j].value;
+            }
             // 调用远程方法
-            this.remoteSelectDataFunction({}, ItemNode.remoteURL, i);
+            this.remoteSelectDataFunction(jsonData, ItemNode.remoteURL, i);
           }
         }
       }
@@ -137,7 +192,7 @@ export default {
         }
       ];
       this.Form.Data[this.Form.Item[index].name] = "";
-      get(remoteURL, requestData).then(res => {
+      post(remoteURL, requestData).then(res => {
         this.Form.Item[index].options = res.extend.classList;
       });
     },
@@ -153,15 +208,23 @@ export default {
         return;
       }
       var requestData = {};
-      requestData.parentClass = value;
+      requestData.selectedParam = value;
+
       // 根据key寻找联动的下拉框
       for (var i in this.Form.Item) {
         if (this.Form.Item[i].key == linkOptionsKey) {
+          // 设置远程方法的参数
+          for (var j in this.Form.Item[i].remoteParmas) {
+            requestData[this.Form.Item[i].remoteParmas[j].key] = this.Form.Item[
+              i
+            ].remoteParmas[j].value;
+          }
           this.remoteSelectDataFunction(
             requestData,
             this.Form.Item[i].remoteURL,
             i
           );
+          break;
         }
       }
     },
@@ -180,10 +243,10 @@ export default {
     /**
      * @description 设置参数，存放临时参数
      */
-    setParams(key,value){
+    setParams(key, value) {
       this.params[key] = value;
     },
-    getParams(key){
+    getParams(key) {
       return this.params[key];
     }
   }

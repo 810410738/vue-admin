@@ -1,8 +1,134 @@
 import Mock from 'mockjs'
 import {userUrlRoot, roleAuthorityUrlRoot, dataHandleUrlRoot} from '@/api/http.js'
+/**--------------------------------------------------------------------------------------- */
+// 01-编辑用户信息(新增或修改)
+var editUserData = {
+  "extend": {
+  },
+  "errCode": 0,
+  "errMsg": "success"
+}
+Mock.mock(userUrlRoot + 'editUser', 'post', editUserData);
 
 /**--------------------------------------------------------------------------------------- */
-//02-导入用户信息
+// 02-根据userId删除用户信息
+var deleteUserByIdData = {
+  "extend": {
+  },
+  "errCode": 0,
+  "errMsg": "success"
+}
+Mock.mock(userUrlRoot + 'deleteUserById', 'post', deleteUserByIdData);
+
+/**--------------------------------------------------------------------------------------- */
+// 03-根据用户id获取用户信息
+var getUserByIdData = {
+  "errCode": 0,
+  "errMsg": "[响应成功]",
+  "extend": {
+      "user": {
+          "userId": "c6ce32e4f5b1406a8f221588926270102",
+          "userNum": "20200001",
+          "userName": "haha",
+          "primaryClass": "中心区支行",
+          "secondaryClass": "中心区支行",
+          "loginAccount": "haha.sz",
+          "loginPassword": "",
+          "isPartyMember": "0",
+          "isLeader": "0",
+          "logicDel": "0",
+          "systemIdentify": "ADMIN",
+          "createTime": "2020-05-08T08:24:30.000+0000",
+          "modifyTime": "2020-05-08T08:24:30.000+0000",
+          "userStatus": "1",
+          "remark": "测试",
+          "isPartyMemberValue": "非党员",
+          "isLeaderValue": "否",
+          "userStatusValue": "启用"
+      }
+  }
+}
+Mock.mock(userUrlRoot + 'getUserById', 'post', getUserByIdData);
+
+/**--------------------------------------------------------------------------------------- */
+// 04-根据筛选条件分页获取用户数据
+var getUserByPageData = {
+  "errCode": 0,
+  "errMsg": "[响应成功]",
+  "extend": {
+      "pageData": {
+          "total": 2,
+          "size": 3,
+          "pages": 1,
+          "current": 1,
+          "records|10": [{
+              "userId": "61a0b23bc4f7414f95891588983569816",
+              "userNum": "20200001",
+              "userName": "haha",
+              "primaryClass": "中心区支行",
+              "secondaryClass": "中心区支行",
+              "loginAccount": "haha.sz",
+              "loginPassword": "000000",
+              "isPartyMember": "0",
+              "isLeader": "0",
+              "logicDel": "0",
+              "systemIdentify": "ADMIN1",
+              "createTime": "2020-05-09T00:19:29.000+0000",
+              "modifyTime": "2020-05-09T00:19:29.000+0000",
+              "userStatus": "1",
+              "remark": "测试",
+              "isPartyMemberValue": "非党员",
+              "isLeaderValue": "否",
+              "userStatusValue": "启用"
+          }]
+      }
+  }
+}
+Mock.mock(userUrlRoot + 'getUserByPage', 'post', getUserByPageData);
+
+
+/**--------------------------------------------------------------------------------------- */
+// 05-用户账号状态修改(启用、禁用)
+var changeUserStatusData = {
+  "extend": {
+  },
+  "errCode": 0,
+  "errMsg": "success"
+}
+Mock.mock(userUrlRoot + 'changeUserStatus', 'post', changeUserStatusData);
+
+/**--------------------------------------------------------------------------------------- */
+// 06-根据用户id获取关联的角色数据
+var getRoleByUserIdData = {
+  "errCode": 0,
+  "errMsg": "[响应成功]",
+  "extend": {
+      "userRoleVOList|5": [{
+          "userRoleId": "111",
+          "userId": "61a0b23bc4f7414f95891588983569816",
+          "roleId": "878134555ea349f6bbfc1588991568444",
+          "roleKey": "framework:rest:222",
+          "roleName": "管理员",
+          "dataScope": "0",
+          "roleStatus": "0",
+          "systemIdentify": "ADMIN",
+          "roleAuthorityVOList": ""
+      }]
+  }
+}
+Mock.mock(userUrlRoot + 'getRoleByUserId', 'post', getRoleByUserIdData);
+
+/**--------------------------------------------------------------------------------------- */
+// 07-用户角色变更
+var updateUserRoleData = {
+  "errCode": 0,
+  "errMsg": "[响应成功]",
+  "extend": {}
+}
+Mock.mock(userUrlRoot + 'updateUserRole', 'post', updateUserRoleData);
+
+/**--------------------------------------------------------------------------------------- */
+//-导入用户信息
 var importUserData = {
   "extend": {
   },
@@ -11,112 +137,3 @@ var importUserData = {
 }
 Mock.mock(dataHandleUrlRoot + 'importUser', 'post', importUserData);
 /**--------------------------------------------------------------------------------------- */
-// 03-根据筛选条件分页获取用户信息列表
-var findAllUserData = {
-  "extend": {
-    "page": {
-      "totalRow": 12,
-      "pageNumber": 1,
-      "firstPage": true,
-      "lastPage": true,
-      "totalPage": 1,
-      "pageSize": 30,
-      "list|10": [{
-        "userNum": "20190020",
-        "loginAccount": "ljl-admin.sz",
-        "isPartyMemberValue": "非党员",
-        "isLeader": "0",
-        "isPartyMember": "0",
-        "roleName": "普通管理员",
-        "isLeaderValue": "其他领导干部",
-        "secondaryClass": "中心区支行",
-        "userName": "ljl_admin",
-        "userId": "1398e8d8d5b34bbab22a6823a6b9ed1f",
-        "primaryClass": "中心区支行",
-        "systemIdentify": "",
-        "createTime": "",
-        "updateTime": "",
-        "userStatus": "1"
-      }]
-    }
-  },
-  "errCode": 0,
-  "errMsg": "success"
-}
-Mock.mock(userUrlRoot + 'getUserByCondAndPage', 'post', findAllUserData);
-
-/**--------------------------------------------------------------------------------------- */
-// 04-根据userId获取用户基本信息
-var getUserInfoData = {
-  "extend": {
-    "user": {
-      "userNum": "20190025",
-      "loginAccount": "ljl-user.sz",
-      "isPartyMemberValue": "非党员",
-      "roleId": "523517d2bd41436ebd552a248c1d787a",
-      "isLeader": "0",
-      "isPartyMember": "0",
-      "roleName": "普通用户",
-      "isLeaderValue": "其他领导干部",
-      "secondaryClass": "中心区支行",
-      "userName": "ljl_user",
-      "userId": "1fdf0399a2e8419ca1aa86586b21e556",
-      "primaryClass": "中心区支行",
-      "systemIdentify": "",
-      "createTime": "2020-04-27 10:00:21",
-      "updateTime": "2020-05-10 10:00:21",
-      "userStatus": "1",
-      "remark":'12321312321'
-    }
-
-  },
-  "errCode": 0,
-  "errMsg": "success"
-}
-Mock.mock(userUrlRoot + 'getUserById', 'post', getUserInfoData);
-
-/**--------------------------------------------------------------------------------------- */
-// 修改用户状态
-var changeUserStatusData = {
-  "extend": {
-    
-
-  },
-  "errCode": 0,
-  "errMsg": "success"
-}
-Mock.mock(userUrlRoot + 'changeUserStatus', 'post', changeUserStatusData);
-
-/**--------------------------------------------------------------------------------------- */
-// 删除用户
-var deleteUserData = {
-  "extend": {
-    
-
-  },
-  "errCode": 0,
-  "errMsg": "success"
-}
-Mock.mock(userUrlRoot + 'deleteUser', 'post', deleteUserData);
-/**--------------------------------------------------------------------------------------- */
-// 05-获取所有角色列表(除系统管理员)
-var getAllRoleExceptAdminData = {
-  "extend": {
-    "roleList": [{
-        "modifyTime": "2019-11-27 10:18:28",
-        "roleId": "523517d2bd41436ebd552a248c1d787a",
-        "roleName": "普通用户",
-        "roleDescr": "参与评议的用户"
-      },
-      {
-        "modifyTime": "2019-11-27 10:18:28",
-        "roleId": "523517d2bd41324ebd552a248c1d787a",
-        "roleName": "管理员",
-        "roleDescr": "发布问卷，控制开始和结束评议系统，收集统计结果"
-      },
-    ]
-  },
-  "errCode": 0,
-  "errMsg": "success"
-}
-Mock.mock(roleAuthorityUrlRoot + 'getAllRoleExceptAdmin', 'post', getAllRoleExceptAdminData);

@@ -8,6 +8,8 @@ import './assets/css/public.css';
 // echarts插件
 import echarts from 'echarts';
 Vue.prototype.$echarts = echarts;
+
+import store from './store/store' //引入状态管理 store
 // 引入FormMaking
 // import FormMaking from 'form-making'
 // import 'form-making/dist/FormMaking.css'
@@ -36,5 +38,6 @@ Vue.config.productionTip = false
 
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')

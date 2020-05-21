@@ -5,24 +5,26 @@ import {userUrlRoot, roleAuthorityUrlRoot, dataHandleUrlRoot} from './http'
  * 
  * @description 用户模块
  */
-// 01-下载用户信息模板
+// 下载用户信息模板
 export const downloadUserTemplate = data => get(dataHandleUrlRoot + 'downloadUserTemplate', data);
-// 02-导入用户信息
+// 导入用户信息
 export const importUser = data => post(dataHandleUrlRoot + 'importUser', data);
-// 03-根据筛选条件分页获取用户信息列表
-export const getUserList = data => post(userUrlRoot + 'getUserByCondAndPage', data);
-// 04-根据userId获取用户基本信息
-export const getUserInfo = data => post(userUrlRoot + 'getUserById', data);
 
-// 修改用户状态
+// 01-编辑用户信息(新增或修改)
+export const editUser = data => post(userUrlRoot + 'editUser', data);
+// 02-根据userId删除用户信息
+export const deleteUserById = data => post(userUrlRoot + 'deleteUserById', data);
+// 03-根据用户id获取用户信息
+export const getUserById = data => post(userUrlRoot + 'getUserById', data);
+// 04-根据筛选条件分页获取用户数据
+export const getUserByPage = data => post(userUrlRoot + 'getUserByPage', data);
+// 05-用户账号状态修改(启用、禁用)
 export const changeUserStatus = data => post(userUrlRoot + 'changeUserStatus', data);
+// 06-根据用户id获取关联的角色数据
+export const getRoleByUserId = data => post(userUrlRoot + 'getRoleByUserId', data);
+// 07-用户角色变更
+export const updateUserRole = data => post(userUrlRoot + 'updateUserRole', data);
 
-// 删除用户
-export const deleteUser = data => post(userUrlRoot + 'deleteUser', data);
-
-// 05-获取所有角色列表(除系统管理员)
-export const getAllRoleExceptAdmin = data => post(roleAuthorityUrlRoot + 'getAllRoleExceptAdmin', data);
-// 06-更新用户角色信息
 
 
 

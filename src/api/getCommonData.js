@@ -7,14 +7,18 @@ import {urlRoot, commonUrlRoot} from './http'
  */
 
 // 登陆
-export const toLogin = data => post(urlRoot + 'login/toLogin', data);
+export const toLogin = data => post(urlRoot + 'framework/rest/login/toLogin', data);
 // 退出登录
 export const logout = data => post(urlRoot + 'logout', data);
 
 // 01-封装“所属机构”
-export const getAllPrimaryClass = data => get( commonUrlRoot + 'getPrimaryClass', data);
+export const getAllPrimaryClass = data => post( commonUrlRoot + 'getPrimaryClass', data);
 // 02-封装“所属网点”
-export const getAllSecoByPrim = data => get( commonUrlRoot + 'getSecByPrim', data);
+export const getAllSecoByPrim = data => post( commonUrlRoot + 'getSecByPrim', data);
+
+// 02-获取数据字典数据(下拉框或者多级列表)
+export const getLeafDictByCond = data => post( commonUrlRoot + 'getLeafDictByCond', data);
+
 // 03-获取当前登录用户信息
 export const getLoginer = data => post( commonUrlRoot + 'getLoginer', data);
 // 04-获取当前登录用户访问菜单

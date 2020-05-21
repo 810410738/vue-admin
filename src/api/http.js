@@ -2,14 +2,14 @@ import axios from 'axios';
 import { MessageBox } from 'element-ui';
 
 // 访问的url
-export const urlRoot = "/aps3/";
+export const urlRoot = "/mip/";
 export const commonUrlRoot = urlRoot + "common/";
 export const dataHandleUrlRoot = urlRoot+ "dataHandle/";
 export const commentUrlRoot = urlRoot + "comment/";
 export const questionUrlRoot = urlRoot + "questionnaire/";
-export const userUrlRoot = urlRoot + "user/";
+export const userUrlRoot = urlRoot + "framework/rest/user/";
 export const roleAuthorityUrlRoot = urlRoot + "roleAuthority/";
-export const formDesignUrlRoot = urlRoot + "formDesign/";
+export const formDesignUrlRoot = urlRoot + "admin/system/form/";
 // 引入element-ui 的loading方法
 import {
   showLoading,
@@ -25,8 +25,10 @@ if (process.env.NODE_ENV == 'development') {
 }
 // 设置请求超时时间
 axios.defaults.timeout = 20000;
+// 设置公共请求参数
+var requestParams = {};
 // 设置post请求头
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 export function setHeader(key, value){
   axios.defaults.headers.post[key] = value;
   axios.defaults.headers.get[key] = value;
@@ -70,6 +72,16 @@ axios.interceptors.response.use(
     return Promise.reject(err);
   })
 
+  // 设置公共参数
+  export function setRequestParams(key, value){
+    requestParams[key] = value;
+  }
+  // 重置公共参数
+  export function resetRequestParams(){
+    for(var key in requestParams){
+      delete requestParams[key];
+    }
+  }
   export function get(url, params){
     return new Promise((resolve, reject) =>{
       axios.get(url,{
@@ -82,6 +94,10 @@ axios.interceptors.response.use(
     })
   }
   export function post(url,params){
+    // 拼接公共参数
+    for(var key in requestParams){
+      params[key] = requestParams[key];
+    }
     return new Promise((resolve, reject) =>{
       axios.post(url, JSON.stringify(params))
       .then(response => {

@@ -38,6 +38,7 @@
  
 <script>
 import {setHeader} from '@/api/http.js'
+import {setRequestParams} from "@/api/http";
 import { toLogin } from "@/api/getCommonData";
 import {b64_md5} from "@/util/MD5";
 export default {
@@ -58,6 +59,8 @@ export default {
   methods: {
     // 清求登陆接口
     login() {
+       // 设置公共请求参数
+      setRequestParams("systemIdentify", "ADMIN");
       if (this.userName == "") {
         this.$message({
           message: "用户名不可以为空",
