@@ -90,7 +90,7 @@ export default {
           ];
       }
       // 添加新的元素到Form.item
-      this.$emit("addItem", this.jsonData);
+      this.$store.commit("Form/addItem",this.jsonData);
     }
   }
 };

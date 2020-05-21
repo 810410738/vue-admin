@@ -13,7 +13,7 @@ export default {
   },
   methods: {
     init(b) {
-      this.$store.commit("Form/increment");
+      // this.$store.commit("Form/increment");
       console.log(this.$store.state.Form.formData);
      
     }

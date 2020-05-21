@@ -2,7 +2,7 @@
   <!-- 导入json的对话框 -->
   <el-dialog
     title="表单设计的JSON数据"
-    :visible.sync="isShow"
+    :visible.sync="this.$store.state.Form.selfImportJsonDialogVisible"
     width="40%"
     :before-close="handleClose"
     :destroy-on-close="true"
@@ -20,12 +20,7 @@
 <script>
 export default {
   components: {},
-  props: {
-    isShow: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props: {},
   data() {
     return {
       jsonString: ""
@@ -55,7 +50,12 @@ export default {
       try {
         if (typeof JSON.parse(this.jsonString) == "object") {
           var jsonData = JSON.parse(this.jsonString);
-          this.$emit("generateJsonData", jsonData);
+          this.$store.commit("Form/resetData", jsonData);
+          this.$message({
+            type: "success",
+            message: "导入成功！"
+          });
+          this.handleClose();
         } else {
           this.$message({
             type: "error",
@@ -65,16 +65,16 @@ export default {
         }
       } catch (e) {
         this.$message({
-            type: "error",
-            message: "json格式不正确，请重新输入"
-          });
+          type: "error",
+          message: "json格式不正确，请重新输入"
+        });
       }
     },
     /**
     @description 关闭对话框
      */
     handleClose() {
-      this.$emit("closeDialog");
+      this.$store.commit("Form/setImportJsonDialogVisible", false);
     }
   }
 };

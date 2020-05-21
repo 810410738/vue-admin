@@ -2,7 +2,7 @@
   <!-- 生成json的对话框 -->
   <el-dialog
     title="表单设计的JSON数据"
-    :visible.sync="isShow"
+    :visible.sync="this.$store.state.Form.selfBuildJsonDialogVisible"
     width="40%"
     :before-close="handleClose"
     :destroy-on-close="true"
@@ -17,10 +17,6 @@
 export default {
   components: {},
   props: {
-    isShow: {
-      type: Boolean,
-      default: false
-    },
     selfBuildJsonData: {
       type: Object,
       default: false
@@ -45,7 +41,7 @@ export default {
     @description 关闭对话框
      */
     handleClose() {
-      this.$emit("closeDialog");
+      this.$store.commit("Form/setBuildJsonDialogVisible",false);
     }
   }
 };

@@ -8,9 +8,9 @@
       </el-row>
       <!-- 自己写的表单生成器 -->
       <el-row class="mainEditForm">
-        <!-- 基础控件 -->
+        <!-- 左边基础控件 -->
         <el-col :span="3">
-          <leftAddButtonComponent @addItem="addItem(arguments)"></leftAddButtonComponent>
+          <leftAddButtonComponent></leftAddButtonComponent>
         </el-col>
         <!-- 表单效果 -->
         <el-col :span="15" class="mainForm">
@@ -19,17 +19,17 @@
           </el-row>
           <el-row>
             <el-form
-              :label-position="Form.labelPosition"
-              :label-width="Form.labelWidth + 'px'"
-              :model="Form.Data"
-              :rules="Form.rules"
-              :size="Form.size"
+              :label-position="this.$store.state.Form.formData.labelPosition"
+              :label-width="this.$store.state.Form.formData.labelWidth + 'px'"
+              :model="this.$store.state.Form.formData.Data"
+              :rules="this.$store.state.Form.formData.rules"
+              :size="this.$store.state.Form.formData.size"
               ref="Form"
             >
               <transition-group tag="div">
                 <div
                   class="formItem"
-                  v-for="(item, index) in Form.Item"
+                  v-for="(item, index) in this.$store.state.Form.formData.Item"
                   :key="item.key"
                   @click="editItem(index)"
                   :class="{'clickFormItem':item.isClick}"
@@ -129,225 +129,33 @@
         </el-col>
         <!-- 右边编辑属性 -->
         <el-col :span="5" :offset="1" class="rightControl">
-          <el-tabs v-model="activeName" type="border-card" :stretch="true">
-            <el-tab-pane label="字段属性" name="item">
-              <el-form
-                v-for="(item,index) in Form.Item"
-                :key="item.key"
-                v-show="item.isClick"
-                label-position="top"
-              >
-                <el-form-item label="字段名字">
-                  <el-input v-model="item.name"></el-input>
-                </el-form-item>
-                <el-form-item label="标题">
-                  <el-input v-model="item.label"></el-input>
-                </el-form-item>
-                <el-form-item label="输入提示">
-                  <el-input v-model="item.placeholder"></el-input>
-                </el-form-item>
-                <el-form-item label="宽度">
-                  <el-input v-model="item.width">
-                    <template slot="append">%</template>
-                  </el-input>
-                </el-form-item>
-                <!-- select特有的操作 -->
-                <div v-if="item.type == 'select'">
-                  <el-form-item label="选项">
-                    <el-tabs v-model="selectActiveName" type="border-card" :stretch="true">
-                      <!--  静态数据的页面 -->
-                      <el-tab-pane label="静态数据" name="static">
-                        <el-card v-for="(item1, index1) in item.options" :key="index1">
-                          <el-input size="mini" v-model="item1.label">
-                            <template slot="prepend">Label</template>
-                          </el-input>
-                          <el-input size="mini" v-model="item1.value">
-                            <template slot="prepend">Value</template>
-                          </el-input>
-                        </el-card>
-                        <el-button
-                          plain
-                          icon="el-icon-plus"
-                          size="mini"
-                          @click="changeSelectOption(index,'add')"
-                        ></el-button>
-                        <el-button
-                          type="danger"
-                          plain
-                          icon="el-icon-minus"
-                          size="mini"
-                          @click="changeSelectOption(index,'delete')"
-                        ></el-button>
-                      </el-tab-pane>
-                      <!--  动态数据的页面 -->
-                      <el-tab-pane label="动态数据" name="dynamic">
-                        <el-form>
-                          <el-form-item label="接口URL">
-                            <el-input v-model="item.remoteURL">
-                              <template slot="prepend">http://</template>
-                            </el-input>
-                          </el-form-item>
-                        </el-form>
-                        <label>参数 ：</label>
-                        <el-card v-for="(item1, index1) in item.remoteParmas" :key="index1">
-                          <el-input size="mini" v-model="item1.key">
-                            <template slot="prepend">Key</template>
-                          </el-input>
-                          <el-input size="mini" v-model="item1.value">
-                            <template slot="prepend">Value</template>
-                          </el-input>
-                        </el-card>
-                        <el-button
-                          plain
-                          icon="el-icon-plus"
-                          size="mini"
-                          @click="changeSelectParams(index,'add')"
-                        ></el-button>
-                        <el-button
-                          type="danger"
-                          plain
-                          icon="el-icon-minus"
-                          size="mini"
-                          @click="changeSelectParams(index,'delete')"
-                        ></el-button>
-                      </el-tab-pane>
-                    </el-tabs>
-                    <el-checkbox v-model="item.isLinkOptions">联动获取数据</el-checkbox>
-                  </el-form-item>
-                  <el-form-item>
-                    <el-select
-                      v-if="item.isLinkOptions"
-                      placeholder="请选择联动数据的下拉框"
-                      v-model="item.linkOptionsKey"
-                    >
-                      <el-option
-                        v-for="option_item in Form.Item"
-                        v-show="option_item.type == 'select' && option_item.key!=item.key"
-                        :key="option_item.key"
-                        :label="option_item.name"
-                        :value="option_item.key"
-                      ></el-option>
-                    </el-select>
-                  </el-form-item>
-                </div>
-                <!-- radio单选框特有的操作 -->
-                <div v-else-if="item.type == 'radio'">
-                  <el-form-item label="radio类型">
-                    <el-radio-group v-model="item.radioType">
-                      <el-radio-button label="primary">基础样式</el-radio-button>
-                      <el-radio-button label="button">按钮样式</el-radio-button>
-                      <el-radio-button label="borderButton">带边框样式</el-radio-button>
-                    </el-radio-group>
-                  </el-form-item>
-                  <el-form-item label="选项">
-                    <el-card>
-                      <el-card v-for="(item1, index1) in item.options" :key="index1">
-                        <el-input size="mini" v-model="item1.label">
-                          <template slot="prepend">Label</template>
-                        </el-input>
-                        <el-input size="mini" v-model="item1.value">
-                          <template slot="prepend">Value</template>
-                        </el-input>
-                      </el-card>
-                      <el-button
-                        plain
-                        icon="el-icon-plus"
-                        size="mini"
-                        @click="changeSelectOption(index,'add')"
-                      ></el-button>
-                      <el-button
-                        type="danger"
-                        plain
-                        icon="el-icon-minus"
-                        size="mini"
-                        @click="changeSelectOption(index,'delete')"
-                      ></el-button>
-                    </el-card>
-                  </el-form-item>
-                </div>
-                <!-- inputTextarea特有的操作 -->
-                <div v-else-if="item.type == 'inputTextarea'">
-                  <el-form-item label="文本行数">
-                    <el-input-number v-model="item.rows" :min="2" :max="20"></el-input-number>
-                  </el-form-item>
-                </div>
-                <!--  -->
-                <el-form-item label="操作属性">
-                  <el-checkbox v-model="item.disabled">禁用</el-checkbox>
-                </el-form-item>
-                <el-form-item label="校验">
-                  <el-checkbox v-model="item.required">必填</el-checkbox>
-                </el-form-item>
-                <el-form-item v-show="item.type != 'select'">
-                  <el-input v-model="item.pattern" placeholder="请填写正则表达式"></el-input>
-                </el-form-item>
-                <el-form-item label="校验不通过的提示文字" v-show="item.type != 'select'">
-                  <el-input v-model="item.errorText"></el-input>
-                </el-form-item>
-              </el-form>
-            </el-tab-pane>
-            <el-tab-pane label="表单属性" name="form">
-              <el-form label-position="top">
-                <el-form-item>
-                  <el-checkbox v-model="Form.disabled">禁用表单</el-checkbox>
-                </el-form-item>
-
-                <el-form-item label="标签对齐方式">
-                  <el-radio-group v-model="Form.labelPosition">
-                    <el-radio-button label="left">左对齐</el-radio-button>
-                    <el-radio-button label="right">右对齐</el-radio-button>
-                    <el-radio-button label="top">顶部对齐</el-radio-button>
-                  </el-radio-group>
-                </el-form-item>
-                <el-form-item label="表单标签宽度">
-                  <el-input-number v-model="Form.labelWidth" :step="10"></el-input-number>
-                </el-form-item>
-                <el-form-item label="组件尺寸">
-                  <el-radio-group v-model="Form.size">
-                    <el-radio-button label="medium">medium</el-radio-button>
-                    <el-radio-button label="small">small</el-radio-button>
-                    <el-radio-button label="mini">mini</el-radio-button>
-                  </el-radio-group>
-                </el-form-item>
-                <el-form-item label="显示提交按钮">
-                  <el-switch v-model="Form.isShowButton"></el-switch>
-                </el-form-item>
-                <el-form-item label="提交按钮的文字内容" v-show="Form.isShowButton">
-                  <el-input v-model="Form.submitText"></el-input>
-                </el-form-item>
-              </el-form>
-            </el-tab-pane>
-          </el-tabs>
+          <rightControlComponent></rightControlComponent>
         </el-col>
       </el-row>
     </el-row>
 
     <!-- 生成json代码的对话框 -->
     <selfBuildJsonDialog
-      :selfBuildJsonData="Form"
-      :isShow="selfBuildJsonDialogVisible"
-      @closeDialog="closeBuildJsonDialogrDialog"
+      :selfBuildJsonData="this.$store.state.Form.formData"
     ></selfBuildJsonDialog>
 
     <!-- 导入json代码的对话框 -->
     <selfImportJsonDialog
-      :isShow="selfImportJsonDialogVisible"
-      @closeDialog="closeImportJsonDialogrDialog"
       @generateJsonData="importJsonData(arguments)"
     ></selfImportJsonDialog>
 
     <!-- 预览表单的对话框 -->
     <el-dialog
       title="预览表单"
-      :visible.sync="previewFormDialogVissible"
-      v-if="previewFormDialogVissible"
+      :visible.sync="this.$store.state.Form.previewFormDialogVissible"
+      v-if="this.$store.state.Form.previewFormDialogVissible"
+      :before-close="closePreviewFormDialogrDialog"
       width="40%"
-      :before-close="closePreviewFormDialog"
       ref="perviewFormDialog"
       center
     >
       <!-- 自定义的表单渲染器 -->
-      <selfGenerateForm :formJson="Form"></selfGenerateForm>
+      <selfGenerateForm :formJson="this.$store.state.Form.formData"></selfGenerateForm>
     </el-dialog>
   </div>
 </template>
@@ -359,7 +167,7 @@ import selfBuildJsonDialog from "@/components/Form/selfBuildJsonDialog";
 import selfImportJsonDialog from "@/components/Form/selfImportJsonDialog";
 import leftAddButtonComponent from "@/components/Form/leftAddButtonComponent";
 import mainControlButtonComponent from "@/components/Form/mainControlButtonComponent";
-
+import rightControlComponent from "@/components/Form/rightControlComponent";
 import selfGenerateForm from "@/components/Form/selfGenerateForm";
 export default {
   components: {
@@ -368,40 +176,15 @@ export default {
     selfGenerateForm,
     selfImportJsonDialog,
     leftAddButtonComponent,
-    mainControlButtonComponent
+    mainControlButtonComponent,
+    rightControlComponent
   },
   data() {
     return {
-      // 控制导入json的对话框是否显示
-      selfImportJsonDialogVisible: false,
-      // 控制生成json的对话框是否显示
-      selfBuildJsonDialogVisible: false,
-      // 控制预览表单的对话框是否显示
-      previewFormDialogVissible: false,
-      // 表单数据
-      Form: {
-        // 表单配置项
-        disabled: false,
-        isShowButton: true,
-        submitText: "提交",
-        labelPosition: "right",
-        labelWidth: "130",
-        size: "small",
-        disabled: false,
-        Item: [],
-        // 表单字段数据
-        Data: {},
-        // 表单验证规则
-        Rules: {}
-      },
       // 请求表单数据的数据
       requestFormData: {
         formId: ""
       },
-      // 右边操作属性的标签切换的名字
-      activeName: "item",
-      // 右边操作属性的选项标签切换的名字
-      selectActiveName: "static"
     };
   },
   mounted() {
@@ -417,7 +200,7 @@ export default {
         this.requestFormData.formId = this.$route.query.formId;
         getFormDataById(this.requestFormData).then(res => {
           if (res.extend.formData) {
-            this.Form = JSON.parse(res.extend.formData);
+            this.$store.commit("Form/resetData",JSON.parse(res.extend.formData));
           }
         });
       }
@@ -428,45 +211,16 @@ export default {
      */
     editItem(index) {
       // 所有元素都重置为未点击的状态
-      for (var i in this.Form.Item) {
-        this.Form.Item[i].isClick = false;
+      for (var i in this.$store.state.Form.formData.Item) {
+        this.$store.state.Form.formData.Item[i].isClick = false;
       }
-      this.Form.Item[index].isClick = true;
+      this.$store.state.Form.formData.Item[index].isClick = true;
     },
     /**
      * @description 返回上一级
      */
     returnBack() {
       this.$router.go(-1);
-    },
-    /**
-     * @description 保存数据
-     */
-    save() {
-      var jsonData = {};
-      jsonData.formId = this.$route.query.formId;
-      jsonData.formData = JSON.stringify(this.Form);
-      updateFromDataById(jsonData).then(res => {
-        // 上传数据成功
-        this.$message({
-          message: "保存成功",
-          type: "success"
-        });
-      });
-    },
-    /**
-     * @description 清空整个表单
-     */
-    clear() {
-      this.Form.Item.splice(0);
-    },
-    /**
-     * @description 添加表单元素,调用添加元素组件，返回需要添加的元素
-     * @param arg 元素对象
-     */
-    addItem(arg) {
-      // 添加新的元素到Form.item
-      this.Form.Item.push(JSON.parse(JSON.stringify(arg[0])));
     },
     /**
      * @description 删除指定索引的表单元素
@@ -521,86 +275,12 @@ export default {
       }
     },
     /**
-     * @description 把Form生成json输出到前端,打开对话框
+     * @description 关闭预览表单对话框
      */
-    buildJSON() {
-      this.selfBuildJsonDialogVisible = true;
+    closePreviewFormDialogrDialog(){
+      this.$store.commit("Form/setpreviewFormDialogVissible",false)
     },
-    /*
-     * @description 关闭生成json的对话框
-     */
-    closeBuildJsonDialogrDialog() {
-      this.selfBuildJsonDialogVisible = false;
-    },
-    /**
-     * @description 改动下拉框的选项值
-     * @param index 元素的索引值
-     * @param type 改动操作的类型（add:添加元素；delete：删除元素）
-     */
-    changeSelectOption(index, type) {
-      switch (type) {
-        case "add":
-          this.Form.Item[index].options.push({
-            label: "",
-            value: ""
-          });
-          break;
-        case "delete":
-          this.Form.Item[index].options.splice(
-            this.Form.Item[index].options.length - 1,
-            1
-          );
-      }
-    },
-    /**
-     * @description 改动下拉框获取远程数据的参数
-     * @param index 元素的索引值
-     * @param type 改动操作的类型（add:添加元素；delete：删除元素）
-     */
-    changeSelectParams(index, type) {
-      switch (type) {
-        case "add":
-          this.Form.Item[index].remoteParmas.push({
-            key: "",
-            value: ""
-          });
-          break;
-        case "delete":
-          this.Form.Item[index].remoteParmas.splice(
-            this.Form.Item[index].remoteParmas.length - 1,
-            1
-          );
-      }
-    },
-    /**
-     * @description 导入json数据
-     */
-    importJsonData(arg) {
-      this.Form = arg[0];
-      this.$message({
-        type: "success",
-        message: "导入成功！"
-      });
-      this.closeImportJsonDialogrDialog();
-    },
-    /**
-     * @description 打开预览表单的对话框
-     */
-    previewForm() {
-      this.previewFormDialogVissible = true;
-    },
-    /**
-     * @description 关闭预览表单的对话框
-     */
-    closePreviewFormDialog() {
-      this.previewFormDialogVissible = false;
-    },
-    /**
-     * @description 关闭导入json的对话框
-     */
-    closeImportJsonDialogrDialog() {
-      this.selfImportJsonDialogVisible = false;
-    }
+
   }
 };
 </script>
