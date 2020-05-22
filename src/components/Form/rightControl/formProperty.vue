@@ -44,6 +44,15 @@ export default {
   mounted() {},
   methods: {},
   computed: {
+    isInline: {
+      get:function(){
+        return this.$store.state.Form.formData.isInline;
+      },
+      set:function(value) {
+        var jsonData = {key:"isInline", value:value};
+        this.$store.commit("Form/setFormData",jsonData);
+      }
+    },
     disabled: {
       get:function(){
         return this.$store.state.Form.formData.disabled;

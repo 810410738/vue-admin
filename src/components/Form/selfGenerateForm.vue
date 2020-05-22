@@ -1,6 +1,7 @@
  <template>
   <!-- 根据json生成表单 -->
   <el-form
+    :inline="Form.isInline"
     :disabled="Form.disabled"
     :label-position="Form.labelPosition"
     :label-width="Form.labelWidth + 'px'"

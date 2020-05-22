@@ -1,3 +1,5 @@
+import {Message} from 'element-ui'
+
 const state = () => ({
   // 初始化状态
   formData: {
@@ -9,6 +11,7 @@ const state = () => ({
     labelWidth: "130",
     size: "small",
     disabled: false,
+    isInline:false,
     Item: [],
     // 表单字段数据
     Data: {},
@@ -85,27 +88,28 @@ const mutations = {
       // 上移
       case "up":
         if (data.index == 0) {
-          this.$message({
+        Message({
             message: "该元素已经是第一个元素，无法继续上移",
             type: "error"
           });
-          return;
+          return false;
         }
         state.formData.Item[data.index] = state.formData.Item[data.index - 1];
         state.formData.Item[data.index - 1] = temp;
         break;
       case "down":
         if (data.index == state.formData.Item.length - 1) {
-          this.$message({
+          Message({
             message: "该元素已经是最后一个元素，无法继续下移",
             type: "error"
           });
-          return;
+          return false;
         }
         state.formData.Item[data.index] = state.formData.Item[data.index + 1];
         state.formData.Item[data.index + 1] = temp;
         break;
     }
+    return true;
   },
   /**
    * @description 点击元素，右边可以编辑属性

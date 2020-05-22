@@ -19,7 +19,7 @@
     </el-row>
     <el-row>
       <el-button type="primary" plain size="mini" @click="addItem('DatePicker')">日期选择器</el-button>
-      <el-button type="primary" plain size="mini" @click="addItem('rate')">rate评分</el-button>
+      <!-- <el-button type="primary" plain size="mini" @click="addItem('rate')">rate评分</el-button> -->
     </el-row>
   </div>
 </template>

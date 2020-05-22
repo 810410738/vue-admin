@@ -19,6 +19,7 @@
           </el-row>
           <el-row>
             <el-form
+              :inline="this.$store.state.Form.formData.isInline"
               :label-position="this.$store.state.Form.formData.labelPosition"
               :label-width="this.$store.state.Form.formData.labelWidth + 'px'"
               :model="this.$store.state.Form.formData.Data"
@@ -32,10 +33,10 @@
                   v-for="(item, index) in this.$store.state.Form.formData.Item"
                   :key="item.key"
                   @click="editItem(index)"
-                  :class="{'clickFormItem':item.isClick}"
+                  :class="[{'clickFormItem':item.isClick}]"
                 >
                   <!-- 各个元素的操作按钮（删除） -->
-                  <div class="itemEdit" v-show="item.isClick">
+                  <div :class="{'itemEdit':!item.isClick}" >
                     <!-- 删除 -->
                     <el-button
                       type="primary"
@@ -169,7 +170,7 @@
                       end-placeholder="结束日期"
                       unlink-panels
                       format="yyyy 年 MM 月 dd 日"
-                       :value-format="item.format"
+                      :value-format="item.format"
                     ></el-date-picker>
                     <span class="itemName">{{item.name}}</span>
                   </el-form-item>
@@ -288,7 +289,10 @@ export default {
      * @parma type 移动类型（up:上移，down：下移）
      */
     moveOneItem(index, type) {
-      this.$store.commit("Form/moveOneItem", { index: index, type: type });
+     this.$store.commit("Form/moveOneItem", {
+        index: index,
+        type: type
+      });
     },
     /**
      * @description 关闭预览表单对话框
@@ -323,6 +327,9 @@ export default {
       span.itemName {
         float: right;
         color: #82dc29;
+      }
+      .itemEdit{
+        visibility: hidden;
       }
     }
     .formItem:hover {
