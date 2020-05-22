@@ -196,6 +196,20 @@
           </el-form-item>
         </el-card>
       </div>
+      <!-- datePicker日期选择器特有的操作 -->
+      <div v-else-if="item.type == 'DatePicker'">
+        <el-card>
+          <el-form-item label="日期类型">
+            <el-radio-group v-model="item.datePickerType">
+              <el-radio-button label="date">选择日</el-radio-button>
+              <el-radio-button label="daterange">选择日期范围</el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="日期格式">
+            <el-input v-model="item.format"></el-input>
+          </el-form-item>
+        </el-card>
+      </div>
       <!--  -->
       <el-form-item label="操作属性">
         <el-checkbox v-model="item.disabled">禁用</el-checkbox>
@@ -223,15 +237,15 @@ export default {
       selectActiveName: "static",
       // 选择颜色的预定义颜色
       predefineColors: [
-          '#ff8c00',
-          '#ffd700',
-          '#90ee90',
-          '#00ced1',
-          '#1e90ff',
-          '#13ce66',
-          '#ff4949',
-          '#c71585', 
-        ]
+        "#ff8c00",
+        "#ffd700",
+        "#90ee90",
+        "#00ced1",
+        "#1e90ff",
+        "#13ce66",
+        "#ff4949",
+        "#c71585"
+      ]
     };
   },
   mounted() {},

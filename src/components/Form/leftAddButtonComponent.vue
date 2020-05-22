@@ -109,6 +109,8 @@ export default {
           break;
         case "DatePicker":
            this.jsonData.label = "DatePicker日期选择器";
+           this.jsonData.datePickerType = "date";
+           this.jsonData.format = "yyyy-MM-dd";
           break;
         case "rate":
           break;

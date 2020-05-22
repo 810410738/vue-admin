@@ -160,7 +160,17 @@
                       :disabled="item.disabled"
                     ></el-switch>
                     <!-- DatePicker日期选择器 -->
-                    <el-date-picker v-else-if="item.checkboxType == 'DatePicker'" type="date" placeholder="选择日期"></el-date-picker>
+                    <el-date-picker
+                      v-else-if="item.type == 'DatePicker'"
+                      :type="item.datePickerType"
+                      placeholder="选择日期"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期"
+                      unlink-panels
+                      format="yyyy 年 MM 月 dd 日"
+                       :value-format="item.format"
+                    ></el-date-picker>
                     <span class="itemName">{{item.name}}</span>
                   </el-form-item>
                 </div>

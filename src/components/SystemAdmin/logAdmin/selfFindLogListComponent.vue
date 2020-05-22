@@ -42,6 +42,7 @@
           <label>操作时间:</label>
           <el-date-picker
             v-model="findComponentData.time"
+            unlink-panels
             type="daterange"
             range-separator="至"
             start-placeholder="开始日期"

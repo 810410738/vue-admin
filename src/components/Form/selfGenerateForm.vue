@@ -119,8 +119,14 @@
       <el-date-picker
         v-else-if="item.type == 'DatePicker'"
         v-model="Form.Data[item.name]"
-        type="date"
+        :type="item.datePickerType"
         placeholder="选择日期"
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        unlink-panels
+        format="yyyy 年 MM 月 dd 日"
+        :value-format="item.format"
       ></el-date-picker>
     </el-form-item>
     <!-- 提交表单 -->
