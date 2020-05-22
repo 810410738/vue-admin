@@ -45,51 +45,57 @@ export default {
   methods: {},
   computed: {
     disabled: {
-      get() {
+      get:function(){
         return this.$store.state.Form.formData.disabled;
       },
-      set(value) {
-        this.$store.commit("Form/setFormData", "disabled", value);
+      set:function(value) {
+        var jsonData = {key:"disabled", value:value};
+        this.$store.commit("Form/setFormData",jsonData);
       }
     },
     labelPosition: {
-      get() {
+      get:function() {
         return this.$store.state.Form.formData.labelPosition;
       },
-      set(value) {
-        this.$store.commit("Form/setFormData", "labelPosition", value);
+      set:function(value) {
+        var jsonData = {key:"labelPosition", value:value};
+        this.$store.commit("Form/setFormData", jsonData);
       }
     },
     labelWidth: {
-      get() {
+      get:function() {
         return this.$store.state.Form.formData.labelWidth;
       },
-      set(value) {
-        this.$store.commit("Form/setFormData", "labelWidth", value);
+      set:function(value) {
+        var jsonData = {key:"labelWidth", value:value};
+        this.$store.commit("Form/setFormData", jsonData);
       }
     },
     size:{
-      get() {
+      get:function() {
         return this.$store.state.Form.formData.size;
       },
-      set(value) {
-        this.$store.commit("Form/setFormData", "size", value);
+      set:function(value) {
+        var jsonData = {key:"size", value:value};
+        this.$store.commit("Form/setFormData", jsonData);
       }
     },
     isShowButton: {
-      get() {
+      get:function() {
         return this.$store.state.Form.formData.isShowButton;
       },
-      set(value) {
-        this.$store.commit("Form/setFormData", "isShowButton", value);
+      set:function(value) {
+        var jsonData = {key:"isShowButton", value:value};
+        this.$store.commit("Form/setFormData", jsonData);
       }
     },
     submitText: {
-      get() {
+      get:function() {
         return this.$store.state.Form.formData.submitText;
       },
-      set(value) {
-        this.$store.commit("Form/setFormData", "submitText", value);
+      set:function(value) {
+        var jsonData = {key:"submitText", value:value};
+        this.$store.commit("Form/setFormData", jsonData);
       }
     }
   }

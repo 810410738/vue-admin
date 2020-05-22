@@ -138,11 +138,63 @@
           </el-card>
         </el-form-item>
       </div>
+      <!-- checkbox多选框特有的操作 -->
+      <div v-else-if="item.type == 'checkbox'">
+        <el-form-item label="checkbox">
+          <el-radio-group v-model="item.checkboxType">
+            <el-radio-button label="primary">基础样式</el-radio-button>
+            <el-radio-button label="button">按钮样式</el-radio-button>
+            <el-radio-button label="borderButton">带边框样式</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="选项">
+          <el-card>
+            <el-card v-for="(item1, index1) in item.options" :key="index1">
+              <el-input size="mini" v-model="item1.label">
+                <template slot="prepend">Label</template>
+              </el-input>
+              <el-input size="mini" v-model="item1.value">
+                <template slot="prepend">Value</template>
+              </el-input>
+            </el-card>
+            <el-button
+              plain
+              icon="el-icon-plus"
+              size="mini"
+              @click="changeSelectOption(index,'add')"
+            ></el-button>
+            <el-button
+              type="danger"
+              plain
+              icon="el-icon-minus"
+              size="mini"
+              @click="changeSelectOption(index,'delete')"
+            ></el-button>
+          </el-card>
+        </el-form-item>
+      </div>
       <!-- inputTextarea特有的操作 -->
       <div v-else-if="item.type == 'inputTextarea'">
         <el-form-item label="文本行数">
           <el-input-number v-model="item.rows" :min="2" :max="20"></el-input-number>
         </el-form-item>
+      </div>
+      <!-- switch开关特有的操作 -->
+      <div v-else-if="item.type == 'switch'">
+        <el-card>
+          <el-form-item label="激活与不激活的颜色">
+            <el-color-picker v-model="item.activeColor" :predefine="predefineColors"></el-color-picker>
+            <el-color-picker v-model="item.inactiveColor" :predefine="predefineColors"></el-color-picker>
+          </el-form-item>
+          <el-form-item label="文字描述">
+            <el-input v-model="item.activeText">
+              <template slot="prepend">active-text</template>
+            </el-input>
+            <el-input v-model="item.inactiveText">
+              <template slot="prepend">inactive-text</template>
+            </el-input>
+          </el-form-item>
+        </el-card>
       </div>
       <!--  -->
       <el-form-item label="操作属性">
@@ -167,14 +219,49 @@ export default {
   props: {},
   data() {
     return {
-      // 右边操作属性的选项标签切换的名字
-      selectActiveName: "static"
+      // select属性的选项标签切换的名字
+      selectActiveName: "static",
+      // 选择颜色的预定义颜色
+      predefineColors: [
+          '#ff8c00',
+          '#ffd700',
+          '#90ee90',
+          '#00ced1',
+          '#1e90ff',
+          '#13ce66',
+          '#ff4949',
+          '#c71585', 
+        ]
     };
   },
   mounted() {},
-  methods: {}
+  methods: {
+    /**
+     * @description 改动下拉框的选项值
+     * @param index 元素的索引值
+     * @param type 改动操作的类型（add:添加元素；delete：删除元素）
+     */
+    changeSelectOption(index, type) {
+      this.$store.commit("Form/changeSelectOption", {
+        index: index,
+        type: type
+      });
+    },
+    /**
+     * @description 改动下拉框获取远程数据的参数
+     * @param index 元素的索引值
+     * @param type 改动操作的类型（add:添加元素；delete：删除元素）
+     */
+    changeSelectParams(index, type) {
+      this.$store.commit("Form/changeSelectParams", {
+        index: index,
+        type: type
+      });
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 </style>
+

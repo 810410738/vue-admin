@@ -15,7 +15,7 @@
         <!-- 表单效果 -->
         <el-col :span="15" class="mainForm">
           <el-row>
-            <mainControlButtonComponent ></mainControlButtonComponent>
+            <mainControlButtonComponent></mainControlButtonComponent>
           </el-row>
           <el-row>
             <el-form
@@ -120,6 +120,47 @@
                         >{{item1.label}}</el-radio>
                       </div>
                     </el-radio-group>
+                    <!-- checkbox多选框 -->
+                    <el-checkbox-group
+                      v-else-if="item.type == 'checkbox'"
+                      :style="'width:' + item.width + '%'"
+                      :disabled="item.disabled"
+                    >
+                      <div v-if="item.checkboxType == 'primary'">
+                        <el-checkbox
+                          v-for="item1 in item.options"
+                          :key="item1.value"
+                          :label="item1.value"
+                        >{{item1.label}}</el-checkbox>
+                      </div>
+                      <div v-else-if="item.checkboxType == 'button'">
+                        <el-checkbox-button
+                          v-for="item1 in item.options"
+                          :key="item1.value"
+                          :label="item1.value"
+                        >{{item1.label}}</el-checkbox-button>
+                      </div>
+                      <div v-else-if="item.checkboxType == 'borderButton'">
+                        <el-checkbox
+                          border
+                          v-for="item1 in item.options"
+                          :key="item1.value"
+                          :label="item1.value"
+                        >{{item1.label}}</el-checkbox>
+                      </div>
+                    </el-checkbox-group>
+                    <!-- switch开关 -->
+                    <el-switch
+                      v-else-if="item.type == 'switch'"
+                      :active-color="item.activeColor"
+                      :inactive-color="item.inactiveColor"
+                      :active-text="item.activeText"
+                      :inactive-text="item.inactiveText"
+                      :style="'width:' + item.width + '%'"
+                      :disabled="item.disabled"
+                    ></el-switch>
+                    <!-- DatePicker日期选择器 -->
+                    <el-date-picker v-else-if="item.checkboxType == 'DatePicker'" type="date" placeholder="选择日期"></el-date-picker>
                     <span class="itemName">{{item.name}}</span>
                   </el-form-item>
                 </div>
@@ -135,14 +176,10 @@
     </el-row>
 
     <!-- 生成json代码的对话框 -->
-    <selfBuildJsonDialog
-      :selfBuildJsonData="this.$store.state.Form.formData"
-    ></selfBuildJsonDialog>
+    <selfBuildJsonDialog :selfBuildJsonData="this.$store.state.Form.formData"></selfBuildJsonDialog>
 
     <!-- 导入json代码的对话框 -->
-    <selfImportJsonDialog
-      @generateJsonData="importJsonData(arguments)"
-    ></selfImportJsonDialog>
+    <selfImportJsonDialog @generateJsonData="importJsonData(arguments)"></selfImportJsonDialog>
 
     <!-- 预览表单的对话框 -->
     <el-dialog
@@ -162,7 +199,7 @@
 
 <script>
 import headTop from "@/components/headTop";
-import { updateFromDataById, getFormDataById } from "@/api/getFormData";
+import { getFormDataById } from "@/api/getFormData";
 import selfBuildJsonDialog from "@/components/Form/selfBuildJsonDialog";
 import selfImportJsonDialog from "@/components/Form/selfImportJsonDialog";
 import leftAddButtonComponent from "@/components/Form/leftAddButtonComponent";
@@ -184,7 +221,7 @@ export default {
       // 请求表单数据的数据
       requestFormData: {
         formId: ""
-      },
+      }
     };
   },
   mounted() {
@@ -200,7 +237,10 @@ export default {
         this.requestFormData.formId = this.$route.query.formId;
         getFormDataById(this.requestFormData).then(res => {
           if (res.extend.formData) {
-            this.$store.commit("Form/resetData",JSON.parse(res.extend.formData));
+            this.$store.commit(
+              "Form/resetData",
+              JSON.parse(res.extend.formData)
+            );
           }
         });
       }
@@ -210,11 +250,7 @@ export default {
      * @param index 元素的索引值
      */
     editItem(index) {
-      // 所有元素都重置为未点击的状态
-      for (var i in this.$store.state.Form.formData.Item) {
-        this.$store.state.Form.formData.Item[i].isClick = false;
-      }
-      this.$store.state.Form.formData.Item[index].isClick = true;
+      this.$store.commit("Form/clickItem", index);
     },
     /**
      * @description 返回上一级
@@ -227,19 +263,14 @@ export default {
      * @param index 表单元素的索引
      */
     deleteOneItem(index) {
-      this.Form.Item.splice(index, 1);
+      this.$store.commit("Form/deleteOneItem", index);
     },
     /**
      * @description 复制指定索引的表单元素,重新生成key和name（保证key和name唯一）
      * @param index 表单元素的索引
      */
     copyOneItem(index) {
-      var jsonData = JSON.parse(JSON.stringify(this.Form.Item[index]));
-      // 生成随机且唯一的key值
-      jsonData.key =
-        String(Math.random()).substring(2, 10) + String(Date.now());
-      jsonData.name = jsonData.type + "_" + jsonData.key;
-      this.Form.Item.splice(index + 1, 0, jsonData);
+      this.$store.commit("Form/copyOneItem", index);
     },
     /**
      * @description 移动表单元素
@@ -247,40 +278,14 @@ export default {
      * @parma type 移动类型（up:上移，down：下移）
      */
     moveOneItem(index, type) {
-      var temp = this.Form.Item[index];
-      switch (type) {
-        // 上移
-        case "up":
-          if (index == 0) {
-            this.$message({
-              message: "该元素已经是第一个元素，无法继续上移",
-              type: "error"
-            });
-            return;
-          }
-          this.Form.Item[index] = this.Form.Item[index - 1];
-          this.Form.Item[index - 1] = temp;
-          break;
-        case "down":
-          if (index == this.Form.Item.length - 1) {
-            this.$message({
-              message: "该元素已经是最后一个元素，无法继续下移",
-              type: "error"
-            });
-            return;
-          }
-          this.Form.Item[index] = this.Form.Item[index + 1];
-          this.Form.Item[index + 1] = temp;
-          break;
-      }
+      this.$store.commit("Form/moveOneItem", { index: index, type: type });
     },
     /**
      * @description 关闭预览表单对话框
      */
-    closePreviewFormDialogrDialog(){
-      this.$store.commit("Form/setpreviewFormDialogVissible",false)
-    },
-
+    closePreviewFormDialogrDialog() {
+      this.$store.commit("Form/setpreviewFormDialogVissible", false);
+    }
   }
 };
 </script>

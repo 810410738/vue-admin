@@ -18,7 +18,7 @@
       <el-button type="primary" plain size="mini" @click="addItem('checkbox')">多选框</el-button>
     </el-row>
     <el-row>
-      <el-button type="primary" plain size="mini" @click="addItem('DatePicker')">时间选择器</el-button>
+      <el-button type="primary" plain size="mini" @click="addItem('DatePicker')">日期选择器</el-button>
       <el-button type="primary" plain size="mini" @click="addItem('rate')">rate评分</el-button>
     </el-row>
   </div>
@@ -41,7 +41,8 @@ export default {
         disabled: false,
         required: false,
         errorText: "输入数据的格式不正确",
-        rules: []
+        rules: [],
+        pattern:''
       }
     };
   },
@@ -88,6 +89,30 @@ export default {
               value: "1"
             }
           ];
+          break;
+        case "switch":
+          this.jsonData.label = "Switch 开关";
+          this.jsonData.activeColor = "#13ce66";
+          this.jsonData.inactiveColor = "#ff4949";
+          this.jsonData.activeText = "";
+          this.jsonData.inactiveText = "";
+          break;
+        case "checkbox":
+          this.jsonData.label = "Checkbox 多选框";
+          this.jsonData.checkboxType = "primary";
+          this.jsonData.options = [
+            {
+              label: "1",
+              value: "1"
+            }
+          ];
+          break;
+        case "DatePicker":
+           this.jsonData.label = "DatePicker日期选择器";
+          break;
+        case "rate":
+          break;
+
       }
       // 添加新的元素到Form.item
       this.$store.commit("Form/addItem",this.jsonData);
@@ -113,3 +138,4 @@ div.primaryButton {
   }
 }
 </style>
+

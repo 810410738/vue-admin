@@ -27,6 +27,18 @@
         :disabled="item.disabled"
         v-model="Form.Data[item.name]"
       ></el-input>
+      <!-- switch开关 -->
+      <el-switch
+        v-else-if="item.type == 'switch'"
+        :active-color="item.activeColor"
+        :inactive-color="item.inactiveColor"
+        :active-text="item.activeText"
+        :inactive-text="item.inactiveText"
+        :style="'width:' + item.width + '%'"
+        :disabled="item.disabled"
+        v-model="Form.Data[item.name]"
+        :validate-event="false"
+      ></el-switch>
       <!-- radio单选框 -->
       <el-radio-group
         v-else-if="item.type == 'radio'"
@@ -57,6 +69,36 @@
           >{{item1.label}}</el-radio>
         </div>
       </el-radio-group>
+      <!-- checkbox多选框 -->
+      <el-checkbox-group
+        v-else-if="item.type == 'checkbox'"
+        v-model="Form.Data[item.name]"
+        :style="'width:' + item.width + '%'"
+        :disabled="item.disabled"
+      >
+        <div v-if="item.checkboxType == 'primary'">
+          <el-checkbox
+            v-for="item1 in item.options"
+            :key="item1.value"
+            :label="item1.value"
+          >{{item1.label}}</el-checkbox>
+        </div>
+        <div v-else-if="item.checkboxType == 'button'">
+          <el-checkbox-button
+            v-for="item1 in item.options"
+            :key="item1.value"
+            :label="item1.value"
+          >{{item1.label}}</el-checkbox-button>
+        </div>
+        <div v-else-if="item.checkboxType == 'borderButton'">
+          <el-checkbox
+            border
+            v-for="item1 in item.options"
+            :key="item1.value"
+            :label="item1.value"
+          >{{item1.label}}</el-checkbox>
+        </div>
+      </el-checkbox-group>
       <el-select
         v-else-if="item.type == 'select'"
         :placeholder="item.placeholder"
@@ -72,6 +114,14 @@
           :value="item1.value"
         ></el-option>
       </el-select>
+
+      <!-- DatePicker日期选择器 -->
+      <el-date-picker
+        v-else-if="item.type == 'DatePicker'"
+        v-model="Form.Data[item.name]"
+        type="date"
+        placeholder="选择日期"
+      ></el-date-picker>
     </el-form-item>
     <!-- 提交表单 -->
     <el-form-item v-if="Form.isShowButton">
@@ -112,7 +162,12 @@ export default {
       for (var i in this.Form.Item) {
         // 往每个元素添加绑定的属性值
         var ItemNode = this.Form.Item[i];
-        this.$set(this.Form.Data, ItemNode.name, "");
+        if (ItemNode.type == "checkbox" && ItemNode.checkboxType != "signal") {
+          this.$set(this.Form.Data, ItemNode.name, []);
+        } else {
+          this.$set(this.Form.Data, ItemNode.name, "");
+        }
+
         // this.Form.Data[ItemNode.name] = "";
         // 为每个元素添加校验规则
         if (ItemNode.required == true) {

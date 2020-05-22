@@ -1,5 +1,7 @@
 <template>
-  <div>{{this.$store.state.Form.formData}}</div>
+  <div>
+    <itemProperty></itemProperty>
+  </div>
 </template>
 
 <script>
@@ -7,7 +9,9 @@ export default {
   created() {
     this.init();
   },
-  components: {},
+  components: {
+   
+  },
   data() {
     return {};
   },
