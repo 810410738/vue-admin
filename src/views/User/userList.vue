@@ -10,7 +10,8 @@
         size="mini"
         @click="downloadTemplate"
         icon="el-icon-download"
-      >下载模板</el-button>
+        v-if="controlAuthority.downloadTemplate"
+      >{{controlAuthority.downloadTemplate.authorityName}}</el-button>
       <el-upload
         class="upload-demo"
         action="/EOAS/dataHandle/importUser"
@@ -20,7 +21,13 @@
         :on-error="uploadError"
         :limit="1"
       >
-        <el-button class="button-middle" type="warning" size="mini" icon="el-icon-upload2">导入</el-button>
+        <el-button
+          class="button-middle"
+          type="warning"
+          size="mini"
+          icon="el-icon-upload2"
+          v-if="controlAuthority.importUser"
+        >{{controlAuthority.importUser.authorityName}}</el-button>
         <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
       </el-upload>
       <el-button
@@ -28,15 +35,17 @@
         type="success"
         size="mini"
         @click="downloadTemplate"
+         v-if="controlAuthority.exportUser"
         icon="el-icon-user"
-      >导出</el-button>
+      >{{controlAuthority.exportUser.authorityName}}</el-button>
       <el-button
         class="button-middle"
         type="primary"
         size="mini"
         @click="addUserDialogVisible = true"
+         v-if="controlAuthority.newUser"
         icon="el-icon-plus"
-      >新增</el-button>
+      >{{controlAuthority.newUser.authorityName}}</el-button>
     </el-row>
     <el-row>
       <el-col :span="18" :offset="6">
@@ -64,7 +73,7 @@
           ></el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="300">
+      <el-table-column label="操作" width="350">
         <template slot-scope="scope">
           <el-button
             type="primary"
@@ -72,21 +81,24 @@
             size="mini"
             icon="el-icon-more"
             @click="checkMore(scope.row)"
-          >查看更多</el-button>
+             v-if="controlAuthority.checkMore"
+          >{{controlAuthority.checkMore.authorityName}}</el-button>
           <el-button
             type="success"
             plain
             size="mini"
             icon="el-icon-edit"
             @click="editUserInfo(scope.row)"
-          >编辑</el-button>
+             v-if="controlAuthority.edit"
+          >{{controlAuthority.edit.authorityName}}</el-button>
           <el-button
             type="danger"
             plain
             size="mini"
             icon="el-icon-delete"
             @click="deleteUser(scope.row.userId)"
-          >删除</el-button>
+             v-if="controlAuthority.deleteUser"
+          > {{controlAuthority.deleteUser.authorityName}} </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -129,7 +141,11 @@
       :destroy-on-close="true"
       center
     >
-      <selfGenerateForm :formJson="editUserFormData" ref="editUserFrom" @submit="editUserSubmit(arguments)"></selfGenerateForm>
+      <selfGenerateForm
+        :formJson="editUserFormData"
+        ref="editUserFrom"
+        @submit="editUserSubmit(arguments)"
+      ></selfGenerateForm>
     </el-dialog>
   </div>
 </template>
@@ -143,7 +159,7 @@ import {
   changeUserStatus,
   getRoleByUserId,
   updateUserRole,
-  downloadUserTemplate,
+  downloadUserTemplate
 } from "@/api/getUserData";
 import { getFormDataById } from "@/api/getFormData";
 import findComponent from "@/components/index/findComponent";
@@ -155,6 +171,58 @@ export default {
   },
   data() {
     return {
+      // 权限列表
+      authorityList: [
+        {
+          authorityId: "1",
+          authorityName: "下载模板",
+          authorityKey: "downloadTemplate"
+        },
+        {
+          authorityId: "2",
+          authorityName: "导入",
+          authorityKey: "importUser"
+        },
+        {
+          authorityId: "3",
+          authorityName: "导出",
+          authorityKey: "exportUser"
+        },
+        {
+          authorityId: "4",
+          authorityName: "新增",
+          authorityKey: "newUser"
+        },
+        {
+          authorityId: "5",
+          authorityName: "查看更多",
+          authorityKey: "checkMore"
+        },
+        {
+          authorityId: "6",
+          authorityName: "编辑",
+          authorityKey: "edit"
+        },
+        {
+          authorityId: "7",
+          authorityName: "删除",
+          authorityKey: "deleteUser"
+        }
+      ],
+      // 根据权限列表生成的控制字段
+      controlAuthority:{
+
+      },
+      // 控制所有按钮的显示状态
+      isShowButton: {
+        downloadTemplateShow: false,
+        importUserShow: false,
+        exportUserShow: false,
+        newUserShow: false,
+        checkMoreShow: false,
+        editShow: false,
+        deleteUserShow: false
+      },
       // 用户表单的配置数据
       addUserFormData: {},
       checkUserFormData: {},
@@ -170,7 +238,7 @@ export default {
         // 当前指定页数
         pageNumber: "1",
         // 系统唯一标识
-        systemIdentify:""
+        systemIdentify: ""
       },
       // 控制新增用户的对话框是否出现
       addUserDialogVisible: false,
@@ -190,17 +258,31 @@ export default {
         this.getUserData = res.extend.pageData;
       });
       // 获取新增用户表单数据
-      getFormDataById({formId:'42d1cc97f23a4cb594ac1589945419935'}).then(res => {
-        this.addUserFormData = JSON.parse(res.extend.formData);
-      });
+      getFormDataById({ formId: "42d1cc97f23a4cb594ac1589945419935" }).then(
+        res => {
+          this.addUserFormData = JSON.parse(res.extend.formData);
+        }
+      );
       // 获取查看用户表单数据
-      getFormDataById({formId:'b22238626a7a4e0c98681589969123974'}).then(res => {
-        this.checkUserFormData = JSON.parse(res.extend.formData);
-      });
+      getFormDataById({ formId: "b22238626a7a4e0c98681589969123974" }).then(
+        res => {
+          this.checkUserFormData = JSON.parse(res.extend.formData);
+        }
+      );
       // 获取编辑用户表单数据
-      getFormDataById({formId:'42d1cc97f23a4cb594ac1589945419935'}).then(res => {
-        this.editUserFormData = JSON.parse(res.extend.formData);
-      });
+      getFormDataById({ formId: "42d1cc97f23a4cb594ac1589945419935" }).then(
+        res => {
+          this.editUserFormData = JSON.parse(res.extend.formData);
+        }
+      );
+      // 获取权限列表数据
+      // TODO
+      // 根据权限列表数据控制按钮,先把数组转化为对象
+      for(var i in this.authorityList){
+        this.controlAuthority[this.authorityList[i].authorityKey] = {
+          authorityName:this.authorityList[i].authorityName,
+        }
+      }
     },
     /**
      * @description 翻页，获取分页用户数据
@@ -296,9 +378,9 @@ export default {
      */
     checkMore(row) {
       this.checkUserDialogVisible = true;
-      this.$nextTick(()=>{
+      this.$nextTick(() => {
         this.$refs.checkUserFrom.setFormData(row);
-      })
+      });
     },
     /**
      * @description 点击编辑按钮，显示用户信息的对话框
@@ -306,10 +388,10 @@ export default {
      */
     editUserInfo(row) {
       this.editUserDialogVisible = true;
-      this.$nextTick(()=>{
+      this.$nextTick(() => {
         this.$refs.editUserFrom.setFormData(row);
-        this.$refs.editUserFrom.setParams("userId",row.userId);
-      })
+        this.$refs.editUserFrom.setParams("userId", row.userId);
+      });
     },
     /**
      * @description 删除用户
@@ -345,30 +427,30 @@ export default {
       for (var key in arg[0]) {
         jsonData[key] = arg[0][key];
       }
-      editUser(jsonData).then(res=>{
+      editUser(jsonData).then(res => {
         this.$message({
-          type:'success',
-          message:'新增用户成功'
+          type: "success",
+          message: "新增用户成功"
         });
         // 刷新数据
         this.initData();
         this.addUserDialogVisible = false;
       });
     },
-     /**
+    /**
      * @description 提交修改用户信息的请求
      * @param arg[0] 包含表单所有元素的值的对象
      */
-    editUserSubmit(arg){
+    editUserSubmit(arg) {
       var jsonData = {};
       for (var key in arg[0]) {
         jsonData[key] = arg[0][key];
       }
-      jsonData.userId =  this.$refs.editUserFrom.getParams("userId");
-      editUser(jsonData).then(res=>{
+      jsonData.userId = this.$refs.editUserFrom.getParams("userId");
+      editUser(jsonData).then(res => {
         this.$message({
-          type:'success',
-          message:'修改用户信息成功'
+          type: "success",
+          message: "修改用户信息成功"
         });
         // 刷新数据
         this.initData();

@@ -117,19 +117,19 @@ var AuthorityByLoginRoleData = {
         "children": [{
             "nodeId": "11",
             "nodeName": "发布问卷排查",
-            "nodeUrl": "/index/adminQuestion",
+            "nodeUrl": "/main/adminQuestion",
             "checked": true,
           },
           {
             "nodeId": "12",
             "nodeName": "参与问卷排查",
-            "nodeUrl": "/index/questionList",
+            "nodeUrl": "/main/questionList",
             "checked": true,
           },
           {
             "nodeId": "13",
             "nodeName": "查看历史问卷",
-            "nodeUrl": "/index/history",
+            "nodeUrl": "/main/history",
             "checked": true,
           },
         ]
@@ -145,7 +145,7 @@ var AuthorityByLoginRoleData = {
           "nodeId": "21",
           "nodeName": "查看用户列表",
           "checked": true,
-          "nodeUrl": "/index/userList"
+          "nodeUrl": "/main/userList"
         }]
       },
       {
@@ -159,13 +159,13 @@ var AuthorityByLoginRoleData = {
             "nodeId": "31",
             "nodeName": "数据统计",
             "checked": true,
-            "nodeUrl": "/index/dataStatistics"
+            "nodeUrl": "/main/dataStatistics"
           },
           {
             "nodeId": "32",
             "nodeName": "查看异常记录",
             "checked": true,
-            "nodeUrl": "/index/abnormal"
+            "nodeUrl": "/main/abnormal"
           }
         ]
       },
@@ -180,23 +180,23 @@ var AuthorityByLoginRoleData = {
           "nodeId": "41",
           "nodeName": "表单设计",
           "checked": true,
-          "nodeUrl": "/index/DesignFormList"
+          "nodeUrl": "/main/DesignFormList"
         },{
           "nodeId": "42",
           "nodeName": "角色管理",
           "checked": true,
-          "nodeUrl": "/index/roleAuthorityAdmin"
+          "nodeUrl": "/main/roleAuthorityAdmin"
         },{
           "nodeId": "43",
           "nodeName": "权限管理",
           "checked": true,
-          "nodeUrl": "/index/authorityAdmin"
+          "nodeUrl": "/main/authorityAdmin"
         },
         {
           "nodeId": "44",
           "nodeName": "日志管理",
           "checked": true,
-          "nodeUrl": "/index/logAdmin"
+          "nodeUrl": "/main/logAdmin"
         },
       ]
       }

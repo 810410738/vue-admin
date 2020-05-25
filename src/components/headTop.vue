@@ -1,8 +1,8 @@
 <template>
   <el-row class="header_container">
     <el-col  :span="12">
-      <img src="@/assets/img/logo-white_logo.png"/>  
-      <span class="headTitle">中国建设银行 深圳市分行</span>
+      <img src="@/assets/img/logoWhite.png"/>  
+      <!-- <span class="headTitle">中国建设银行 深圳市分行</span> -->
     </el-col>
     <el-col :span="2">
       <el-tag v-if="roleName != '普通用户'"> {{roleName}}</el-tag>
@@ -78,8 +78,8 @@ export default {
   padding:10px;
 }
 img{
-  width: 40px;
-  height: 40px;
+  // width: 40px; 
+  height: 35px;
   vertical-align: middle;
 }
 .headTitle{

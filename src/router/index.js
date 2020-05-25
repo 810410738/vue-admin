@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 
 import login from '../views/login.vue'
 import index from '../views/index.vue'
+import main from '../views/main.vue'
 import userList from '@/views/User/userList.vue'
 
 import questionList from '@/views/Question/questionList.vue'
@@ -27,6 +28,9 @@ import logAdmin from '@/views/SystemAdmin/logAdmin.vue'
 import DesignFormList from '@/views/Form/DesignFormList.vue'
 import editForm from '@/views/Form/editForm.vue'
 
+// 错误页面
+import pageNotFound from '@/errorPage/404';
+
 import test from '@/views/Test/test.vue'
 
 Vue.use(VueRouter)
@@ -34,88 +38,188 @@ Vue.use(VueRouter)
 const routes = [{
     path: '/',
     name: 'login',
-    component: login
+    component: login,
+    meta: {
+      requireSystemIdentify: false
+    }
   },
   {
     path: '/index',
     name: 'index',
     component: index,
+    meta: {
+      requireSystemIdentify: false
+    }
+  },
+  {
+    path: '/main',
+    name: 'main',
+    component: main,
+    meta: {
+      requireSystemIdentify: true
+    },
     children: [{
         path: '',
         component: questionList,
+        meta: {
+          requireSystemIdentify: true
+        },
       },
       {
         path: 'DesignFormList',
         component: DesignFormList,
+        meta: {
+          requireSystemIdentify: true
+        },
       },
       {
         path: 'userList',
         component: userList,
+        meta: {
+          requireSystemIdentify: true
+        },
       },
       {
         path: 'questionList',
         component: questionList,
+        meta: {
+          requireSystemIdentify: true
+        },
       },
       {
         path: 'doQuestion',
         component: doQuestion,
+        meta: {
+          requireSystemIdentify: true
+        },
       },
       {
         path: 'adminQuestion',
         component: adminQuestion,
+        meta: {
+          requireSystemIdentify: true
+        },
       },
       {
         path: 'dataStatistics',
         component: dataStatistics,
+        meta: {
+          requireSystemIdentify: true
+        },
       },
       {
         path: 'authorityAdmin',
         component: authorityAdmin,
+        meta: {
+          requireSystemIdentify: true
+        },
       },
       {
         path: 'roleAuthorityAdmin',
-        component: roleAuthorityAdmin
+        component: roleAuthorityAdmin,
+        meta: {
+          requireSystemIdentify: true
+        },
       },
       {
-        path:'logAdmin',
-        component:logAdmin
+        path: 'logAdmin',
+        component: logAdmin,
+        meta: {
+          requireSystemIdentify: true
+        },
       },
       {
         path: 'addQuestionnaire',
         component: addQuestionnaire,
+        meta: {
+          requireSystemIdentify: true
+        },
       },
       {
         path: 'adminQuestionDetail',
         component: adminQuestionDetail,
+        meta: {
+          requireSystemIdentify: true
+        },
       },
       {
         path: 'statisticsDetails',
         component: statisticsDetails,
-      },{
-        path:'abnormal',
-        component: abnormal
+        meta: {
+          requireSystemIdentify: true
+        },
+      }, {
+        path: 'abnormal',
+        component: abnormal,
+        meta: {
+          requireSystemIdentify: true
+        },
       },
       {
-        path:'abnormalDetails',
-        component:abnormalDetails
+        path: 'abnormalDetails',
+        component: abnormalDetails,
+        meta: {
+          requireSystemIdentify: true
+        },
       }
-      
-      
+
+
     ]
   },
   {
     path: '/Form',
-    component:editForm,
+    component: editForm,
+    meta: {
+      requireSystemIdentify: true
+    },
   },
   {
-    path:'/test',
-    component:test
+    path: '/error',
+    component: pageNotFound
+  },
+  {
+    path: '/test',
+    component: test
+  },
+  {
+    path: '*',
+		component: pageNotFound,
   }
-
 ]
 
 const router = new VueRouter({
   routes
 })
+router.beforeEach((to, from, next) => {
+  if(to.query.isVisited){
+    next();
+  }
+  // 如果访问error页面，直接next
+  if (to.path === '/error') {
+    next();
+  }
+  if(to.meta.isVisited){
+    next();
+  }
+  // query需要添加系统标识这个字段
+  if (from.meta.requireSystemIdentify == true) {
+    if (from.query.systemIdentify) {
+      next({
+        path: to.path,
+        query: {
+          systemIdentify: from.query.systemIdentify,
+          isVisited:true
+        },
+      })
+    } else {
+      next({
+        path: '/error'
+      });
+    }
+  } 
+  else {
+    next();
+  }
 
+})
 export default router
