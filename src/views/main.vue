@@ -1,29 +1,28 @@
 <template>
   <div>
     <headTop></headTop>
-    <el-row style="height: 100%;">
-      <el-col :span="4" style="min-height: 100%; background-color: #324057;">
+    <div class="body">
+      <div class="left">
         <!-- 左边菜单 -->
         <leftMenu></leftMenu>
-      </el-col>
-      <el-col :span="20" style="height: 100%;overflow: auto;">
+      </div>
+      <div class="right">
         <!-- 主页面 -->
-          <router-view></router-view>
-      </el-col>
-    </el-row>
+        <router-view></router-view>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import leftMenu from "@/components/index/leftMenu"
+import leftMenu from "@/components/index/leftMenu";
 import headTop from "@/components/headTop";
-import {setRequestParams} from "@/api/http";
 export default {
   components: {
     leftMenu,
     headTop
   },
-  created(){
+  created() {
     this.init();
   },
   methods: {
@@ -32,18 +31,30 @@ export default {
      */
     init() {
       var systemIdentify = this.$route.query.systemIdentify;
-      if(systemIdentify){
-
-      }else{
+      if (systemIdentify) {
+      } else {
         this.$router.push({
-          path:'/error'
+          path: "/error"
         });
       }
     }
-  },
+  }
 };
 </script>
 
-
 <style lang="scss" scoped>
+div.body {
+  display: flex;
+  width: 100%;
+  height: 90vh;
+  div.left {
+    position: relative;
+    display: inline-block;
+    height: 100%;
+  }
+  div.right {
+    display: inline-block;
+    width: 100%;
+  }
+}
 </style>

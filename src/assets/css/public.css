@@ -7,3 +7,19 @@ h3 {
   background: #f0f9eb;
   background-image: linear-gradient(to right, #f0f9eb , rgb(255, 255, 255));
 }
+
+::-webkit-scrollbar {
+  /*滚动条整体*/
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  /*滚动条轨道*/
+  background: #ededed;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  /*滚动条里面的滑块*/
+  border-radius: 10px;
+  background-color: rgb(98, 198, 255);
+}

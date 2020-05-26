@@ -191,15 +191,24 @@ const router = new VueRouter({
   routes
 })
 router.beforeEach((to, from, next) => {
+  // 如果该页面带有isVisited参数，直接next
   if(to.query.isVisited){
     next();
+    return ;
   }
   // 如果访问error页面，直接next
-  if (to.path === '/error') {
+  if (to.path === '/error' || to.path === '/') {
     next();
+    return ;
   }
-  if(to.meta.isVisited){
-    next();
+  if(!isLogin()){
+    next({
+      path: '/',
+      query:{
+        message:'notLogin'
+      }
+    });
+    return 
   }
   // query需要添加系统标识这个字段
   if (from.meta.requireSystemIdentify == true) {
@@ -211,15 +220,25 @@ router.beforeEach((to, from, next) => {
           isVisited:true
         },
       })
+      return ;
     } else {
       next({
         path: '/error'
       });
+      return ;
     }
   } 
   else {
     next();
   }
 
-})
+});
+
+// 判断是否已经登陆
+function isLogin(){
+  if(localStorage.getItem('authToken')){
+    return true;
+  }
+  return false;
+}
 export default router

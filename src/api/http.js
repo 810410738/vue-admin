@@ -29,14 +29,15 @@ axios.defaults.timeout = 20000;
 var requestParams = {};
 // 设置post请求头
 axios.defaults.headers.post['Content-Type'] = 'application/json';
-export function setHeader(key, value){
-  axios.defaults.headers.post[key] = value;
-  axios.defaults.headers.get[key] = value;
-}
 //定义一个请求拦截器
 axios.interceptors.request.use(
   config => {
     //在请求发出之前进行一些操作
+    // 设置公共请求头的token
+    var authToken = localStorage.getItem('authToken');
+    if(authToken){
+      config.headers.common['authToken'] = authToken;
+    }
     showLoading();
     return config;
   },
@@ -98,6 +99,7 @@ axios.interceptors.response.use(
     for(var key in requestParams){
       params[key] = requestParams[key];
     }
+    console.log(params.systemIdentify);
     return new Promise((resolve, reject) =>{
       axios.post(url, JSON.stringify(params))
       .then(response => {

@@ -16,9 +16,9 @@ import store from './store/store' //引入状态管理 store
 // Vue.use(FormMaking)
 
 // 引入codemirror
-import { codemirror } from 'vue-codemirror'
-import 'codemirror/lib/codemirror.css'
-Vue.use(codemirror)
+// import { codemirror } from 'vue-codemirror'
+// import 'codemirror/lib/codemirror.css'
+// Vue.use(codemirror)
 
 // 开发环境
 if (process.env.NODE_ENV === "development") {

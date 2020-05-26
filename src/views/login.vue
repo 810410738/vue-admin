@@ -37,9 +37,9 @@
 </template>
  
 <script>
-import {setHeader} from '@/api/http.js'
+import { setHeader } from "@/api/http.js";
 import { toLogin } from "@/api/getCommonData";
-import {b64_md5} from "@/util/MD5";
+import { b64_md5 } from "@/util/MD5";
 export default {
   data() {
     return {
@@ -52,10 +52,30 @@ export default {
       responseData: ""
     };
   },
-  created(){
-    
+  created() {
+    this.init();
+  },
+  watch: {
+    $route(to, from) {
+      this.init();
+    }
   },
   methods: {
+    /**
+     * @description 初始化页面
+     */
+    init() {
+      if (this.$route.query.message == "notLogin") {
+        this.$message({
+          type: "warning",
+          message: "请登陆"
+        });
+      }
+      // 显示已保存的账号
+      if (localStorage.getItem("loginAccount")) {
+        this.userName = localStorage.getItem("loginAccount");
+      }
+    },
     // 清求登陆接口
     login() {
       if (this.userName == "") {
@@ -75,10 +95,9 @@ export default {
       var params = {};
       params.loginAccount = this.userName;
       // 超级管理员的密码加密传输
-      if(this.userName == "admin"){
+      if (this.userName == "admin") {
         params.loginPassword = b64_md5(this.password);
-      }
-      else{
+      } else {
         params.loginPassword = this.password;
       }
       toLogin(params).then(response => {
@@ -86,10 +105,12 @@ export default {
       });
     },
     loginSuccess(response) {
-      // 把token设置到请求头
-      setHeader("authToken",response.extend.tokenId);
+      // 把token保存到localStorage
+      localStorage.setItem("authToken", response.extend.tokenId);
+      // 把账号保存到localStorage
+      localStorage.setItem("loginAccount", this.userName);
       this.$router.push({
-        path: "/index",
+        path: "/index"
       });
     }
   }
@@ -110,7 +131,6 @@ export default {
   /* position: absolute; */
   margin-top: 90px;
   text-align: center;
-  
 }
 .login-wrapper .logo {
   margin-bottom: 45px;

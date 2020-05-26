@@ -1,25 +1,25 @@
 <template>
-  <el-menu
-    class="el-menu-vertical-demo"
-    router
-  >
-    <el-submenu 
-      v-for="item in filterAuthorityList" 
-      :key="item.nodeId"
-      :index="item.nodeId"
-    >
-      <template slot="title">
-        <i :class="item.icon"></i>
-        <span>{{item.nodeName}}</span>
-      </template>
-      <el-menu-item
-        v-for="subItem in item.children"
-        v-show="subItem.checked"
-        :key="subItem.nodeId"
-        :index="subItem.nodeUrl"
-      >{{subItem.nodeName}}</el-menu-item>
-    </el-submenu>
-  </el-menu>
+  <div>
+    <el-button size="mini" circle icon="el-icon-s-operation" @click="isCollapse = !isCollapse"></el-button>
+    <el-menu class="el-menu-vertical-demo" router :collapse="isCollapse">
+      <el-submenu
+        v-for="item in filterAuthorityList"
+        :key="item.nodeId"
+        :index="item.nodeId"
+      >
+        <template slot="title">
+          <i :class="item.icon"></i>
+          <span>{{item.nodeName}}</span>
+        </template>
+        <el-menu-item
+          v-for="subItem in item.children"
+          v-show="subItem.checked"
+          :key="subItem.nodeId"
+          :index="subItem.nodeUrl"
+        >{{subItem.nodeName}}</el-menu-item>
+      </el-submenu>
+    </el-menu>
+  </div>
 </template>
 
 <script>
@@ -27,7 +27,9 @@ import { findAuthorityByLoginRole } from "@/api/getCommonData";
 export default {
   data() {
     return {
-      authorityList: []
+      authorityList: [],
+      // 控制菜单是否展开
+      isCollapse: false
     };
   },
   created() {
@@ -52,4 +54,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.el-button{
+  margin-left: 10%;
+}
+ .el-menu-vertical-demo:not(.el-menu--collapse) {
+    width: 200px;
+    min-height: 400px;
+  }
 </style>

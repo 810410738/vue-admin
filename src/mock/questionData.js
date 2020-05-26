@@ -37,12 +37,17 @@ var getTempQuestionnaireData = {
   "extend": {
     questionnaireName:'第一季度排查',
     title:'请认真填写问卷，谢谢',
-    "list|10":[
+    "list":[
       {
+        type:'content',
         content:'是否存在异常行为',
         selfAnswer:'否',
         otherAnswer:'否',
         remark:'123'
+      },
+      {
+        subTitle:'工作方面',
+        type:'subTitle'
       }
     ]
   },

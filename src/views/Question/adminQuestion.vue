@@ -157,7 +157,7 @@ export default {
      */
     addQuestionniare() {
       this.$router.push({
-        path: "/index/addQuestionnaire"
+        path: "/main/addQuestionnaire"
       });
     },
     /**
@@ -166,7 +166,7 @@ export default {
      */
     checkQuestion(row) {
       this.$router.push({
-        path: "/index/adminQuestionDetail",
+        path: "/main/adminQuestionDetail",
         query: {
           questionnaireId: row.questionnaireId,
         }

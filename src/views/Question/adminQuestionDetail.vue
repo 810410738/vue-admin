@@ -1,10 +1,12 @@
 <template>
   <div>
     <h3 class="headTitle">{{questionData.questionnaireName}}</h3>
-    <p> {{questionData.title}} </p>
+    <p>{{questionData.title}}</p>
     <!-- 问卷题目表格数据 -->
     <div class="table_container">
       <el-table
+        class="el-table"
+        height="40em"
         size="medium"
         :data="questionData.list"
         highlight-current-row
@@ -12,6 +14,7 @@
         style="width: 100%"
       >
         <el-table-column type="index" label="序号" width="100"></el-table-column>
+
         <el-table-column property="content" label="主要排查内容" width="400"></el-table-column>
         <el-table-column label="自查">
           <template slot-scope="scope">
@@ -84,7 +87,19 @@ h3 {
   text-align: center;
   color: #696d73;
 }
-.table_container {
-  padding: 20px;
+.el-table::-webkit-scrollbar {
+  /*滚动条整体*/
+  width: 6px;
+  height: 6px;
+}
+.el-table::-webkit-scrollbar-track {
+  /*滚动条轨道*/
+  background: #ededed;
+  border-radius: 10px;
+}
+.el-table::-webkit-scrollbar-thumb {
+  /*滚动条里面的滑块*/
+  border-radius: 10px;
+  background-color: rgb(98, 198, 255);
 }
 </style>
