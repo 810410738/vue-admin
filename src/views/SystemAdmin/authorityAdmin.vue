@@ -46,7 +46,7 @@
                   icon="el-icon-bottom"
                   @click="moveNode(scope,'down')"
                 >下移</el-button>
-                <el-button size="mini" type="text" icon="el-icon-plus" @click="newNode">新增</el-button>
+                <el-button size="mini" type="text" icon="el-icon-plus" @click="newNode(scope.row)">新增</el-button>
                 <el-button
                   size="mini"
                   type="text"
@@ -62,41 +62,25 @@
     </el-card>
 
     <!-- 编辑的对话框 -->
-    <el-dialog title="修改权限信息" :visible.sync="dialogVisible" width="30%">
-      <el-form
-        :label-position="right"
-        :label-width="100"
-        :model="requestEditData"
-        :size="small"
-        ref="form"
-      >
-        <el-form-item label="权限名称" prop="nodeName">
-          <el-input v-model="requestEditData.nodeName"></el-input>
-        </el-form-item>
-        <el-form-item label="请求地址" prop="nodeUrl">
-          <el-input v-model="requestEditData.nodeUrl"></el-input>
-        </el-form-item>
-        <!-- <el-form-item label="权限标识" prop="">
-          <el-input v-model="requestEditData.nodeName"></el-input>
-        </el-form-item>-->
-        <el-form-item label="显示图标" prop="icon">
-          <el-select v-model="requestEditData.icon">
-            <el-option
-              :label="item.label"
-              :value="item.value"
-              v-for="item in iconOption"
-              :key="item.value"
-            >
-              <i :class="item.value" class="icon"></i>
-            </el-option>
-          </el-select>
-          <i :class="requestEditData.icon" class="icon"></i>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submit">确 定</el-button>
-      </div>
+    <el-dialog
+      title="编辑权限"
+      :visible.sync="editDialogVisible"
+      width="40%"
+      :destroy-on-close="true"
+      center
+    >
+      <selfGenerateForm ref="editForm" :formJson="editFormData" @submit="editSubmit(arguments)"></selfGenerateForm>
+    </el-dialog>
+
+    <!-- 新增权限的对话框 -->
+    <el-dialog
+      title="新增权限"
+      :visible.sync="addDialogVisible"
+      width="40%"
+      :destroy-on-close="true"
+      center
+    >
+      <selfGenerateForm ref="addForm" :formJson="addFormData" @submit="addSubmit(arguments)"></selfGenerateForm>
     </el-dialog>
   </div>
 </template>
@@ -107,19 +91,28 @@ import {
   getUserInfo,
   getAllRoleExceptAdmin
 } from "@/api/getUserData";
-import {getIconOption} from '@/api/getCommonData';
-import { getAuthorityList, deleteAuthority } from "@/api/getSystemAdminData";
+import { getIconOption } from "@/api/getCommonData";
+import { getFormDataById } from "@/api/getFormData";
+import {
+  getAuthorityTree,
+  deleteAuthorityById,
+  updateOrderNum,
+  editAuthority
+} from "@/api/systemAdmin/getAuthorityData";
 import { isFirstChild, isLastChild, exchange } from "@/util/HandleTreeData";
 import selfFindSystemComponent from "@/components/SystemAdmin/selfFindSystemComponent";
+import selfGenerateForm from "@/components/Form/selfGenerateForm";
 export default {
   components: {
-    selfFindSystemComponent
+    selfFindSystemComponent,
+    selfGenerateForm
   },
   data() {
     return {
-      iconOption: [],
+      // 控制新增权限的对话框是否显示
+      addDialogVisible: false,
       // 控制编辑对话框的显示
-      dialogVisible: false,
+      editDialogVisible: false,
       // 请求修改权限信息的参数
       requestEditData: {},
       // 所有角色列表
@@ -127,9 +120,14 @@ export default {
       // 获取的用户数据
       getAuthorityData: [],
       // 请求权限列表数据的参数
-      requestData: {},
+      requestData: {
+        systemIdentify: "ADMIN"
+      },
       // 标志已经移动过节点元素
-      isMoved: false
+      isMoved: false,
+      // 新增和编辑权限的表单配置数据
+      addFormData: {},
+      editFormData: {}
     };
   },
   created() {
@@ -138,12 +136,66 @@ export default {
   },
   methods: {
     initData() {
-      getAuthorityList(this.requestData).then(res => {
-        this.getAuthorityData = res.extend.authorityList;
+      getAuthorityTree(this.requestData).then(res => {
+        this.getAuthorityData = res.extend.authorityTree;
       });
-      getIconOption().then(res=>{
+      // 获取新增权限的表单数据
+      getFormDataById({ formId: "7c54f6d7c96a446584a11590573494045" }).then(
+        res => {
+          this.addFormData = JSON.parse(res.extend.formData);
+        }
+      );
+      // 获取编辑权限的表单数据
+      getFormDataById({ formId: "7c54f6d7c96a446584a11590573494045" }).then(
+        res => {
+          this.editFormData = JSON.parse(res.extend.formData);
+        }
+      );
+      getIconOption().then(res => {
         this.iconOption = res.extend.classList;
-      })
+      });
+    },
+    /**
+     * @description 新增权限点击提交回调的方法
+     * @param arg[0] 包含表单所有元素的值的对象
+     */
+    addSubmit(arg) {
+      var jsonData = {};
+      for (var key in arg[0]) {
+        jsonData[key] = arg[0][key];
+      }
+      jsonData.authorityId = this.$refs.addForm.getParams("authorityId");
+      jsonData.systemIdentify = this.$refs.addForm.getParams("systemIdentify");
+      editAuthority(jsonData).then(res => {
+        this.$message({
+          type: "success",
+          message: "新增成功"
+        });
+        this.initData();
+        this.addDialogVisible = false;
+      });
+    },
+    /**
+     * @description 编辑权限点击提交回调的方法
+     * @param arg[0] 包含表单所有元素的值的对象
+     */
+    editSubmit(arg) {
+      var jsonData = {};
+      for (var key in arg[0]) {
+        jsonData[key] = arg[0][key];
+      }
+      debugger
+      jsonData.authorityId = this.$refs.editForm.getParams("authorityId");
+      jsonData.parentId = this.$refs.editForm.getParams("parentId");
+      jsonData.systemIdentify = this.$refs.editForm.getParams("systemIdentify");
+      editAuthority(jsonData).then(res => {
+        this.$message({
+          type: "success",
+          message: "修改成功"
+        });
+        this.initData();
+        this.editDialogVisible = false;
+      });
     },
     /**
      * @description 移动表单元素
@@ -164,6 +216,8 @@ export default {
             return;
           }
           exchange(this.getAuthorityData, currentNode, type);
+          // 操作成功过的标志
+          this.isMoved = true;
           break;
         case "down":
           if (isLastChild(this.getAuthorityData, currentNode, index)) {
@@ -202,13 +256,6 @@ export default {
       this.initData();
     },
     /**
-     * @description 点击编辑按钮，弹出对话框
-     */
-    edit(row) {
-      this.requestEditData = JSON.parse(JSON.stringify(row));
-      this.dialogVisible = true;
-    },
-    /**
      * @description 点击删除按钮，删除当前的元素
      * @param nodeId 节点id
      */
@@ -221,8 +268,8 @@ export default {
       }).then(() => {
         // 请求删除接口
         var jsonData = {};
-        jsonData.nodeId = nodeId;
-        deleteAuthority(jsonData).then(res => {
+        jsonData.authorityId = nodeId;
+        deleteAuthorityById(jsonData).then(res => {
           // 弹出成功提示
           this.$message({
             message: "删除成功",
@@ -233,11 +280,29 @@ export default {
         });
       });
     },
-    
     /**
-     * @description 新增一个节点,请求服务器
+     * @description 点击编辑按钮，打开对话框，设置parentId和systemIdentify
      */
-    newNode() {},
+    edit(row) {
+      this.editDialogVisible = true;
+      this.$nextTick(() => {
+        debugger
+        this.$refs.editForm.setFormData(row);
+        this.$refs.editForm.setParams("authorityId", row.nodeId);
+        this.$refs.editForm.setParams("parentId", row.nodePid);
+        this.$refs.editForm.setParams("systemIdentify", row.systemIdentify);
+      });
+    },
+    /**
+     * @description 点击新增按钮，打开对话框，设置parentId和systemIdentify
+     */
+    newNode(row) {
+      this.addDialogVisible = true;
+      this.$nextTick(() => {
+        this.$refs.addForm.setParams("authorityId", row.nodeId);
+        this.$refs.addForm.setParams("systemIdentify", row.systemIdentify);
+      });
+    },
     /**
      * @description 保存修改
      */
@@ -251,8 +316,15 @@ export default {
       }
       // 向服务器发送保存请求
       var jsonData = {};
-
-      this.isMoved = false;
+      jsonData.authorityTree = this.getAuthorityData;
+      updateOrderNum(jsonData).then(res => {
+        this.$message({
+          type: "success",
+          message: "保存修改成功"
+        });
+        this.isMoved = false;
+        this.initData();
+      });
     }
   }
 };

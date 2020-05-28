@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { getLogData } from "@/api/getSystemAdminData";
+import { getLogData } from "@/api/systemAdmin/getSystemAdminData";
 import { getFormData } from "@/api/getFormData";
 import selfFindLogListComponent from "@/components/SystemAdmin/logAdmin/selfFindLogListComponent";
 import selfGenerateForm from "@/components/Form/selfGenerateForm";

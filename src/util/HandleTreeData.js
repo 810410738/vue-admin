@@ -14,7 +14,7 @@ var NodeIndex = 0;
  */
 export function isFirstChild(data, currentNode, index) {
   // 为根节点
-  if (currentNode.pId == "-1") {
+  if (currentNode.nodePid == "-1") {
     if (index == 0) {
       return true;
     }
@@ -23,7 +23,7 @@ export function isFirstChild(data, currentNode, index) {
   // 非根节点
   else {
     // 查找父节点
-    var beforeNode = findNodeById(data, currentNode.pId);
+    var beforeNode = findNodeById(data, currentNode.nodePid);
     if (beforeNode.children[0].nodeId == currentNode.nodeId) {
       return true;
     }
@@ -39,7 +39,7 @@ export function isFirstChild(data, currentNode, index) {
  */
 export function isLastChild(data, currentNode, index) {
   // 为根节点
-  if (currentNode.pId == "-1") {
+  if (currentNode.nodePid == "-1") {
     if (data[data.length - 1].nodeId == currentNode.nodeId) {
       return true;
     }
@@ -48,7 +48,7 @@ export function isLastChild(data, currentNode, index) {
   // 非根节点
   else {
     // 查找父节点
-    var beforeNode = findNodeById(data, currentNode.pId);
+    var beforeNode = findNodeById(data, currentNode.nodePid);
     if (beforeNode.children[beforeNode.children.length - 1].nodeId == currentNode.nodeId) {
       return true;
     }
@@ -63,7 +63,7 @@ export function isLastChild(data, currentNode, index) {
  */
 export function exchange(data, currentNode, type) {
   // 为根节点
-  if (currentNode.pId == "-1") {
+  if (currentNode.nodePid == "-1") {
     for (var i in data) {
       debugger
       i = parseInt(i);
@@ -85,7 +85,7 @@ export function exchange(data, currentNode, type) {
     }
   }
   // 查找父节点
-  var parentNode = findNodeById(data, currentNode.pId);
+  var parentNode = findNodeById(data, currentNode.nodePid);
   for (var i in parentNode.children) {
     i = parseInt(i);
     if (parentNode.children[i].nodeId == currentNode.nodeId) {

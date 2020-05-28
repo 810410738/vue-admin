@@ -1,5 +1,5 @@
-import {get,post} from './http'
-import {userUrlRoot, roleAuthorityUrlRoot} from './http'
+import {get,post} from '../http'
+import {userUrlRoot, roleAuthorityUrlRoot} from '../http'
 
 /**
  * 

@@ -2,7 +2,7 @@ import '@babel/polyfill'
 import Vue from 'vue';
 import App from './App.vue';
 import './plugins/element.js';
-import router from './router';
+import router from './router/systemAdmin';
 // 引用公共样式
 import './assets/css/public.css';
 // echarts插件
@@ -26,7 +26,10 @@ if (process.env.NODE_ENV === "development") {
   require('./mock/commonData.js');
   require('./mock/questionData.js');
   require('./mock/dataAdminData.js');
-  require('./mock/systemAdminData.js');
+  require('./mock/systemAdmin/systemAdminData.js');
+  require('./mock/systemAdmin/authorityData.js');
+  require('./mock/systemAdmin/roleData.js');
+  require('./mock/systemAdmin/roleAuthorityData.js');
   require('./mock/userData.js');
   require('./mock/formData.js');
 }

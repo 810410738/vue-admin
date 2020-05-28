@@ -12,7 +12,7 @@ export default {
   methods: {
     changeSystemIdentify() {
       if (this.$route.query.systemIdentify) {
-        setRequestParams("systemIdentify", this.$route.query.systemIdentify);
+        setRequestParams("SID", this.$route.query.systemIdentify);
       }
     }
   },

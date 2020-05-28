@@ -39,16 +39,27 @@ var getTempQuestionnaireData = {
     title:'请认真填写问卷，谢谢',
     "list":[
       {
-        type:'content',
-        content:'是否存在异常行为',
-        selfAnswer:'否',
-        otherAnswer:'否',
-        remark:'123'
+        "type":'工作方面',
+        "title|5":[
+          {
+            content:'是否存在异常行为',
+            selfAnswer:'否',
+            otherAnswer:'否',
+            remark:'123'
+          },
+        ]
       },
       {
-        subTitle:'工作方面',
-        type:'subTitle'
-      }
+        "type":'生活方面',
+        "title|7":[
+          {
+            content:'是否存在异常行为11',
+            selfAnswer:'否',
+            otherAnswer:'否',
+            remark:'123'
+          },
+        ]
+      },
     ]
   },
   "errCode": 0,

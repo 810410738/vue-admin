@@ -11,7 +11,7 @@ var toLoginData = {
   "errCode": 0,
   "errMsg": "[响应成功]",
   "extend": {
-      "tokenId": "5b32ec2b-e052-4a4e-b598-75b7f263d57b"
+    "tokenId": "5b32ec2b-e052-4a4e-b598-75b7f263d57b"
   }
 }
 Mock.mock(urlRoot + 'framework/rest/login/toLogin', 'post', toLoginData);
@@ -50,8 +50,7 @@ Mock.mock(commonUrlRoot + 'getPrimaryClass', 'post', getAllPrimaryClassData);
 // 02-封装“所属网点”
 var getAllSecoByPrimData = {
   "extend": {
-    "classList": [
-      {
+    "classList": [{
         "label": "龙岗网点",
         "value": "龙岗网点",
       },
@@ -59,7 +58,7 @@ var getAllSecoByPrimData = {
         "label": "中心区网点",
         "value": "中心区网点",
       }
-      
+
     ]
   },
   "errCode": 0,
@@ -74,10 +73,10 @@ var getLeafDictByCondData = {
   "errCode": 0,
   "errMsg": "[响应成功]",
   "extend": {
-      "classList": [{
-          "label": "APS-员工线上排查系统",
-          "value": "4"
-      }]
+    "classList": [{
+      "label": "APS-员工线上排查系统",
+      "value": "4"
+    }]
   }
 }
 Mock.mock(commonUrlRoot + 'getLeafDictByCond', 'post', getLeafDictByCondData);
@@ -109,97 +108,59 @@ var AuthorityByLoginRoleData = {
   "extend": {
     "authorityList": [{
         "nodeId": "1",
-        "nodeName": "问卷排查",
-        "nodeUrl": "",
-        "chkDisable": false,
-        "checked": true,
-        "icon": 'el-icon-edit-outline',
-        "children": [{
-            "nodeId": "11",
-            "nodeName": "发布问卷排查",
-            "nodeUrl": "/main/adminQuestion",
-            "checked": true,
-          },
-          {
-            "nodeId": "12",
-            "nodeName": "参与问卷排查",
-            "nodeUrl": "/main/questionList",
-            "checked": true,
-          },
-          {
-            "nodeId": "13",
-            "nodeName": "查看历史问卷",
-            "nodeUrl": "/main/history",
-            "checked": true,
-          },
-        ]
-      },
-      {
-        "nodeId": "2",
-        "nodeName": "用户管理",
+        "nodeName": "系统管理",
         "nodeUrl": "",
         "checked": true,
         "chkDisable": false,
         "icon": 'el-icon-user',
-        "children": [{
-          "nodeId": "21",
-          "nodeName": "查看用户列表",
-          "checked": true,
-          "nodeUrl": "/main/userList"
-        }]
-      },
-      {
-        "nodeId": "3",
-        "nodeName": "数据管理",
-        "checked": true,
         "nodeUrl": "",
-        "icon": 'el-icon-s-data',
-        "chkDisable": false,
         "children": [{
-            "nodeId": "31",
-            "nodeName": "数据统计",
+            "nodeId": "2",
+            "nodeName": "用户管理",
+            "nodeUrl": "",
             "checked": true,
-            "nodeUrl": "/main/dataStatistics"
+            "chkDisable": false,
+            "icon": 'el-icon-user',
+            "nodeUrl": "/main/userList",
+            "children": [{
+              "nodeId": "21",
+              "nodeName": "用户管理",
+              "nodeUrl": "",
+              "checked": true,
+              "chkDisable": false,
+              "icon": 'el-icon-user',
+              "nodeUrl": "/main/userList",
+            }]
           },
           {
-            "nodeId": "32",
-            "nodeName": "查看异常记录",
+            "nodeId": "41",
+            "nodeName": "表单设计",
             "checked": true,
-            "nodeUrl": "/main/abnormal"
-          }
+            "nodeUrl": "/main/DesignFormList",
+            "icon": 'el-icon-s-data',
+          }, {
+            "nodeId": "42",
+            "nodeName": "角色管理",
+            "checked": true,
+            "nodeUrl": "/main/roleAuthorityAdmin",
+            "icon": 'el-icon-s-data',
+          }, {
+            "nodeId": "43",
+            "nodeName": "权限管理",
+            "checked": true,
+            "nodeUrl": "/main/authorityAdmin",
+            "icon": 'el-icon-s-data',
+          },
+          {
+            "nodeId": "44",
+            "nodeName": "日志管理",
+            "checked": true,
+            "nodeUrl": "/main/logAdmin",
+            "icon": 'el-icon-s-data',
+          },
         ]
-      },
-      {
-        "nodeId": "4",
-        "nodeName": "系统管理",
-        "checked": true,
-        "nodeUrl": "",
-        "icon": 'el-icon-s-data',
-        "chkDisable": false,
-        "children": [{
-          "nodeId": "41",
-          "nodeName": "表单设计",
-          "checked": true,
-          "nodeUrl": "/main/DesignFormList"
-        },{
-          "nodeId": "42",
-          "nodeName": "角色管理",
-          "checked": true,
-          "nodeUrl": "/main/roleAuthorityAdmin"
-        },{
-          "nodeId": "43",
-          "nodeName": "权限管理",
-          "checked": true,
-          "nodeUrl": "/main/authorityAdmin"
-        },
-        {
-          "nodeId": "44",
-          "nodeName": "日志管理",
-          "checked": true,
-          "nodeUrl": "/main/logAdmin"
-        },
-      ]
       }
+
     ]
   },
   "errCode": "0",
@@ -225,10 +186,10 @@ var getIconOptionData = {
   "errCode": 0,
   "errMsg": "[响应成功]",
   "extend": {
-      "classList": [{
-          "label": "el-icon-platform-eleme",
-          "value": "el-icon-platform-eleme"
-      }]
+    "classList": [{
+      "label": "el-icon-platform-eleme",
+      "value": "el-icon-platform-eleme"
+    }]
   }
 }
 Mock.mock(commonUrlRoot + 'getIconOption', 'post', getIconOptionData);

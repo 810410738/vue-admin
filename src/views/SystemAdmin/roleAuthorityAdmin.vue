@@ -54,7 +54,11 @@
       :before-close="closeNewRoleDialog"
     >
       <!-- 自定义的表单渲染器 -->
-      <selfGenerateForm :formJson="newRoleFormData" @submit="submitNewRole(arguments)"></selfGenerateForm>
+      <selfGenerateForm
+        ref="addRoleForm"
+        :formJson="newRoleFormData"
+        @submit="submitNewRole(arguments)"
+      ></selfGenerateForm>
     </el-dialog>
 
     <!-- 编辑角色的对话框 -->
@@ -66,7 +70,11 @@
       :before-close="closeEditRoleDialog"
     >
       <!-- 自定义的表单渲染器 -->
-      <selfGenerateForm ref="editRoleForm" :formJson="newRoleFormData" @submit="submitEditRole(arguments)"></selfGenerateForm>
+      <selfGenerateForm
+        ref="editRoleForm"
+        :formJson="editRoleFormData"
+        @submit="submitEditRole(arguments)"
+      ></selfGenerateForm>
     </el-dialog>
 
     <!-- 修改角色权限的对话框 -->
@@ -97,9 +105,12 @@
 import {
   getAllRoleByPage,
   deleteRoleById,
-  getChangeAuthorityList,
-  updateRoleAuthority
-} from "@/api/getSystemAdminData";
+  editRole
+} from "@/api/systemAdmin/getRoleData";
+import {
+  getRelateAuthByRoleId,
+  changeRoleAuthority
+} from "@/api/systemAdmin/getRoleAuthorityData";
 import { getFormData } from "@/api/getFormData";
 import selfFindRoleListComponent from "@/components/SystemAdmin/RoleAdmin/selfFindRoleListComponent";
 import selfGenerateForm from "@/components/Form/selfGenerateForm";
@@ -107,9 +118,10 @@ selfFindRoleListComponent;
 export default {
   data() {
     return {
-      newRoleFormData:{},
+      newRoleFormData: {},
+      editRoleFormData: {},
       // 控制编辑角色信息的对话框是否可见
-      editRoleDialogVisible:false,
+      editRoleDialogVisible: false,
       // 控制分配权限的对话框是否可见
       changeAuthorityDialogVisible: false,
       // 控制新增角色的对话框是否可见
@@ -153,14 +165,18 @@ export default {
         this.tableData = res.extend.pageData;
       });
       // 获取新增角色的表单数据
-      getFormData({}).then(res=>{
-        this.newRoleFormData =  res.extend.FormInfo;
-      })
+      getFormData({ formId: "42d1cc97f23a4cb594ac1589945419935" }).then(res => {
+        this.newRoleFormData = res.extend.FormInfo;
+      });
+      // 获取编辑角色信息的表单数据
+      getFormData({ formId: "7c54f6d7c96a446584a11590573494045" }).then(res => {
+        this.editRoleFormData = res.extend.FormInfo;
+      });
     },
     /**
      * @description 点击新增角色的按钮
      */
-    newRole(){
+    newRole() {
       this.newRoleDialogVisible = true;
     },
     /**
@@ -169,10 +185,10 @@ export default {
      */
     edit(row) {
       this.editRoleDialogVisible = true;
-      this.$nextTick(()=>{
+      this.$nextTick(() => {
+        this.$refs.editRoleForm.setParams("roleId", row.roleId);
         this.$refs.editRoleForm.setFormData(row);
-      })
-      
+      });
     },
     /**
      * @description 点击分配权限按钮
@@ -186,7 +202,7 @@ export default {
       // 获取菜单数据
       var jsonData = {};
       jsonData.roleId = row.roleId;
-      getChangeAuthorityList(jsonData).then(res => {
+      getRelateAuthByRoleId(jsonData).then(res => {
         this.authorityList = res.extend.authorityList;
         // 设置选中的id数组
         var keys = [];
@@ -206,19 +222,48 @@ export default {
     /**
      * @description 提交新增角色的申请
      */
-    submitNewRole(arg){
-      console.log(arg[0]);
+    submitNewRole(arg) {
+      var jsonData = {};
+      for (var key in arg[0]) {
+        jsonData[key] = arg[0][key];
+      }
+      jsonData.roleId = this.$refs.editRoleForm.getParams("roleId");
+      editRole(jsonData).then(res => {
+        this.$message({
+          type: "success",
+          message: "新增成功！"
+        });
+        this.initData();
+        this.newRoleDialogVisible = false;
+      });
+    },
+    /**
+     * @description 提交修改角色信息
+     */
+    submitEditRole(arg) {
+      var jsonData = {};
+      for (var key in arg[0]) {
+        jsonData[key] = arg[0][key];
+      }
+      editRole(jsonData).then(res => {
+        this.$message({
+          type: "success",
+          message: "新增成功！"
+        });
+        this.initData();
+        this.newRoleDialogVisible = false;
+      });
     },
     /**
      * @description 关闭新增角色的对话框
      */
-    closeNewRoleDialog(){
+    closeNewRoleDialog() {
       this.newRoleDialogVisible = false;
     },
     /**
      * @description 关闭编辑角色信息的对话框
      */
-    closeEditRoleDialog(){
+    closeEditRoleDialog() {
       this.editRoleDialogVisible = false;
     },
     /**
@@ -250,7 +295,7 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
-        updateRoleAuthority(this.requestData).then(res => {
+        changeRoleAuthority(this.requestData).then(res => {
           // 请求成功后关闭对话框，弹出提示
           this.changeAuthorityDialogVisible = false;
           this.$message({
@@ -266,7 +311,7 @@ export default {
      * @description 翻页，获取分页数据
      */
     handleCurrentChange(val) {
-      this.requestData.pageNumber = val;
+      this.requestAllRoleData.pageNumber = val;
       this.initData();
     },
     /**

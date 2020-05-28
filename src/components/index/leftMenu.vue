@@ -2,11 +2,7 @@
   <div>
     <el-button size="mini" circle icon="el-icon-s-operation" @click="isCollapse = !isCollapse"></el-button>
     <el-menu class="el-menu-vertical-demo" router :collapse="isCollapse">
-      <el-submenu
-        v-for="item in filterAuthorityList"
-        :key="item.nodeId"
-        :index="item.nodeId"
-      >
+      <el-submenu v-for="item in filterAuthorityList" :key="item.nodeId" :index="item.nodeId">
         <template slot="title">
           <i :class="item.icon"></i>
           <span>{{item.nodeName}}</span>
@@ -16,7 +12,12 @@
           v-show="subItem.checked"
           :key="subItem.nodeId"
           :index="subItem.nodeUrl"
-        >{{subItem.nodeName}}</el-menu-item>
+        >
+          <template slot="title">
+            <i :class="subItem.icon"></i>
+            <span>{{subItem.nodeName}}</span>
+          </template>
+        </el-menu-item>
       </el-submenu>
     </el-menu>
   </div>
@@ -54,11 +55,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-button{
+.el-button {
   margin-left: 10%;
 }
- .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 200px;
-    min-height: 400px;
-  }
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: 200px;
+  min-height: 400px;
+}
 </style>

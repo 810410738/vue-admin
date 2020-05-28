@@ -30,13 +30,6 @@ export default {
      * @description 初始化页面
      */
     init() {
-      var systemIdentify = this.$route.query.systemIdentify;
-      if (systemIdentify) {
-      } else {
-        this.$router.push({
-          path: "/error"
-        });
-      }
     }
   }
 };

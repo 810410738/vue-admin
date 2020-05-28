@@ -20,7 +20,7 @@ module.exports = {
   },
 
   lintOnSave: false,
-  publicPath: '/mip/',
+  publicPath: '/sys/',
 
   // devServer:{
   //   open:true,
@@ -30,7 +30,7 @@ module.exports = {
   //   hotOnly:true,
   //   proxy:{
   //     '/mip':{
-  //       target:'http://192.168.43.14:8080/',
+  //       target:'http://192.168.43.48:8080/',
   //       changOrigin:true,
   //     }
   //   }

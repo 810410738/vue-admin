@@ -8,8 +8,11 @@ export const dataHandleUrlRoot = urlRoot+ "dataHandle/";
 export const commentUrlRoot = urlRoot + "comment/";
 export const questionUrlRoot = urlRoot + "questionnaire/";
 export const userUrlRoot = urlRoot + "framework/rest/user/";
-export const roleAuthorityUrlRoot = urlRoot + "roleAuthority/";
+export const roleAuthorityUrlRoot = urlRoot + "framework/rest/roleAuthority/";
 export const formDesignUrlRoot = urlRoot + "admin/system/form/";
+export const authorityUrlRoot = urlRoot + "framework/rest/roleAuthority/";
+export const roleUrlRoot = urlRoot + "framework/rest/roleAuthority/";
+
 // 引入element-ui 的loading方法
 import {
   showLoading,
@@ -99,7 +102,6 @@ axios.interceptors.response.use(
     for(var key in requestParams){
       params[key] = requestParams[key];
     }
-    console.log(params.systemIdentify);
     return new Promise((resolve, reject) =>{
       axios.post(url, JSON.stringify(params))
       .then(response => {
