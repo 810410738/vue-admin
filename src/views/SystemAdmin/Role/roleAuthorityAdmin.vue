@@ -116,7 +116,7 @@ import {
 } from "@/api/systemAdmin/getRoleAuthorityData";
 import { getFormData } from "@/api/getFormData";
 import selfFindRoleListComponent from "@/components/SystemAdmin/RoleAdmin/selfFindRoleListComponent";
-import selfGenerateForm from "@/components/Form/selfGenerateForm";
+import selfGenerateForm from "@/components/SystemAdmin/Form/selfGenerateForm";
 selfFindRoleListComponent;
 export default {
   data() {

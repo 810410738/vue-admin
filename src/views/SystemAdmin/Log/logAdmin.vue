@@ -49,7 +49,7 @@
 import { getLogData } from "@/api/systemAdmin/getSystemAdminData";
 import { getFormData } from "@/api/getFormData";
 import selfFindLogListComponent from "@/components/SystemAdmin/logAdmin/selfFindLogListComponent";
-import selfGenerateForm from "@/components/Form/selfGenerateForm";
+import selfGenerateForm from "@/components/SystemAdmin/Form/selfGenerateForm";
 export default {
   data() {
     return {

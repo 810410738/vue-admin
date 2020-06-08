@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import itemProperty from "@/components/Form/rightControl/itemProperty"
-import formProperty from "@/components/Form/rightControl/formProperty"
+import itemProperty from "@/components/SystemAdmin/Form/rightControl/itemProperty"
+import formProperty from "@/components/SystemAdmin/Form/rightControl/formProperty"
 export default {
   data() {
     return {

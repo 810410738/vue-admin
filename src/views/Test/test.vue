@@ -1,23 +1,23 @@
 <template>
- <div class="control">
-          <div class="buttonGroup">
-            <el-button round size="small">个人信息</el-button>
-             <el-button round size="small">返回导航主页</el-button>
-            <el-button round size="small" type="danger">退出系统</el-button>
-          </div>
-        </div>
+<div>
+  {{test}}
+</div>
 </template>
 
 <script>
 export default {
   created() {
-   
+    debugger
+    console.log(this.$store.state.Form.formData);
+   this.test = this.$store.state.Form.formData.Item;
   },
   components: {
    
   },
   data() {
-    return {};
+    return {
+      test:''
+    };
   },
   methods: {
    

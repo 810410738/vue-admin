@@ -38,7 +38,8 @@ const mutations = {
   },
   // 重置formData 
   resetData(state, data) {
-    state.formData = data
+    state.formData = {};
+    state.formData = data;
     // JSON.parse(JSON.stringify(data));
   },
   // 添加一个表单元素

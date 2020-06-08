@@ -211,12 +211,12 @@
 <script>
 import headTop from "@/components/headTop";
 import { getFormDataById } from "@/api/getFormData";
-import selfBuildJsonDialog from "@/components/Form/selfBuildJsonDialog";
-import selfImportJsonDialog from "@/components/Form/selfImportJsonDialog";
-import leftAddButtonComponent from "@/components/Form/leftAddButtonComponent";
-import mainControlButtonComponent from "@/components/Form/mainControlButtonComponent";
-import rightControlComponent from "@/components/Form/rightControlComponent";
-import selfGenerateForm from "@/components/Form/selfGenerateForm";
+import selfBuildJsonDialog from "@/components/SystemAdmin/Form/selfBuildJsonDialog";
+import selfImportJsonDialog from "@/components/SystemAdmin/Form/selfImportJsonDialog";
+import leftAddButtonComponent from "@/components/SystemAdmin/Form/leftAddButtonComponent";
+import mainControlButtonComponent from "@/components/SystemAdmin/Form/mainControlButtonComponent";
+import rightControlComponent from "@/components/SystemAdmin/Form/rightControlComponent";
+import selfGenerateForm from "@/components/SystemAdmin/Form/selfGenerateForm";
 export default {
   components: {
     headTop,

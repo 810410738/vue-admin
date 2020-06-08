@@ -79,7 +79,7 @@
 <script>
 import { editForm, deleteFormById, getFormByPage } from "@/api/getFormData";
 import selfFindSystemComponent from "@/components/SystemAdmin/selfFindSystemComponent";
-import selfGenerateForm from "@/components/Form/selfGenerateForm";
+import selfGenerateForm from "@/components/SystemAdmin/Form/selfGenerateForm";
 export default {
   components: {
     selfFindSystemComponent,

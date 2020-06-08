@@ -41,12 +41,9 @@ export default {
     return {
       url: require("@/assets/img/logo-black.png"),
       // 是否记住密码的标志
-      isRemember: false,
+      isRemember: true,
       userName: "",
       password: "",
-      tips: "",
-      loginButtonText: "登陆",
-      loadingFlag: false,
       responseData: ""
     };
   },

@@ -164,9 +164,13 @@ import {
   updateUserRole,
   downloadUserTemplate
 } from "@/api/getUserData";
-import { getFormDataById } from "@/api/getFormData";
+// 表单配置数据的json
+import addUserFormJson from "@/json/User/addUserForm";
+import editUserFormJson from "@/json/User/editUserForm";
+import checkUserFormJson from "@/json/User/checkUserForm";
+
 import findComponent from "@/components/index/findComponent";
-import selfGenerateForm from "@/components/Form/selfGenerateForm";
+import selfGenerateForm from "@/components/SystemAdmin/Form/selfGenerateForm";
 export default {
   components: {
     findComponent,
@@ -258,24 +262,10 @@ export default {
       getUserByPage(this.requestData).then(res => {
         this.getUserData = res.extend.pageData;
       });
-      // 获取新增用户表单数据
-      getFormDataById({ formId: "42d1cc97f23a4cb594ac1589945419935" }).then(
-        res => {
-          this.addUserFormData = JSON.parse(res.extend.formData);
-        }
-      );
-      // 获取查看用户表单数据
-      getFormDataById({ formId: "b22238626a7a4e0c98681589969123974" }).then(
-        res => {
-          this.checkUserFormData = JSON.parse(res.extend.formData);
-        }
-      );
-      // 获取编辑用户表单数据
-      getFormDataById({ formId: "42d1cc97f23a4cb594ac1589945419935" }).then(
-        res => {
-          this.editUserFormData = JSON.parse(res.extend.formData);
-        }
-      );
+      this.addUserFormData = addUserFormJson;
+      this.checkUserFormData = checkUserFormJson;
+      this.editUserFormData = editUserFormJson;
+     
       // 获取权限列表数据
       // TODO
       // 根据权限列表数据控制按钮,先把数组转化为对象

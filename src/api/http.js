@@ -2,8 +2,8 @@ import axios from 'axios';
 import { MessageBox } from 'element-ui';
 
 // 访问的url
-export const urlRoot = "/mip/";
-export const commonUrlRoot = urlRoot + "common/";
+export const urlRoot = "/sys/";
+export const commonUrlRoot = urlRoot + "framework/rest/common/";
 export const dataHandleUrlRoot = urlRoot+ "dataHandle/";
 export const commentUrlRoot = urlRoot + "comment/";
 export const questionUrlRoot = urlRoot + "questionnaire/";
