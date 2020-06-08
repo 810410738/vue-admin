@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import leftMenu from "@/components/index/leftMenu";
-import headTop from "@/components/headTop";
+import leftMenu from "@/components/SystemAdmin/leftMenu";
+import headTop from "@/components/SystemAdmin/headTop";
 export default {
   components: {
     leftMenu,
@@ -31,21 +31,24 @@ export default {
     /**
      * @description 初始化页面
      */
-    init() {}
+    init() {
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+$headHeight:8vh;
+$mainHeight:100vh - $headHeight;
 div.body {
   height: 100vh;
   div.head{
-    height: 10vh;
+    height: $headHeight;
   }
   div.main {
     display: flex;
     width: 100%;
-    height: 90vh;
+    height: $mainHeight;
     div.left {
       position: relative;
       display: inline-block;

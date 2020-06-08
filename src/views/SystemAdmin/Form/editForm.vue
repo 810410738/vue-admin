@@ -359,20 +359,6 @@ export default {
     height: 40em;
     overflow: auto;
   }
-  .rightControl::-webkit-scrollbar {
-    /*滚动条整体*/
-    width: 6px;
-  }
-  .rightControl::-webkit-scrollbar-track {
-    /*滚动条轨道*/
-    background: #ededed;
-    border-radius: 10px;
-  }
-  .rightControl::-webkit-scrollbar-thumb {
-    /*滚动条里面的滑块*/
-    border-radius: 10px;
-    background-color: rgb(98, 198, 255);
-  }
 }
 // 控制动画
 .v-enter,

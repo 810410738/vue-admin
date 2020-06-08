@@ -1,107 +1,109 @@
 <template>
-  <div class="table_container">
+  <div>
     <h3 class="headTitle">用户信息</h3>
     <!-- 操作组件 -->
-    <el-row>
-      <!-- 操作组件 -->
-      <el-button
-        class="button-middle"
-        type="info"
-        size="mini"
-        @click="downloadTemplate"
-        icon="el-icon-download"
-        v-if="controlAuthority.downloadTemplate"
-      >{{controlAuthority.downloadTemplate.authorityName}}</el-button>
-      <el-upload
-        class="upload-demo"
-        action="/EOAS/dataHandle/importUser"
-        name="wenjian"
-        :show-file-list="false"
-        :on-success="uploadDone"
-        :on-error="uploadError"
-        :limit="1"
-      >
+    <el-card class="primaryCard topCard">
+      <el-row>
+        <!-- 操作组件 -->
         <el-button
           class="button-middle"
-          type="warning"
+          type="info"
           size="mini"
-          icon="el-icon-upload2"
-          v-if="controlAuthority.importUser"
-        >{{controlAuthority.importUser.authorityName}}</el-button>
-        <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-      </el-upload>
-      <el-button
-        class="button-middle"
-        type="success"
-        size="mini"
-        @click="downloadTemplate"
-         v-if="controlAuthority.exportUser"
-        icon="el-icon-user"
-      >{{controlAuthority.exportUser.authorityName}}</el-button>
-      <el-button
-        class="button-middle"
-        type="primary"
-        size="mini"
-        @click="addUserDialogVisible = true"
-         v-if="controlAuthority.newUser"
-        icon="el-icon-plus"
-      >{{controlAuthority.newUser.authorityName}}</el-button>
-    </el-row>
-    <el-row>
-      <el-col :span="18" :offset="6">
-        <!-- 查找操作组件 -->
-        <findComponent @find="find(arguments)"></findComponent>
-      </el-col>
-    </el-row>
-
+          @click="downloadTemplate"
+          icon="el-icon-download"
+          v-if="controlAuthority.downloadTemplate"
+        >{{controlAuthority.downloadTemplate.authorityName}}</el-button>
+        <el-upload
+          class="upload-demo"
+          action="/EOAS/dataHandle/importUser"
+          name="wenjian"
+          :show-file-list="false"
+          :on-success="uploadDone"
+          :on-error="uploadError"
+          :limit="1"
+        >
+          <el-button
+            class="button-middle"
+            type="warning"
+            size="mini"
+            icon="el-icon-upload2"
+            v-if="controlAuthority.importUser"
+          >{{controlAuthority.importUser.authorityName}}</el-button>
+          <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+        </el-upload>
+        <el-button
+          class="button-middle"
+          type="success"
+          size="mini"
+          @click="downloadTemplate"
+          v-if="controlAuthority.exportUser"
+          icon="el-icon-user"
+        >{{controlAuthority.exportUser.authorityName}}</el-button>
+        <el-button
+          class="button-middle"
+          type="primary"
+          size="mini"
+          @click="addUserDialogVisible = true"
+          v-if="controlAuthority.newUser"
+          icon="el-icon-plus"
+        >{{controlAuthority.newUser.authorityName}}</el-button>
+      </el-row>
+      <el-row>
+        <el-col :span="18" :offset="6">
+          <!-- 查找操作组件 -->
+          <findComponent @find="find(arguments)"></findComponent>
+        </el-col>
+      </el-row>
+    </el-card>
     <!-- 用户表格数据 -->
-    <el-table :data="getUserData.records" highlight-current-row style="width: 100%" stripe>
-      <el-table-column type="index" width="100"></el-table-column>
-      <el-table-column property="userNum" label="用户编号" width="150"></el-table-column>
-      <el-table-column property="userName" label="用户姓名" width="150"></el-table-column>
-      <el-table-column property="primaryClass" label="所在机构" width="180"></el-table-column>
-      <el-table-column property="secondaryClass" label="所在网点" width="180"></el-table-column>
-      <el-table-column property="userStatus" label="用户状态" width="100">
-        <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.userStatus"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-            active-value="1"
-            inactive-value="0"
-            @change="changeUserStatus($event, scope.$index, scope.row.userId)"
-          ></el-switch>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="350">
-        <template slot-scope="scope">
-          <el-button
-            type="primary"
-            plain
-            size="mini"
-            icon="el-icon-more"
-            @click="checkMore(scope.row)"
-             v-if="controlAuthority.checkMore"
-          >{{controlAuthority.checkMore.authorityName}}</el-button>
-          <el-button
-            type="success"
-            plain
-            size="mini"
-            icon="el-icon-edit"
-            @click="editUserInfo(scope.row)"
-             v-if="controlAuthority.edit"
-          >{{controlAuthority.edit.authorityName}}</el-button>
-          <el-button
-            type="danger"
-            plain
-            size="mini"
-            icon="el-icon-delete"
-            @click="deleteUser(scope.row.userId)"
-             v-if="controlAuthority.deleteUser"
-          > {{controlAuthority.deleteUser.authorityName}} </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <el-card class="primaryCard">
+      <el-table :data="getUserData.records" highlight-current-row stripe>
+        <el-table-column type="index" width="100"></el-table-column>
+        <el-table-column property="userNum" label="用户编号" width="150"></el-table-column>
+        <el-table-column property="userName" label="用户姓名" width="150"></el-table-column>
+        <el-table-column property="primaryClass" label="所在机构" width="180"></el-table-column>
+        <el-table-column property="secondaryClass" label="所在网点" width="180"></el-table-column>
+        <el-table-column property="userStatus" label="用户状态" width="100">
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.userStatus"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              active-value="1"
+              inactive-value="0"
+              @change="changeUserStatus($event, scope.$index, scope.row.userId)"
+            ></el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="350">
+          <template slot-scope="scope">
+            <el-button
+              type="primary"
+              plain
+              size="mini"
+              icon="el-icon-more"
+              @click="checkMore(scope.row)"
+              v-if="controlAuthority.checkMore"
+            >{{controlAuthority.checkMore.authorityName}}</el-button>
+            <el-button
+              type="success"
+              plain
+              size="mini"
+              icon="el-icon-edit"
+              @click="editUserInfo(scope.row)"
+              v-if="controlAuthority.edit"
+            >{{controlAuthority.edit.authorityName}}</el-button>
+            <el-button
+              type="danger"
+              plain
+              size="mini"
+              icon="el-icon-delete"
+              @click="deleteUser(scope.row.userId)"
+              v-if="controlAuthority.deleteUser"
+            >{{controlAuthority.deleteUser.authorityName}}</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     <!-- 分页组件 -->
     <div class="Pagination" style="text-align: left;margin-top: 10px;">
       <el-pagination
@@ -113,6 +115,7 @@
         :total="this.getUserData.total"
       ></el-pagination>
     </div>
+     </el-card>
     <!-- 新增用户的对话框 -->
     <el-dialog
       title="新增用户"
@@ -210,9 +213,7 @@ export default {
         }
       ],
       // 根据权限列表生成的控制字段
-      controlAuthority:{
-
-      },
+      controlAuthority: {},
       // 控制所有按钮的显示状态
       isShowButton: {
         downloadTemplateShow: false,
@@ -278,10 +279,10 @@ export default {
       // 获取权限列表数据
       // TODO
       // 根据权限列表数据控制按钮,先把数组转化为对象
-      for(var i in this.authorityList){
+      for (var i in this.authorityList) {
         this.controlAuthority[this.authorityList[i].authorityKey] = {
-          authorityName:this.authorityList[i].authorityName,
-        }
+          authorityName: this.authorityList[i].authorityName
+        };
       }
     },
     /**
@@ -462,9 +463,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.table_container {
-  padding: 20px;
-}
 .el-dialog {
   .el-input {
     width: 70%;

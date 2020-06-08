@@ -1,8 +1,8 @@
 <template>
-  <div class="table_container">
+  <div>
     <h3 class="headTitle">权限管理</h3>
     <!-- 操作组件 -->
-    <el-card class="findCard">
+    <el-card class="primaryCard topCard">
       <el-row>
         <el-col :span="6">
           <!-- 所有子系统 -->
@@ -13,7 +13,7 @@
         </el-col>
       </el-row>
     </el-card>
-    <el-card>
+    <el-card class="primaryCard">
       <!-- 用户表格数据 -->
       <el-table
         :data="getAuthorityData"
@@ -331,12 +331,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-h3 {
-  font-style: normal;
-  font-weight: normal;
-  color: #696d73;
-  margin-left: 20px;
-}
 .table_container {
   padding: 20px;
 }

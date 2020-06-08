@@ -1,11 +1,11 @@
 <template>
-  <div class="table_container">
+  <div>
     <h3 class="headTitle">日志管理</h3>
-    <el-card class="findCard">
+    <el-card class="primaryCard topCard">
       <!-- 搜索组件 -->
       <selfFindLogListComponent @find="find(arguments)"></selfFindLogListComponent>
     </el-card>
-    <el-card>
+    <el-card class="primaryCard">
       <!-- 用户表格数据 -->
       <el-table :data="getLogData.records" highlight-current-row style="width: 100%" stripe>
         <el-table-column property="logNum" label="日志编号" width="150"></el-table-column>
@@ -90,13 +90,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-h3 {
-  font-style: normal;
-  font-weight: normal;
-  color: #696d73;
-  margin-left: 20px;
-}
-.table_container {
-  padding: 20px;
-}
+
 </style>

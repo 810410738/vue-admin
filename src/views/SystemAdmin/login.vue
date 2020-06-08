@@ -1,38 +1,34 @@
 <template>
-  <div class="login-bg">
-    <div class="login-wrapper">
-      <a class="logo">
-        <el-image style="width: 20%; height: 20%" :src="url"></el-image>
-      </a>
-      <div class="box">
-        <div class="content-wrap">
-          <h6>请登陆</h6>
-          <el-input
-            @keyup.enter.native="login()"
-            id="userName"
-            type="text"
-            placeholder="请输入用户名"
-            v-model="userName"
-          />
-          <el-input
-            @keyup.enter.native="login()"
-            id="password"
-            type="password"
-            placeholder="请输入密码"
-            v-model="password"
-          />
-          <el-button
-            id="loginBtn"
-            type="primary"
-            :loading="loadingFlag"
-            @click="login()"
-          >{{loginButtonText}}</el-button>
-        </div>
+  <!-- 
+  后台管理系统的登录页面
+  -->
+  <div class="body">
+    <div class="main">
+      <h3 class="title">深圳建行行内系统后台管理入口</h3>
+      <div class="tips">请使用管理账号登录</div>
+      <div class="form-group">
+        <el-input
+          @keyup.enter.native="login()"
+          type="text"
+          placeholder="请输入用户名"
+          v-model="userName"
+        />
+      </div>
+      <div class="form-group">
+        <el-input
+          @keyup.enter.native="login()"
+          type="password"
+          placeholder="请输入密码"
+          v-model="password"
+        />
+      </div>
+      <div class="form-group">
+        <el-button class="loginButton" @click="login">登 录</el-button>
+      </div>
+      <div class="form-check">
+        <el-checkbox v-model="isRemember">记住账号</el-checkbox>
       </div>
     </div>
-    <el-row class="footContainer">
-      <span class="foot">请使用火狐浏览器或谷歌浏览器打开</span>
-    </el-row>
   </div>
 </template>
  
@@ -44,6 +40,8 @@ export default {
   data() {
     return {
       url: require("@/assets/img/logo-black.png"),
+      // 是否记住密码的标志
+      isRemember: false,
       userName: "",
       password: "",
       tips: "",
@@ -94,12 +92,8 @@ export default {
       }
       var params = {};
       params.loginAccount = this.userName;
-      // 超级管理员的密码加密传输
-      if (this.userName == "admin") {
-        params.loginPassword = b64_md5(this.password);
-      } else {
-        params.loginPassword = this.password;
-      }
+      // 管理员的密码加密传输
+      params.loginPassword = b64_md5(this.password);
       toLogin(params).then(response => {
         this.loginSuccess(response);
       });
@@ -108,9 +102,15 @@ export default {
       // 把token保存到localStorage
       localStorage.setItem("authToken", response.extend.tokenId);
       // 把账号保存到localStorage
-      localStorage.setItem("loginAccount", this.userName);
+      if(this.isRemember){
+        localStorage.setItem("loginAccount", this.userName);
+      }
+      else{
+        localStorage.removeItem("loginAccount");
+      }
+      // 跳转页面
       this.$router.push({
-        path: "/index"
+        path: "/main"
       });
     }
   }
@@ -118,81 +118,38 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.login-bg {
-  background: url("../assets/img/bgs/landscape.jpg") no-repeat center center;
+$elementHeight: 50px;
+div.body {
   width: 100%;
   height: 100%;
   position: fixed;
-}
-#loginTips {
-  color: red;
-}
-.login-wrapper {
-  /* position: absolute; */
-  margin-top: 90px;
-  text-align: center;
-}
-.login-wrapper .logo {
-  margin-bottom: 45px;
-  position: relative;
-  left: -2px;
-}
-.login-wrapper .box {
-  margin: 45px auto 0 auto;
-  padding: 35px 0 30px;
-  float: none;
-  width: 400px;
-  box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.65);
-}
-.login-wrapper .box .content-wrap {
-  width: 82%;
-  margin: 0 auto;
-}
-.login-wrapper .box h6 {
-  text-transform: uppercase;
-  margin: 0 0 30px 0;
-  font-size: 18px;
-  font-weight: 600;
-}
-.login-wrapper .box input[type="text"],
-.login-wrapper .box input[type="password"] {
-  font-size: 15px;
-  height: 40px;
-  margin-bottom: 18px;
-  border-color: #b2bfc7;
-  padding-left: 12px;
-}
-
-.login-wrapper .box .login {
-  text-transform: uppercase;
-  font-size: 13px;
-  padding: 8px 30px;
-}
-
-/* responsive */
-@media (max-width: 767px) {
-  .login-wrapper .box {
-    width: 350px;
-  }
-}
-@media (max-width: 480px) {
-  .login-wrapper .box {
-    width: 90%;
-  }
-}
-.el-input {
-  margin-top: 5px;
-}
-#loginBtn {
-  margin-top: 10px;
-}
-.footContainer {
-  margin-top: 280px;
-  text-align: center;
-  span.foot {
-    color: white;
+  background: #f2edf3;
+  div.main {
+    background: #ffffff;
+    margin: 3em auto 0 auto;
+    padding: 2.5em;
+    width: 20%;
+    height: 50%;
+    .title {
+      margin-bottom: 0.3em;
+    }
+    .tips {
+      margin-bottom: 2.5em;
+    }
+    div.form-group {
+      margin: 1.5em 0;
+      .el-input__inner {
+        height: $elementHeight;
+      }
+      .loginButton {
+        height: $elementHeight;
+        width: 100%;
+        font-size: 20px;
+        font-weight: bold;
+        color: #ffffff;
+        background: linear-gradient(to right, #da8cff, #9a55ff);
+      }
+    }
   }
 }
 </style>

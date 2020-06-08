@@ -2,18 +2,18 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 // 登陆模块
-import login from '@/views/login.vue'
+import login from '@/views/SystemAdmin/login.vue'
 // 主页面
-import main from '@/views/main.vue'
+import main from '@/views/SystemAdmin/main.vue'
 // 用户管理
 import userList from '@/views/SystemAdmin/User/userList.vue'
 // 权限管理
-import authorityAdmin from '@/views/SystemAdmin/authorityAdmin.vue'
+import authorityAdmin from '@/views/SystemAdmin/Authority/authorityAdmin.vue'
 // 角色管理
-import roleAuthorityAdmin from '@/views/SystemAdmin/roleAuthorityAdmin.vue'
+import roleAuthorityAdmin from '@/views/SystemAdmin/Role/roleAuthorityAdmin.vue'
 // 日志管理模块
-import logAdmin from '@/views/SystemAdmin/logAdmin.vue'
-// 设计表单模块
+import logAdmin from '@/views/SystemAdmin/Log/logAdmin.vue'
+// 设计表单模块s
 import DesignFormList from '@/views/SystemAdmin/Form/DesignFormList.vue'
 import editForm from '@/views/SystemAdmin/Form/editForm.vue'
 // 错误页面

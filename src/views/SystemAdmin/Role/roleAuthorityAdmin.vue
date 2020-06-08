@@ -1,11 +1,14 @@
 <template>
-  <div class="table_container">
+<!-- 
+  角色管理页面
+ -->
+  <div>
     <h3 class="headTitle">角色管理</h3>
-    <el-card class="findCard">
+    <el-card class="primaryCard topCard">
       <!-- 搜索组件 -->
       <selfFindRoleListComponent @find="find(arguments)"></selfFindRoleListComponent>
     </el-card>
-    <el-card>
+    <el-card class="primaryCard">
       <el-row>
         <el-button type="warning" size="small" icon="el-icon-plus" @click="newRole">新增</el-button>
       </el-row>
@@ -344,12 +347,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-h3 {
-  font-style: normal;
-  font-weight: normal;
-  color: #696d73;
-  margin-left: 20px;
-}
 .table_container {
   padding: 20px;
 }

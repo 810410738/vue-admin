@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h3>表单列表</h3>
-    <el-card class="controlCard">
+    <h3 class="headTitle">表单列表</h3>
+    <el-card class="primaryCard topCard">
       <el-row>
         <el-col :span="13" :offset="1">
           <!-- 所有子系统 -->
@@ -15,8 +15,8 @@
         </el-col>
       </el-row>
     </el-card>
-    <el-card>
-      <el-table :data="getFormDesignData.records" highlight-current-row style="width: 100%" stripe>
+    <el-card class="primaryCard">
+      <el-table :data="getFormDesignData.records" highlight-current-row stripe>
         <el-table-column type="index" label="序号"></el-table-column>
         <el-table-column property="systemIdentify" label="表单分组" width="200"></el-table-column>
         <el-table-column property="formName" label="表单名称" width="150"></el-table-column>
@@ -214,7 +214,4 @@ export default {
 
 
 <style lang="scss" scoped>
-.controlCard {
-  margin-bottom: 1em;
-}
 </style>

@@ -1,6 +1,15 @@
-h3 {
+/* 标题 */
+h3.headTitle {
   text-align: center;
   color: #696d73;
+}
+/* el-card的公共样式 */
+.primaryCard{
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.topCard{
+  margin-bottom: 1em;
 }
 /* el-table的行样式 */
 .el-table .table-green-row{

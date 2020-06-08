@@ -1,5 +1,7 @@
 <template>
-  <!-- 所有子系统 -->
+   <!-- 
+      下拉选择子系统的组件
+     -->
   <div>
     <label>子系统：</label>
     <el-select size="small" v-model="systemIdentify">
