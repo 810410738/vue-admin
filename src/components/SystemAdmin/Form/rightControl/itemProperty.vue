@@ -5,7 +5,7 @@
   -->
   <div>
     <el-form
-      v-for="(item,index) in this.$store.state.Form.formData.Item"
+      v-for="(item,index) in $store.state.Form.formData.Item"
       :key="item.key"
       v-show="item.isClick"
       label-position="top"
@@ -94,7 +94,7 @@
             v-model="item.linkOptionsKey"
           >
             <el-option
-              v-for="option_item in this.$store.state.Form.formData.Item"
+              v-for="option_item in $store.state.Form.formData.Item"
               v-show="option_item.type == 'select' && option_item.key!=item.key"
               :key="option_item.key"
               :label="option_item.name"
