@@ -21,6 +21,8 @@ import pageNotFound from '@/errorPage/404';
 
 import test from '@/views/Test/test.vue'
 
+import question from '@/views/aps/Question/addQuestionnaire.vue'
+
 Vue.use(VueRouter)
 
 const routes = [{
@@ -61,7 +63,6 @@ const routes = [{
       {
         path: 'logAdmin',
         component: logAdmin,
-       
       },
     ]
   },
@@ -76,6 +77,10 @@ const routes = [{
   {
     path: '/test',
     component: test
+  },
+  {
+    path: '/question',
+    component: question
   },
   {
     path: '*',
