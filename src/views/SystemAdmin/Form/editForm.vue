@@ -4,7 +4,7 @@
     <el-row style="height: 100%;">
       <el-row>
         <el-button type="info" size="small" @click="returnBack" class="returnButton">返回</el-button>
-        <h3>{{this.$route.query.formName}} - 表单设计</h3>
+        <h3 class="headTitle">{{this.$route.query.formName}} - 表单设计</h3>
       </el-row>
       <!-- 自己写的表单生成器 -->
       <el-row class="mainEditForm">
@@ -36,10 +36,10 @@
                   :class="[{'clickFormItem':item.isClick}]"
                 >
                   <!-- 各个元素的操作按钮（删除） -->
-                  <div :class="{'itemEdit':!item.isClick}" >
+                  <div :class="{'itemEdit':!item.isClick}">
                     <!-- 删除 -->
                     <el-button
-                      type="primary"
+                      type="danger"
                       icon="el-icon-delete"
                       circle
                       size="mini"
@@ -68,7 +68,13 @@
                       @click="moveOneItem(index,'down')"
                     ></el-button>
                   </div>
+
                   <el-form-item :label="item.label" :prop="item.name">
+                    <!-- 静态文本 -->
+                    <p
+                      :style="{color:item.textColor, fontSize:(item.textSize + 'px'), marginLeft:(item.marginLeft + 'px')}"
+                      v-if="item.type == 'staticText'"
+                    >{{item.content}}</p>
                     <!-- 单行输入框 -->
                     <el-input
                       v-if="item.type == 'input'"
@@ -172,7 +178,9 @@
                       format="yyyy 年 MM 月 dd 日"
                       :value-format="item.format"
                     ></el-date-picker>
-                    <span class="itemName">{{item.name}}</span>
+                    <!-- 静态文本 -->
+                    <el-tag type="info" v-else-if="item.type == 'text'">显示{{item.name}}的值</el-tag>
+                    <span v-if="item.type != 'staticText'" class="itemName">{{item.name}}</span>
                   </el-form-item>
                 </div>
               </transition-group>
@@ -289,7 +297,7 @@ export default {
      * @parma type 移动类型（up:上移，down：下移）
      */
     moveOneItem(index, type) {
-     this.$store.commit("Form/moveOneItem", {
+      this.$store.commit("Form/moveOneItem", {
         index: index,
         type: type
       });
@@ -328,7 +336,7 @@ export default {
         float: right;
         color: #82dc29;
       }
-      .itemEdit{
+      .itemEdit {
         visibility: hidden;
       }
     }

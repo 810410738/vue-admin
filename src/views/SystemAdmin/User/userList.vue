@@ -61,8 +61,8 @@
         <el-table-column type="index" width="100"></el-table-column>
         <el-table-column property="userNum" label="用户编号" width="150"></el-table-column>
         <el-table-column property="userName" label="用户姓名" width="150"></el-table-column>
-        <el-table-column property="primaryClass" label="所在机构" width="180"></el-table-column>
-        <el-table-column property="secondaryClass" label="所在网点" width="180"></el-table-column>
+        <el-table-column property="primaryClass" label="所属一级机构" width="180"></el-table-column>
+        <el-table-column property="secondaryClass" label="所属二级机构" width="180"></el-table-column>
         <el-table-column property="userStatus" label="用户状态" width="100">
           <template slot-scope="scope">
             <el-switch
@@ -120,7 +120,7 @@
     <el-dialog
       title="新增用户"
       :visible.sync="addUserDialogVisible"
-      width="40%"
+      width="30%"
       :destroy-on-close="true"
       center
     >
@@ -130,7 +130,7 @@
     <el-dialog
       title="查看用户信息"
       :visible.sync="checkUserDialogVisible"
-      width="40%"
+      width="30%"
       :destroy-on-close="true"
       center
     >
@@ -140,7 +140,7 @@
     <el-dialog
       title="修改用户信息"
       :visible.sync="editUserDialogVisible"
-      width="40%"
+      width="30%"
       :destroy-on-close="true"
       center
     >

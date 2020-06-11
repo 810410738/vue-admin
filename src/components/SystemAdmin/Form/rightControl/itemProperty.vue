@@ -10,6 +10,21 @@
       v-show="item.isClick"
       label-position="top"
     >
+      <!-- 静态文本的特有操作 -->
+      <div v-if="item.type == 'staticText'">
+        <el-form-item label="字体颜色">
+          <el-color-picker v-model="item.textColor" :predefine="predefineColors"></el-color-picker>
+        </el-form-item>
+        <el-form-item label="字体大小">
+          <el-input-number v-model="item.textSize" :min="13" :max="50"></el-input-number>
+        </el-form-item>
+        <el-form-item label="左外边距">
+          <el-input-number v-model="item.marginLeft" :min="-100" :max="1200"></el-input-number>
+        </el-form-item>
+         <el-form-item label="文本内容">
+          <el-input v-model="item.content"></el-input>
+        </el-form-item>
+      </div>
       <el-form-item label="字段名字">
         <el-input v-model="item.name"></el-input>
       </el-form-item>
@@ -209,6 +224,15 @@
             <el-input v-model="item.format"></el-input>
           </el-form-item>
         </el-card>
+      </div>
+      <!-- 普通文本的特有操作 -->
+      <div v-else-if="item.type == 'text'">
+        <el-form-item>
+          <el-checkbox v-model="item.isStatic">静态内容</el-checkbox>
+        </el-form-item>
+        <el-form-item label="静态内容" v-if="item.isStatic">
+          <el-input v-model="item.staticContent"></el-input>
+        </el-form-item>
       </div>
       <!--  -->
       <el-form-item label="操作属性">

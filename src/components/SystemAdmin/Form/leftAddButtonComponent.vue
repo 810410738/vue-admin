@@ -1,25 +1,49 @@
  <template>
- <!-- 
+  <!-- 
    表单设计界面左边的新增字段的操作组件
   -->
   <div class="primaryButton">
     <span class="primaryText">基础字段</span>
     <div class="aLine"></div>
     <el-row>
-      <el-button type="primary" plain size="mini" @click="addItem('input')">普通输入框</el-button>
-      <el-button type="primary" plain size="mini" @click="addItem('select')">下拉框</el-button>
+      <el-col :span="12">
+        <el-button type="primary" plain size="mini" @click="addItem('input')">普通输入框</el-button>
+      </el-col>
+      <el-col :span="12">
+        <el-button type="primary" plain size="mini" @click="addItem('text')">动态文本</el-button>
+      </el-col>
     </el-row>
     <el-row>
-      <el-button type="primary" plain size="mini" @click="addItem('inputTextarea')">多行输入框</el-button>
-      <el-button type="primary" plain size="mini" @click="addItem('radio')">单选框</el-button>
+      <el-col :span="12">
+        <el-button type="primary" plain size="mini" @click="addItem('inputTextarea')">多行输入框</el-button>
+      </el-col>
+      <el-col :span="12">
+        <el-button type="primary" plain size="mini" @click="addItem('select')">下拉框</el-button>
+      </el-col>
     </el-row>
     <el-row>
-      <el-button type="primary" plain size="mini" @click="addItem('switch')">switch开关</el-button>
-      <el-button type="primary" plain size="mini" @click="addItem('checkbox')">多选框</el-button>
+      <el-col :span="12">
+        <el-button type="primary" plain size="mini" @click="addItem('radio')">单选框</el-button>
+      </el-col>
+      <el-col :span="12">
+        <el-button type="primary" plain size="mini" @click="addItem('checkbox')">多选框</el-button>
+      </el-col>
     </el-row>
     <el-row>
-      <el-button type="primary" plain size="mini" @click="addItem('DatePicker')">日期选择器</el-button>
-      <!-- <el-button type="primary" plain size="mini" @click="addItem('rate')">rate评分</el-button> -->
+      <el-col :span="12">
+        <el-button type="primary" plain size="mini" @click="addItem('switch')">switch开关</el-button>
+      </el-col>
+      <el-col :span="12">
+        <el-button type="primary" plain size="mini" @click="addItem('DatePicker')">日期选择器</el-button>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="12">
+        <el-button type="primary" plain size="mini" @click="addItem('staticText')">静态文本</el-button>
+      </el-col>
+      <el-col :span="12">
+        <el-button type="primary" plain size="mini" >待开发</el-button>
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -42,7 +66,7 @@ export default {
         required: false,
         errorText: "输入数据的格式不正确",
         rules: [],
-        pattern:''
+        pattern: ""
       }
     };
   },
@@ -59,6 +83,18 @@ export default {
       this.jsonData.name = ItemType + "_" + this.jsonData.key;
       this.jsonData.type = ItemType;
       switch (ItemType) {
+        // 静态文本
+        case "staticText":
+          this.jsonData.label = "";
+          this.jsonData.content = '静态文本'
+          this.jsonData.textSize = 16;
+          this.jsonData.textColor = '#000000';
+          this.jsonData.marginLeft = 30;
+          break;
+        // 动态文本
+        case "text":
+          this.jsonData.label = "普通文本";
+          break;
         // 单行输入框
         case "input":
           this.jsonData.label = "input输入框";
@@ -108,16 +144,15 @@ export default {
           ];
           break;
         case "DatePicker":
-           this.jsonData.label = "DatePicker日期选择器";
-           this.jsonData.datePickerType = "date";
-           this.jsonData.format = "yyyy-MM-dd";
+          this.jsonData.label = "DatePicker日期选择器";
+          this.jsonData.datePickerType = "date";
+          this.jsonData.format = "yyyy-MM-dd";
           break;
         case "rate":
           break;
-
       }
       // 添加新的元素到Form.item
-      this.$store.commit("Form/addItem",this.jsonData);
+      this.$store.commit("Form/addItem", this.jsonData);
     }
   }
 };
@@ -137,6 +172,9 @@ div.primaryButton {
   }
   .el-row {
     margin-bottom: 0.5em;
+    .el-button{
+      width: 100px;
+    }
   }
 }
 </style>

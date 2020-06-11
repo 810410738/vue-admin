@@ -3,73 +3,69 @@
   "isShowButton": false,
   "submitText": "提交",
   "labelPosition": "right",
-  "labelWidth": 130,
+  "labelWidth": 190,
   "size": "small",
-  "Item": [
-      {
-          "key": "266683991589967863173",
-          "name": "userName",
-          "type": "input",
-          "label": "用户姓名",
-          "placeholder": "请输入用户姓名",
-          "width": "100",
-          "isClick": true,
-          "disabled": false,
-          "required": true,
-          "errorText": "输入数据的格式不正确",
-          "rules": []
-      },
-      {
-          "key": "090375541589967864026",
-          "name": "primaryClass",
-          "type": "select",
-          "label": "所属一级机构",
-          "placeholder": "请输入所属一级机构",
-          "width": "100",
-          "isClick": false,
-          "disabled": false,
-          "required": true,
-          "errorText": "输入数据的格式不正确",
-          "rules": [],
-          "remote": false,
-          "remoteURL": "/sys/framework/rest/common/getPrimaryClass",
-          "remoteParmas": [
-              {
-                  "key": "systemIdentify",
-                  "value": "ADMIN"
-              }
-          ],
-          "options": [],
-          "isLinkOptions": true,
-          "linkOptionsKey": "361769321589967864692",
-          "isLinked": false
-      },
-      {
-          "key": "361769321589967864692",
-          "name": "secondaryClass",
-          "type": "select",
-          "label": "所属二级机构",
-          "placeholder": "请输入所属一级机构",
-          "width": "100",
-          "isClick": false,
-          "disabled": false,
-          "required": false,
-          "errorText": "输入数据的格式不正确",
-          "rules": [],
-          "remote": false,
-          "remoteURL": "/sys/framework/rest/common/getSecByPrim",
-          "remoteParmas": [
-              {
-                  "key": "systemIdentify",
-                  "value": "ADMIN"
-              }
-          ],
-          "options": [],
-          "isLinkOptions": false,
-          "linkOptionsKey": "",
-          "isLinked": false
-      }
-  ],
+  "Item": [{
+    "key": "251643001591859589426",
+    "name": "userNum",
+    "type": "text",
+    "label": "用户编号  ：",
+    "placeholder": "",
+    "width": "100",
+    "isClick": true,
+    "disabled": false,
+    "required": false,
+    "errorText": "输入数据的格式不正确",
+    "rules": [],
+    "pattern": "",
+    "isStatic": false,
+    "staticContent": ""
+  }, {
+    "key": "414686061591863257658",
+    "name": "userName",
+    "type": "text",
+    "label": "用户姓名  ：",
+    "placeholder": "",
+    "width": "100",
+    "isClick": false,
+    "disabled": false,
+    "required": false,
+    "errorText": "输入数据的格式不正确",
+    "rules": [],
+    "pattern": "",
+    "isStatic": false,
+    "staticContent": ""
+  }, {
+    "key": "701867371591863275312",
+    "name": "primaryClass",
+    "type": "text",
+    "label": "所属一级机构  ：",
+    "placeholder": "",
+    "width": "100",
+    "isClick": false,
+    "disabled": false,
+    "required": false,
+    "errorText": "输入数据的格式不正确",
+    "rules": [],
+    "pattern": "",
+    "isStatic": false,
+    "staticContent": ""
+  }, {
+    "key": "074294661591863297467",
+    "name": "secondaryClass",
+    "type": "text",
+    "label": "所属二级机构 ：",
+    "placeholder": "",
+    "width": "100",
+    "isClick": false,
+    "disabled": false,
+    "required": false,
+    "errorText": "输入数据的格式不正确",
+    "rules": [],
+    "pattern": "",
+    "isStatic": false,
+    "staticContent": ""
+  }],
   "Data": {},
   "Rules": {}
 }

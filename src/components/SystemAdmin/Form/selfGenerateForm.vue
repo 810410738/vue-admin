@@ -129,6 +129,15 @@
         format="yyyy 年 MM 月 dd 日"
         :value-format="item.format"
       ></el-date-picker>
+
+      <!-- 动态文本 -->
+      <el-tag type="info" v-else-if="item.type == 'text'">{{Form.Data[item.name]}}</el-tag>
+
+       <!-- 静态文本 -->
+      <p
+        :style="{color:item.textColor, fontSize:(item.textSize + 'px'), marginLeft:(item.marginLeft + 'px')}"
+        v-if="item.type == 'staticText'"
+      >{{item.content}}</p>
     </el-form-item>
     <!-- 提交表单 -->
     <el-form-item v-if="Form.isShowButton">
