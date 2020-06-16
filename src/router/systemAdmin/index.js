@@ -1,8 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-// 登陆模块
-import login from '@/views/SystemAdmin/login.vue'
+// 普通用户登陆模块
+import userLogin from '@/views/Login/userLogin.vue'
+// 用户导航页面
+import userIndex from '@/views/Index/index.vue'
+// 后台管理系统登陆模块
+import adminLogin from '@/views/SystemAdmin/login.vue'
 // 主页面
 import main from '@/views/SystemAdmin/main.vue'
 // 用户管理
@@ -21,24 +25,32 @@ import pageNotFound from '@/errorPage/404';
 
 import test from '@/views/Test/test.vue'
 
-import question from '@/views/aps/Question/addQuestionnaire.vue'
 
 Vue.use(VueRouter)
 
 const routes = [{
     path: '/',
-    name: 'login',
-    component: login,
+    name: 'adminLogin',
+    component: adminLogin,
     meta: {
       requireSystemIdentify: false
     }
+  },
+  // 普通用户登陆
+  {
+    path: '/userLogin',
+    name: 'userLogin',
+    component: userLogin,
+  },
+  {
+    path: '/userIndex',
+    component: userIndex
   },
   {
     path: '/main',
     name: 'main',
     component: main,
-    children: [
-      {
+    children: [{
         path: '',
         component: userList,
       },
@@ -53,12 +65,12 @@ const routes = [{
       {
         path: 'authorityAdmin',
         component: authorityAdmin,
-       
+
       },
       {
         path: 'roleAuthorityAdmin',
         component: roleAuthorityAdmin,
-        
+
       },
       {
         path: 'logAdmin',
@@ -79,12 +91,8 @@ const routes = [{
     component: test
   },
   {
-    path: '/question',
-    component: question
-  },
-  {
     path: '*',
-		component: pageNotFound,
+    component: pageNotFound,
   }
 ]
 
@@ -93,30 +101,30 @@ const router = new VueRouter({
 })
 
 
-router.beforeEach((to, from, next) => {
-  // 如果访问error页面，直接next
-  if (to.path === '/error' || to.path === '/') {
-    next();
-    return ;
-  }
-  if(!isLogin()){
-    next({
-      path: '/',
-      query:{
-        message:'notLogin'
-      }
-    });
-    return 
-  }
-  else{
-    next();
-  }
+// router.beforeEach((to, from, next) => {
+//   // 如果访问error页面，直接next
+//   if (to.path === '/error' || to.path === '/') {
+//     next();
+//     return ;
+//   }
+//   if(!isLogin()){
+//     next({
+//       path: '/',
+//       query:{
+//         message:'notLogin'
+//       }
+//     });
+//     return 
+//   }
+//   else{
+//     next();
+//   }
 
-});
+// });
 
 // 判断是否已经登陆
-function isLogin(){
-  if(localStorage.getItem('authToken')){
+function isLogin() {
+  if (localStorage.getItem('authToken')) {
     return true;
   }
   return false;

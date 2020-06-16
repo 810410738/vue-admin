@@ -46,7 +46,12 @@
                   icon="el-icon-bottom"
                   @click="moveNode(scope,'down')"
                 >下移</el-button>
-                <el-button size="mini" type="text" icon="el-icon-plus" @click="newNode(scope.row)">新增</el-button>
+                <el-button
+                  size="mini"
+                  type="text"
+                  icon="el-icon-plus"
+                  @click="newNode(scope.row)"
+                >新增</el-button>
                 <el-button
                   size="mini"
                   type="text"
@@ -91,8 +96,8 @@ import {
   getUserInfo,
   getAllRoleExceptAdmin
 } from "@/api/getUserData";
+import editAuthorityJson from "@/json/Authority/editAuthority";
 import { getIconOption } from "@/api/getCommonData";
-import { getFormDataById } from "@/api/getFormData";
 import {
   getAuthorityTree,
   deleteAuthorityById,
@@ -140,17 +145,9 @@ export default {
         this.getAuthorityData = res.extend.authorityTree;
       });
       // 获取新增权限的表单数据
-      getFormDataById({ formId: "7c54f6d7c96a446584a11590573494045" }).then(
-        res => {
-          this.addFormData = JSON.parse(res.extend.formData);
-        }
-      );
-      // 获取编辑权限的表单数据
-      getFormDataById({ formId: "7c54f6d7c96a446584a11590573494045" }).then(
-        res => {
-          this.editFormData = JSON.parse(res.extend.formData);
-        }
-      );
+      this.addFormData = editAuthorityJson;
+      this.editFormData = editAuthorityJson;
+
       getIconOption().then(res => {
         this.iconOption = res.extend.classList;
       });
@@ -184,7 +181,6 @@ export default {
       for (var key in arg[0]) {
         jsonData[key] = arg[0][key];
       }
-      debugger
       jsonData.authorityId = this.$refs.editForm.getParams("authorityId");
       jsonData.parentId = this.$refs.editForm.getParams("parentId");
       jsonData.systemIdentify = this.$refs.editForm.getParams("systemIdentify");
@@ -286,7 +282,6 @@ export default {
     edit(row) {
       this.editDialogVisible = true;
       this.$nextTick(() => {
-        debugger
         this.$refs.editForm.setFormData(row);
         this.$refs.editForm.setParams("authorityId", row.nodeId);
         this.$refs.editForm.setParams("parentId", row.nodePid);

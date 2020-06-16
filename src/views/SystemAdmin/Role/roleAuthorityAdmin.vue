@@ -1,7 +1,7 @@
 <template>
-<!-- 
+  <!-- 
   角色管理页面
- -->
+  -->
   <div>
     <h3 class="headTitle">角色管理</h3>
     <el-card class="primaryCard topCard">
@@ -114,7 +114,8 @@ import {
   getRelateAuthByRoleId,
   changeRoleAuthority
 } from "@/api/systemAdmin/getRoleAuthorityData";
-import { getFormData } from "@/api/getFormData";
+import newRoleJson from '@/json/Role/newRole';
+import editRoleJson from '@/json/Role/editRole';
 import selfFindRoleListComponent from "@/components/SystemAdmin/RoleAdmin/selfFindRoleListComponent";
 import selfGenerateForm from "@/components/SystemAdmin/Form/selfGenerateForm";
 selfFindRoleListComponent;
@@ -168,13 +169,9 @@ export default {
         this.tableData = res.extend.pageData;
       });
       // 获取新增角色的表单数据
-      getFormData({ formId: "42d1cc97f23a4cb594ac1589945419935" }).then(res => {
-        this.newRoleFormData = res.extend.FormInfo;
-      });
+      this.newRoleFormData = newRoleJson;
       // 获取编辑角色信息的表单数据
-      getFormData({ formId: "7c54f6d7c96a446584a11590573494045" }).then(res => {
-        this.editRoleFormData = res.extend.FormInfo;
-      });
+      this.editRoleFormData = editRoleJson;
     },
     /**
      * @description 点击新增角色的按钮

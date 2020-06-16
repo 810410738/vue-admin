@@ -7,26 +7,37 @@
       <div class="box">
         <div class="content-wrap">
           <h6>请登陆</h6>
-          <el-input
-            @keyup.enter.native="login()"
-            id="userName"
-            type="text"
-            placeholder="请输入用户名"
-            v-model="userName"
-          />
-          <el-input
-            @keyup.enter.native="login()"
-            id="password"
-            type="password"
-            placeholder="请输入密码"
-            v-model="password"
-          />
-          <el-button
-            id="loginBtn"
-            type="primary"
-            :loading="loadingFlag"
-            @click="login()"
-          >{{loginButtonText}}</el-button>
+          <el-row>
+            <el-input
+              @keyup.enter.native="login()"
+              id="userName"
+              type="text"
+              placeholder="请输入用户名"
+              v-model="userName"
+            />
+          </el-row>
+          <el-row>
+            <el-input
+              @keyup.enter.native="login()"
+              id="password"
+              type="password"
+              placeholder="请输入密码"
+              v-model="password"
+            />
+          </el-row>
+          <el-row>
+            <el-col :span="18">
+              <el-button
+                id="loginBtn"
+                type="primary"
+                :loading="loadingFlag"
+                @click="login()"
+              >{{loginButtonText}}</el-button>
+            </el-col>
+            <el-col :span="6">
+              <el-button type="text" @click="adminEnter">管理员入口</el-button>
+            </el-col>
+          </el-row>
         </div>
       </div>
     </div>
@@ -39,7 +50,6 @@
 <script>
 import { setHeader } from "@/api/http.js";
 import { toLogin } from "@/api/getCommonData";
-import { b64_md5 } from "@/util/MD5";
 export default {
   data() {
     return {
@@ -94,12 +104,7 @@ export default {
       }
       var params = {};
       params.loginAccount = this.userName;
-      // 超级管理员的密码加密传输
-      if (this.userName == "admin") {
-        params.loginPassword = b64_md5(this.password);
-      } else {
-        params.loginPassword = this.password;
-      }
+       params.loginPassword = this.password;
       toLogin(params).then(response => {
         this.loginSuccess(response);
       });
@@ -110,8 +115,16 @@ export default {
       // 把账号保存到localStorage
       localStorage.setItem("loginAccount", this.userName);
       this.$router.push({
-        path: "/index"
+        path: "/userIndex"
       });
+    },
+    /**
+     * 跳转到管理员登陆入口
+     */
+    adminEnter() {
+      this.$router.push({
+        path:"/"
+      })
     }
   }
 };
@@ -119,7 +132,7 @@ export default {
 
 <style lang="scss" scoped>
 .login-bg {
-  background: url("../assets/img/bgs/landscape.jpg") no-repeat center center;
+  background: url("../../assets/img/bgs/landscape.jpg") no-repeat center center;
   width: 100%;
   height: 100%;
   position: fixed;
@@ -131,44 +144,38 @@ export default {
   /* position: absolute; */
   margin-top: 90px;
   text-align: center;
-}
-.login-wrapper .logo {
-  margin-bottom: 45px;
-  position: relative;
-  left: -2px;
-}
-.login-wrapper .box {
-  margin: 45px auto 0 auto;
-  padding: 35px 0 30px;
-  float: none;
-  width: 400px;
-  box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.65);
-}
-.login-wrapper .box .content-wrap {
-  width: 82%;
-  margin: 0 auto;
-}
-.login-wrapper .box h6 {
-  text-transform: uppercase;
-  margin: 0 0 30px 0;
-  font-size: 18px;
-  font-weight: 600;
-}
-.login-wrapper .box input[type="text"],
-.login-wrapper .box input[type="password"] {
-  font-size: 15px;
-  height: 40px;
-  margin-bottom: 18px;
-  border-color: #b2bfc7;
-  padding-left: 12px;
-}
-
-.login-wrapper .box .login {
-  text-transform: uppercase;
-  font-size: 13px;
-  padding: 8px 30px;
+  .logo {
+    margin-bottom: 45px;
+    position: relative;
+    left: -2px;
+  }
+  .box {
+    margin: 45px auto 0 auto;
+    padding: 35px 0 30px;
+    float: none;
+    width: 400px;
+    box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.65);
+    .content-wrap {
+      width: 82%;
+      margin: 0 auto;
+    }
+    h6 {
+      text-align: left;
+      text-transform: uppercase;
+      margin: 0 0 30px 0;
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .el-input {
+      margin-bottom: 10px;
+    }
+    #loginBtn {
+      // margin-top: 10px;
+      width: 17.5em;
+    }
+  }
 }
 
 /* responsive */
@@ -181,12 +188,6 @@ export default {
   .login-wrapper .box {
     width: 90%;
   }
-}
-.el-input {
-  margin-top: 5px;
-}
-#loginBtn {
-  margin-top: 10px;
 }
 .footContainer {
   margin-top: 280px;

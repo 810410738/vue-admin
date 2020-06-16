@@ -77,7 +77,7 @@ export default {
         localStorage.removeItem("authToken");
         // 跳转到登陆页面
         this.$router.push({
-          path: "/"
+          path: "/userLogin"
         });
       });
     },
@@ -87,7 +87,7 @@ export default {
     returnIndex() {
       // 跳转页面
       this.$router.push({
-        path: "/index"
+        path: "/userIndex"
       });
     }
   }

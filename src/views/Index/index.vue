@@ -9,7 +9,7 @@
           shadow="hover"
           v-for="item in getSystemData"
           :key="item.id"
-          @click.native="enterSystem(item.systemIdentify)"
+          @click.native="enterSystem(item.systemUrl)"
         >
           <div slot="header" class="clearfix">
             <span>{{item.name}}</span>
@@ -31,19 +31,23 @@ export default {
       getSystemData: [
         {
           systemIdentify: "1",
-          name: "线上评议"
+          name: "线上评议",
+          systemUrl:'https:www.baidu.com'
         },
         {
           systemIdentify: "2",
-          name: "员工行为排查"
+          name: "员工行为排查",
+          systemUrl:'https:www.taobao.com'
         },
         {
           systemIdentify: "3",
-          name: "对公客户信息维护"
+          name: "对公客户信息维护",
+          systemUrl:''
         },
         {
           systemIdentify: "4",
-          name: "人力资源投票统计"
+          name: "人力资源投票统计",
+          systemUrl:'https://blog.csdn.net'
         }
       ]
     };
@@ -53,13 +57,8 @@ export default {
      * @description 根据系统标识进入不同的系统
      * @param systemIdentify 系统标识
      */
-    enterSystem(systemIdentify) {
-      this.$router.push({
-        path: "/main",
-        query: {
-          systemIdentify: systemIdentify
-        }
-      });
+    enterSystem(systemUrl) {
+     window.location.href = systemUrl;
     }
   }
 };
@@ -68,7 +67,7 @@ export default {
 
 <style lang="scss" scoped>
 div.index {
-  background: url("../assets/img/bgs/bg.jpg") no-repeat center center;
+  background: url("../../assets/img/bgs/bg.jpg") no-repeat center center;
   width: 100%;
   height: 100%;
   position: fixed;

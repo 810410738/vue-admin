@@ -27,6 +27,7 @@
       </div>
       <div class="form-check">
         <el-checkbox v-model="isRemember">记住账号</el-checkbox>
+        <el-button type="text" @click="userLogin">普通用户登陆</el-button>
       </div>
     </div>
   </div>
@@ -67,8 +68,8 @@ export default {
         });
       }
       // 显示已保存的账号
-      if (localStorage.getItem("loginAccount")) {
-        this.userName = localStorage.getItem("loginAccount");
+      if (localStorage.getItem("adminLoginAccount")) {
+        this.userName = localStorage.getItem("adminLoginAccount");
       }
     },
     // 清求登陆接口
@@ -99,15 +100,22 @@ export default {
       // 把token保存到localStorage
       localStorage.setItem("authToken", response.extend.tokenId);
       // 把账号保存到localStorage
-      if(this.isRemember){
-        localStorage.setItem("loginAccount", this.userName);
-      }
-      else{
-        localStorage.removeItem("loginAccount");
+      if (this.isRemember) {
+        localStorage.setItem("adminLoginAccount", this.userName);
+      } else {
+        localStorage.removeItem("adminLoginAccount");
       }
       // 跳转页面
       this.$router.push({
         path: "/main"
+      });
+    },
+    /**
+     * 普通用户登陆入口
+     */
+    userLogin() {
+      this.$router.push({
+        path: "/userLogin"
       });
     }
   }
@@ -145,6 +153,11 @@ div.body {
         font-weight: bold;
         color: #ffffff;
         background: linear-gradient(to right, #da8cff, #9a55ff);
+      }
+    }
+    div.form-check{
+      .el-button{
+        margin-left: 10em;
       }
     }
   }
