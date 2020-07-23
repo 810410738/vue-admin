@@ -217,7 +217,7 @@
 </template>
 
 <script>
-import headTop from "@/components/headTop";
+import headTop from "@/components/SystemAdmin/headTop";
 import { getFormDataById } from "@/api/getFormData";
 import selfBuildJsonDialog from "@/components/SystemAdmin/Form/selfBuildJsonDialog";
 import selfImportJsonDialog from "@/components/SystemAdmin/Form/selfImportJsonDialog";

@@ -27,7 +27,6 @@
       </div>
       <div class="form-check">
         <el-checkbox v-model="isRemember">记住账号</el-checkbox>
-        <el-button type="text" @click="userLogin">普通用户登陆</el-button>
       </div>
     </div>
   </div>
@@ -110,14 +109,6 @@ export default {
         path: "/main"
       });
     },
-    /**
-     * 普通用户登陆入口
-     */
-    userLogin() {
-      this.$router.push({
-        path: "/userLogin"
-      });
-    }
   }
 };
 </script>

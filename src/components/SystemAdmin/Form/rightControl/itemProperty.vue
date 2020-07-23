@@ -21,7 +21,7 @@
         <el-form-item label="左外边距">
           <el-input-number v-model="item.marginLeft" :min="-100" :max="1200"></el-input-number>
         </el-form-item>
-         <el-form-item label="文本内容">
+        <el-form-item label="文本内容">
           <el-input v-model="item.content"></el-input>
         </el-form-item>
       </div>
@@ -163,29 +163,64 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="选项">
-          <el-card>
-            <el-card v-for="(item1, index1) in item.options" :key="index1">
-              <el-input size="mini" v-model="item1.label">
-                <template slot="prepend">Label</template>
-              </el-input>
-              <el-input size="mini" v-model="item1.value">
-                <template slot="prepend">Value</template>
-              </el-input>
-            </el-card>
-            <el-button
-              plain
-              icon="el-icon-plus"
-              size="mini"
-              @click="changeSelectOption(index,'add')"
-            ></el-button>
-            <el-button
-              type="danger"
-              plain
-              icon="el-icon-minus"
-              size="mini"
-              @click="changeSelectOption(index,'delete')"
-            ></el-button>
-          </el-card>
+          <el-tabs v-model="selectActiveName" type="border-card" :stretch="true">
+            <!--  静态数据的页面 -->
+            <el-tab-pane label="静态数据" name="static">
+              <el-card v-for="(item1, index1) in item.options" :key="index1">
+                <el-input size="mini" v-model="item1.label">
+                  <template slot="prepend">Label</template>
+                </el-input>
+                <el-input size="mini" v-model="item1.value">
+                  <template slot="prepend">Value</template>
+                </el-input>
+              </el-card>
+              <el-button
+                plain
+                icon="el-icon-plus"
+                size="mini"
+                @click="changeSelectOption(index,'add')"
+              ></el-button>
+              <el-button
+                type="danger"
+                plain
+                icon="el-icon-minus"
+                size="mini"
+                @click="changeSelectOption(index,'delete')"
+              ></el-button>
+            </el-tab-pane>
+            <!--  动态数据的页面 -->
+            <el-tab-pane label="动态数据" name="dynamic">
+              <el-form>
+                <el-form-item label="接口URL">
+                  <el-input v-model="item.remoteURL">
+                    <template slot="prepend">http://</template>
+                  </el-input>
+                </el-form-item>
+              </el-form>
+              <label>参数 ：</label>
+              <el-card v-for="(item1, index1) in item.remoteParmas" :key="index1">
+                <el-input size="mini" v-model="item1.key">
+                  <template slot="prepend">Key</template>
+                </el-input>
+                <el-input size="mini" v-model="item1.value">
+                  <template slot="prepend">Value</template>
+                </el-input>
+              </el-card>
+              <el-button
+                plain
+                icon="el-icon-plus"
+                size="mini"
+                @click="changeSelectParams(index,'add')"
+              ></el-button>
+              <el-button
+                type="danger"
+                plain
+                icon="el-icon-minus"
+                size="mini"
+                @click="changeSelectParams(index,'delete')"
+              ></el-button>
+            </el-tab-pane>
+          </el-tabs>
         </el-form-item>
       </div>
       <!-- inputTextarea特有的操作 -->

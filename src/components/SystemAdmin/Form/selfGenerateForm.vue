@@ -133,7 +133,7 @@
       <!-- 动态文本 -->
       <el-tag type="info" v-else-if="item.type == 'text'">{{Form.Data[item.name]}}</el-tag>
 
-       <!-- 静态文本 -->
+      <!-- 静态文本 -->
       <p
         :style="{color:item.textColor, fontSize:(item.textSize + 'px'), marginLeft:(item.marginLeft + 'px')}"
         v-if="item.type == 'staticText'"
@@ -162,7 +162,7 @@ export default {
       params: {}
     };
   },
-  mounted() {
+  created() {
     this.init();
   },
   methods: {
@@ -210,8 +210,11 @@ export default {
           }
         }
         // 元素类型为下拉框且不是被联动，获取数据
-        if (ItemNode.type == "select" && ItemNode.isLinked == false) {
-          if (ItemNode.remoteURL == "") {
+        if (
+          (ItemNode.type == "select" && ItemNode.isLinked == false) ||
+          ItemNode.type == "checkbox"
+        ) {
+          if (ItemNode.remoteURL == "" || ItemNode.remoteURL == null) {
             ItemNode.remote = false;
           } else {
             ItemNode.remote = true;
@@ -262,7 +265,7 @@ export default {
           value: ""
         }
       ];
-      this.Form.Data[this.Form.Item[index].name] = "";
+      // this.Form.Data[this.Form.Item[index].name] = "";
       post(remoteURL, requestData).then(res => {
         this.Form.Item[index].options = res.extend.classList;
       });
@@ -299,13 +302,17 @@ export default {
         }
       }
     },
+    // 以下方法是提供给外部组件调用
+
     /**
      * @description 根据传入的对象，给表单的各个元素赋值
      */
     setFormData(row) {
       try {
         for (var key in this.Form.Data) {
-          this.Form.Data[key] = row[key];
+          if(row[key]){
+            this.Form.Data[key] = row[key];
+          }
         }
       } catch (e) {
         console.log(e);
@@ -319,6 +326,13 @@ export default {
     },
     getParams(key) {
       return this.params[key];
+    },
+    /**
+     * @description 提交表单
+     * formName 表单名字
+     */
+    getFormData() {
+      return this.Form.Data;
     }
   }
 };

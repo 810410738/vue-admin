@@ -18,6 +18,12 @@
 <script>
 import { getLeafDictByCond } from "@/api/getCommonData";
 export default {
+  props: {
+    isDefaultShowAll: {
+      type: Boolean,
+      default: true
+    }
+  },
   data() {
     return {
       // 所有系统分类
@@ -44,16 +50,24 @@ export default {
        * @description 获取所有子系统分类
        */
       getLeafDictByCond(this.requestClassData).then(res => {
-        this.systemIdentifyClass = [
+        if(this.isDefaultShowAll){
+          this.systemIdentifyClass = [
           {
             label: "默认全部",
             value: ""
           }
         ];
+        }
+        else{
+           this.systemIdentifyClass = [];
+        }
         this.systemIdentifyClass.push.apply(
           this.systemIdentifyClass,
           res.extend.classList
         );
+        if(!this.isDefaultShowAll){
+          this.systemIdentify = this.systemIdentifyClass[0].value;
+        }
       });
     },
     /**

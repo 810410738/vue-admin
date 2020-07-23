@@ -112,7 +112,7 @@ var AuthorityByLoginRoleData = {
         "nodeUrl": "",
         "checked": true,
         "chkDisable": false,
-        "icon": 'el-icon-user',
+        "icon": '',
         "nodeUrl": "",
         "children": [{
             "nodeId": "2",
@@ -122,42 +122,40 @@ var AuthorityByLoginRoleData = {
             "chkDisable": false,
             "icon": 'el-icon-user',
             "nodeUrl": "/main/userList",
-            "children": [{
-              "nodeId": "21",
-              "nodeName": "用户管理",
-              "nodeUrl": "",
-              "checked": true,
-              "chkDisable": false,
-              "icon": 'el-icon-user',
-              "nodeUrl": "/main/userList",
-            }]
           },
           {
             "nodeId": "41",
             "nodeName": "表单设计",
             "checked": true,
             "nodeUrl": "/main/DesignFormList",
-            "icon": 'el-icon-s-data',
+            "icon": 'el-icon-s-order',
           }, {
             "nodeId": "42",
             "nodeName": "角色管理",
             "checked": true,
             "nodeUrl": "/main/roleAuthorityAdmin",
-            "icon": 'el-icon-s-data',
+            "icon": 'el-icon-picture-outline-round',
           }, {
             "nodeId": "43",
             "nodeName": "权限管理",
             "checked": true,
             "nodeUrl": "/main/authorityAdmin",
-            "icon": 'el-icon-s-data',
+            "icon": 'el-icon-open',
           },
           {
             "nodeId": "44",
             "nodeName": "日志管理",
             "checked": true,
             "nodeUrl": "/main/logAdmin",
-            "icon": 'el-icon-s-data',
+            "icon": 'el-icon-postcard',
           },
+          {
+            "nodeId": "45",
+            "nodeName": "子系统管理",
+            "checked": true,
+            "nodeUrl": "/main/checkChildSystem",
+            "icon": 'el-icon-s-data',
+          }
         ]
       }
 

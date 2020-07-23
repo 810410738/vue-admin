@@ -19,15 +19,7 @@ import store from './store/store' //引入状态管理 store
 // 开发环境
 if (process.env.NODE_ENV === "development") {
   // 引入mock
-  require('./mock/commonData.js');
-  require('./mock/questionData.js');
-  require('./mock/dataAdminData.js');
-  require('./mock/systemAdmin/systemAdminData.js');
-  require('./mock/systemAdmin/authorityData.js');
-  require('./mock/systemAdmin/roleData.js');
-  require('./mock/systemAdmin/roleAuthorityData.js');
-  require('./mock/userData.js');
-  require('./mock/formData.js');
+  require('@/api/mock/mock.js');
 }
 // 生产环境 
 else {

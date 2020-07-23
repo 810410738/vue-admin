@@ -3,56 +3,56 @@
     <h3 class="headTitle">用户信息</h3>
     <!-- 操作组件 -->
     <el-card class="primaryCard topCard">
-      <el-row>
-        <!-- 操作组件 -->
-        <el-button
-          class="button-middle"
-          type="info"
-          size="mini"
-          @click="downloadTemplate"
-          icon="el-icon-download"
-          v-if="controlAuthority.downloadTemplate"
-        >{{controlAuthority.downloadTemplate.authorityName}}</el-button>
-        <el-upload
-          class="upload-demo"
-          action="/EOAS/dataHandle/importUser"
-          name="wenjian"
-          :show-file-list="false"
-          :on-success="uploadDone"
-          :on-error="uploadError"
-          :limit="1"
-        >
+      <el-row class="firstRow">
+        <el-col :span="16" :offset="8">
+          <!-- 操作组件 -->
           <el-button
             class="button-middle"
-            type="warning"
-            size="mini"
-            icon="el-icon-upload2"
-            v-if="controlAuthority.importUser"
-          >{{controlAuthority.importUser.authorityName}}</el-button>
-          <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-        </el-upload>
-        <el-button
-          class="button-middle"
-          type="success"
-          size="mini"
-          @click="downloadTemplate"
-          v-if="controlAuthority.exportUser"
-          icon="el-icon-user"
-        >{{controlAuthority.exportUser.authorityName}}</el-button>
-        <el-button
-          class="button-middle"
-          type="primary"
-          size="mini"
-          @click="addUserDialogVisible = true"
-          v-if="controlAuthority.newUser"
-          icon="el-icon-plus"
-        >{{controlAuthority.newUser.authorityName}}</el-button>
+            type="info"
+            size="small"
+            @click="downloadTemplate"
+            icon="el-icon-download"
+            v-if="controlAuthority.downloadTemplate"
+          >{{controlAuthority.downloadTemplate.authorityName}}</el-button>
+          <el-upload
+            class="upload-demo"
+            action="/EOAS/dataHandle/importUser"
+            name="wenjian"
+            :show-file-list="false"
+            :on-success="uploadDone"
+            :on-error="uploadError"
+            :limit="1"
+          >
+            <el-button
+              class="button-middle"
+              type="warning"
+              size="small"
+              icon="el-icon-upload2"
+              v-if="controlAuthority.importUser"
+            >{{controlAuthority.importUser.authorityName}}</el-button>
+            <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+          </el-upload>
+          <el-button
+            class="button-middle"
+            type="success"
+            size="small"
+            @click="downloadTemplate"
+            v-if="controlAuthority.exportUser"
+            icon="el-icon-user"
+          >{{controlAuthority.exportUser.authorityName}}</el-button>
+          <el-button
+            class="button-middle"
+            type="primary"
+            size="small"
+            @click="addUserDialogVisible = true"
+            v-if="controlAuthority.newUser"
+            icon="el-icon-plus"
+          >{{controlAuthority.newUser.authorityName}}</el-button>
+        </el-col>
       </el-row>
       <el-row>
-        <el-col :span="18" :offset="6">
           <!-- 查找操作组件 -->
           <findComponent @find="find(arguments)"></findComponent>
-        </el-col>
       </el-row>
     </el-card>
     <!-- 用户表格数据 -->
@@ -63,6 +63,7 @@
         <el-table-column property="userName" label="用户姓名" width="150"></el-table-column>
         <el-table-column property="primaryClass" label="所属一级机构" width="180"></el-table-column>
         <el-table-column property="secondaryClass" label="所属二级机构" width="180"></el-table-column>
+        <el-table-column property="modifyTime" label="修改时间" width="180"></el-table-column>
         <el-table-column property="userStatus" label="用户状态" width="100">
           <template slot-scope="scope">
             <el-switch
@@ -104,18 +105,18 @@
           </template>
         </el-table-column>
       </el-table>
-    <!-- 分页组件 -->
-    <div class="Pagination" style="text-align: left;margin-top: 10px;">
-      <el-pagination
-        @current-change="handleCurrentChange"
-        :current-page="this.getUserData.current"
-        :page-size="this.getUserData.size"
-        layout="total, prev, pager, next"
-        :page-count="this.getUserData.pages"
-        :total="this.getUserData.total"
-      ></el-pagination>
-    </div>
-     </el-card>
+      <!-- 分页组件 -->
+      <div class="Pagination" style="text-align: left;margin-top: 10px;">
+        <el-pagination
+          @current-change="handleCurrentChange"
+          :current-page="this.getUserData.current"
+          :page-size="this.getUserData.size"
+          layout="total, prev, pager, next"
+          :page-count="this.getUserData.pages"
+          :total="this.getUserData.total"
+        ></el-pagination>
+      </div>
+    </el-card>
     <!-- 新增用户的对话框 -->
     <el-dialog
       title="新增用户"
@@ -265,7 +266,7 @@ export default {
       this.addUserFormData = addUserFormJson;
       this.checkUserFormData = checkUserFormJson;
       this.editUserFormData = editUserFormJson;
-     
+
       // 获取权限列表数据
       // TODO
       // 根据权限列表数据控制按钮,先把数组转化为对象
@@ -461,5 +462,8 @@ export default {
 .upload-demo {
   display: inline-block;
   margin: 0 1em;
+}
+.firstRow{
+  margin-bottom: 1em;
 }
 </style>

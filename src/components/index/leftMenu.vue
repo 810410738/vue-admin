@@ -1,7 +1,14 @@
 <template>
   <div>
     <el-button size="mini" circle icon="el-icon-s-operation" @click="isCollapse = !isCollapse"></el-button>
-    <el-menu class="el-menu-vertical-demo" router :collapse="isCollapse">
+    <el-menu
+      class="el-menu-vertical-demo"
+      router
+      :collapse="isCollapse"
+      background-color="#545c64"
+      text-color="#fff"
+      active-text-color="#ffd04b"
+    >
       <el-submenu v-for="item in filterAuthorityList" :key="item.nodeId" :index="item.nodeId">
         <template slot="title">
           <i :class="item.icon"></i>
@@ -55,11 +62,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-button {
-  margin-left: 10%;
-}
-.el-menu-vertical-demo:not(.el-menu--collapse) {
-  width: 200px;
-  min-height: 400px;
+div {
+  background: #545c64;
+  height: 100%;
+  .el-button {
+    margin-left: 10%;
+  }
+  .el-menu-vertical-demo:not(.el-menu--collapse) {
+    width: 200px;
+    min-height: 400px;
+  }
 }
 </style>

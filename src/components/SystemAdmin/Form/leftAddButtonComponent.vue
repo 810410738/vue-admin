@@ -136,12 +136,7 @@ export default {
         case "checkbox":
           this.jsonData.label = "Checkbox 多选框";
           this.jsonData.checkboxType = "primary";
-          this.jsonData.options = [
-            {
-              label: "1",
-              value: "1"
-            }
-          ];
+          this.jsonData.options = [];
           break;
         case "DatePicker":
           this.jsonData.label = "DatePicker日期选择器";

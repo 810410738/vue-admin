@@ -1,10 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-// 普通用户登陆模块
-import userLogin from '@/views/Login/userLogin.vue'
-// 用户导航页面
-import userIndex from '@/views/Index/index.vue'
 // 后台管理系统登陆模块
 import adminLogin from '@/views/SystemAdmin/login.vue'
 // 主页面
@@ -20,6 +16,8 @@ import logAdmin from '@/views/SystemAdmin/Log/logAdmin.vue'
 // 设计表单模块s
 import DesignFormList from '@/views/SystemAdmin/Form/DesignFormList.vue'
 import editForm from '@/views/SystemAdmin/Form/editForm.vue'
+// 子系统管理模块
+import checkChildSystem from "@/views/SystemAdmin/childSystem/checkChildSystem.vue"
 // 错误页面
 import pageNotFound from '@/errorPage/404';
 
@@ -35,16 +33,6 @@ const routes = [{
     meta: {
       requireSystemIdentify: false
     }
-  },
-  // 普通用户登陆
-  {
-    path: '/userLogin',
-    name: 'userLogin',
-    component: userLogin,
-  },
-  {
-    path: '/userIndex',
-    component: userIndex
   },
   {
     path: '/main',
@@ -76,6 +64,10 @@ const routes = [{
         path: 'logAdmin',
         component: logAdmin,
       },
+      {
+        path:'checkChildSystem',
+        component:checkChildSystem
+      }
     ]
   },
   {

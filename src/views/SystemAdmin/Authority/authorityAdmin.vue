@@ -6,7 +6,7 @@
       <el-row>
         <el-col :span="6">
           <!-- 所有子系统 -->
-          <selfFindSystemComponent ref="findSystem"></selfFindSystemComponent>
+          <selfFindSystemComponent :isDefaultShowAll="false" ref="findSystem"></selfFindSystemComponent>
         </el-col>
         <el-col :span="6">
           <el-button type="success" size="small" @click="save">保存修改</el-button>
@@ -126,7 +126,7 @@ export default {
       getAuthorityData: [],
       // 请求权限列表数据的参数
       requestData: {
-        systemIdentify: "ADMIN"
+        systemIdentify: ""
       },
       // 标志已经移动过节点元素
       isMoved: false,
@@ -141,9 +141,13 @@ export default {
   },
   methods: {
     initData() {
-      getAuthorityTree(this.requestData).then(res => {
-        this.getAuthorityData = res.extend.authorityTree;
+      this.$nextTick(() => {
+        this.requestData.systemIdentify = this.$refs.findSystem.getSystemIdentify();
+        getAuthorityTree(this.requestData).then(res => {
+          this.getAuthorityData = res.extend.authorityTree;
+        });
       });
+
       // 获取新增权限的表单数据
       this.addFormData = editAuthorityJson;
       this.editFormData = editAuthorityJson;

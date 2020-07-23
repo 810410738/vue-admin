@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import leftMenu from "@/components/SystemAdmin/leftMenu";
+import leftMenu from "@/components/index/leftMenu";
 import headTop from "@/components/SystemAdmin/headTop";
 export default {
   components: {

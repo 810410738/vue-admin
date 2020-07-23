@@ -1,9 +1,10 @@
 <template>
   <el-row :gutter="2">
-    <el-col :span="6">
-       <!-- 所有子系统 -->
-      <selfFindSystemComponent ref="findSystem"></selfFindSystemComponent>
-    </el-col>
+    <el-col :span="8">
+          <el-button type="primary" size="small" plain @click="find('')">全部</el-button>
+          <el-button type="success" size="small" plain @click="find('1')">已启用</el-button>
+          <el-button type="danger" size="small" plain @click="find('0')">禁用</el-button>
+        </el-col>
     <el-col :span="4">
       <!-- 一级机构 -->
       <el-select size="small" @change="getAllSecoByPrimData" v-model="findComponentData.primaryClass">
@@ -22,17 +23,16 @@
       </el-input>
     </el-col>
     <el-col :span="2">
-      <el-button type="primary" size="small" @click="find">查找</el-button>
+      <el-button type="primary" size="small" @click="find(null)">查找</el-button>
     </el-col>
   </el-row>
 </template>
 
 <script>
 import { getAllPrimaryClass, getAllSecoByPrim } from "@/api/getCommonData";
-import selfFindSystemComponent from "@/components/SystemAdmin/selfFindSystemComponent"
 export default {
   components: {
-    selfFindSystemComponent
+    
   },
   data() {
     return {
@@ -57,7 +57,7 @@ export default {
         primaryClass:'',
         secondaryClass:'',
         keyword:'',
-        systemIdentify:''
+        status:''
       }
     };
   },
@@ -70,7 +70,7 @@ export default {
        * @description 获取所有一级分类
        */
       getAllPrimaryClass({}).then(res => {
-        this.primaryClass = res.extend.classList;
+        this.primaryClass = this.primaryClass.concat(res.extend.classList);
       });
     },
     /**
@@ -101,8 +101,11 @@ export default {
     /**
      * @description 点击查找用户信息，传参到父组件 
      */
-    find(){
-      this.findComponentData.systemIdentify = this.$refs.findSystem.getSystemIdentify();
+    find(status){
+      if(status!=null)
+      {
+        this.findComponentData.status = status;
+      }
       this.$emit('find', this.findComponentData);
     }
   }
