@@ -24,6 +24,11 @@ export default {
     leftMenu,
     headTop
   },
+  data() {
+    return {
+     
+    }
+  },
   created() {
     this.init();
   },

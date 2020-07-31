@@ -98,6 +98,7 @@ export default {
         // 单行输入框
         case "input":
           this.jsonData.label = "input输入框";
+          this.jsonData.isPassword = false;
           break;
         case "inputTextarea":
           this.jsonData.label = "多行输入框";

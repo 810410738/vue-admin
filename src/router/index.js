@@ -2,25 +2,39 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 // 后台管理系统登陆模块
-import adminLogin from '@/views/SystemAdmin/login.vue'
+import adminLogin from '@/views/login.vue'
 // 主页面
-import main from '@/views/SystemAdmin/main.vue'
+import main from '@/views/main.vue'
+// 个人信息页面
+import userInfo from "@/views/userInfo.vue"
+/**
+ *  子系统管理
+ */
+
 // 用户管理
-import userList from '@/views/SystemAdmin/User/userList.vue'
+import userList from '@/views/childSystem/User/userList.vue'
 // 权限管理
-import authorityAdmin from '@/views/SystemAdmin/Authority/authorityAdmin.vue'
+import authorityAdmin from '@/views/childSystem/Authority/authorityAdmin.vue'
 // 角色管理
-import roleAuthorityAdmin from '@/views/SystemAdmin/Role/roleAuthorityAdmin.vue'
+import roleAuthorityAdmin from '@/views/childSystem/Role/roleAuthorityAdmin.vue'
+// 设计表单模块
+import DesignFormList from '@/views/childSystem/Form/DesignFormList.vue'
+import editForm from '@/views/childSystem/Form/editForm.vue'
+
+/**
+ *  后台系统管理 
+ */
+// 管理员用户
+import adminUserList from "@/views/SystemAdmin/User/adminUserList.vue";
+// 子系统信息
+import checkChildSystem from "@/views/SystemAdmin/childSystemInfo/checkChildSystem.vue"
 // 日志管理模块
 import logAdmin from '@/views/SystemAdmin/Log/logAdmin.vue'
-// 设计表单模块s
-import DesignFormList from '@/views/SystemAdmin/Form/DesignFormList.vue'
-import editForm from '@/views/SystemAdmin/Form/editForm.vue'
-// 子系统管理模块
-import checkChildSystem from "@/views/SystemAdmin/childSystem/checkChildSystem.vue"
+
+
 // 错误页面
 import pageNotFound from '@/errorPage/404';
-
+// 测试
 import test from '@/views/Test/test.vue'
 
 
@@ -35,13 +49,19 @@ const routes = [{
     }
   },
   {
+    path:'/userInfo',
+    component:userInfo
+  },
+  {
     path: '/main',
     name: 'main',
     component: main,
-    children: [{
+    children: [
+      {
         path: '',
         component: userList,
       },
+      
       {
         path: 'userList',
         component: userList,
@@ -67,6 +87,10 @@ const routes = [{
       {
         path:'checkChildSystem',
         component:checkChildSystem
+      },
+      {
+        path:'adminUserList',
+        component:adminUserList
       }
     ]
   },

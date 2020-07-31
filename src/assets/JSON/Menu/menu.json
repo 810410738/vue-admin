@@ -1,0 +1,71 @@
+{
+    "authorityList": [
+      {
+        "nodeId": "1",
+        "nodeName": "后台管理",
+        "checked": true,
+        "chkDisable": false,
+        "icon": "",
+        "nodeUrl": "",
+        "children": [
+          {
+            "nodeId": "11",
+            "nodeName": "管理员用户",
+            "checked": true,
+            "nodeUrl": "/main/adminUserList",
+            "icon": "el-icon-user-solid"
+          },
+          {
+            "nodeId": "12",
+            "nodeName": "子系统信息",
+            "checked": true,
+            "nodeUrl": "/main/checkChildSystem",
+            "icon": "el-icon-s-data"
+          },
+          {
+            "nodeId": "13",
+            "nodeName": "日志管理",
+            "checked": true,
+            "nodeUrl": "/main/logAdmin",
+            "icon": "el-icon-postcard"
+          }
+        ]
+      },
+      {
+        "nodeId": "2",
+        "nodeName": "子系统管理",
+        "checked": true,
+        "chkDisable": false,
+        "icon": "",
+        "nodeUrl": "",
+        "children": [{
+            "nodeId": "21",
+            "nodeName": "用户管理",
+            "checked": true,
+            "chkDisable": false,
+            "icon": "el-icon-user",
+            "nodeUrl": "/main/userList"
+          },
+          {
+            "nodeId": "22",
+            "nodeName": "表单设计",
+            "checked": true,
+            "nodeUrl": "/main/DesignFormList",
+            "icon": "el-icon-s-order"
+          }, {
+            "nodeId": "23",
+            "nodeName": "角色管理",
+            "checked": true,
+            "nodeUrl": "/main/roleAuthorityAdmin",
+            "icon": "el-icon-picture-outline-round"
+          }, {
+            "nodeId": "24",
+            "nodeName": "权限管理",
+            "checked": true,
+            "nodeUrl": "/main/authorityAdmin",
+            "icon": "el-icon-open"
+          }
+        ]
+      }
+    ]
+  }

@@ -12,6 +12,8 @@ export const roleAuthorityUrlRoot = urlRoot + "framework/rest/roleAuthority/";
 export const formDesignUrlRoot = urlRoot + "admin/system/form/";
 export const authorityUrlRoot = urlRoot + "framework/rest/roleAuthority/";
 export const roleUrlRoot = urlRoot + "framework/rest/roleAuthority/";
+export const AdminUserUrlRoot = urlRoot + "framework/rest/AdminUserUrlRoot/";
+export const childSystemInfoUrlRoot = urlRoot + "framework/rest/childSystemInfoUrlRoot/";
 
 // 引入element-ui 的loading方法
 import {

@@ -114,8 +114,8 @@ import {
   getRelateAuthByRoleId,
   changeRoleAuthority
 } from "@/api/systemAdmin/getRoleAuthorityData";
-import newRoleJson from '@/json/Role/newRole';
-import editRoleJson from '@/json/Role/editRole';
+import newRoleJson from '@/assets/JSON//Role/newRole';
+import editRoleJson from '@/assets/JSON//Role/editRole';
 import selfFindRoleListComponent from "@/components/SystemAdmin/RoleAdmin/selfFindRoleListComponent";
 import selfGenerateForm from "@/components/SystemAdmin/Form/selfGenerateForm";
 selfFindRoleListComponent;

@@ -21,10 +21,6 @@ export const getLeafDictByCond = data => post( commonUrlRoot + 'getLeafDictByCon
 
 // 03-获取当前登录用户信息
 export const getLoginer = data => post( commonUrlRoot + 'getLoginer', data);
-// 04-获取当前登录用户访问菜单
-export const findAuthorityByLoginRole = data => post( commonUrlRoot + 'getMenuByLoginRole', data);
-// 05-获取评议系统启动状态
-export const getCurrentCommentOperate = data => post( commonUrlRoot + 'getCurrentCommentOperate', data);
 
 export const getIconOption = data => post( commonUrlRoot + 'getIconOption', data);
 

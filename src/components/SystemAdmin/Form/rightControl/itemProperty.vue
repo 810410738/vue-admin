@@ -39,6 +39,12 @@
           <template slot="append">%</template>
         </el-input>
       </el-form-item>
+      <!-- input特有的操作 -->
+      <div v-if="item.type == 'input'">
+        <el-form-item >
+          <el-checkbox v-model="item.isPassword">是否为密码框</el-checkbox>
+        </el-form-item>
+      </div>
       <!-- select特有的操作 -->
       <div v-if="item.type == 'select'">
         <el-form-item label="选项">
@@ -303,8 +309,8 @@ export default {
         "#1e90ff",
         "#13ce66",
         "#ff4949",
-        "#c71585"
-      ]
+        "#c71585",
+      ],
     };
   },
   mounted() {},
@@ -317,7 +323,7 @@ export default {
     changeSelectOption(index, type) {
       this.$store.commit("Form/changeSelectOption", {
         index: index,
-        type: type
+        type: type,
       });
     },
     /**
@@ -328,10 +334,10 @@ export default {
     changeSelectParams(index, type) {
       this.$store.commit("Form/changeSelectParams", {
         index: index,
-        type: type
+        type: type,
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

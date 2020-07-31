@@ -156,19 +156,17 @@
 
 <script>
 import {
-  editUser,
-  deleteUserById,
+  edit,
+  deleteById,
   getUserById,
-  getUserByPage,
-  changeUserStatus,
-  getRoleByUserId,
-  updateUserRole,
-  downloadUserTemplate
-} from "@/api/getUserData";
+  getById,
+  getByPage,
+  updateUserStatus,
+} from "@/api/childSystemAdmin/getUserData";
 // 表单配置数据的json
-import addUserFormJson from "@/json/User/addUserForm";
-import editUserFormJson from "@/json/User/editUserForm";
-import checkUserFormJson from "@/json/User/checkUserForm";
+import addUserFormJson from "@/assets/JSON//User/addUserForm";
+import editUserFormJson from "@/assets/JSON//User/editUserForm";
+import checkUserFormJson from "@/assets/JSON//User/checkUserForm";
 
 import findComponent from "@/components/index/findComponent";
 import selfGenerateForm from "@/components/SystemAdmin/Form/selfGenerateForm";
@@ -260,7 +258,7 @@ export default {
      * @description 初始化分页获取用户数据
      */
     initData() {
-      getUserByPage(this.requestData).then(res => {
+      getByPage(this.requestData).then(res => {
         this.getUserData = res.extend.pageData;
       });
       this.addUserFormData = addUserFormJson;
@@ -349,7 +347,7 @@ export default {
           var jsonData = {};
           jsonData.userStatus = $event;
           jsonData.userId = userId;
-          changeUserStatus(jsonData).then(res => {
+          updateUserStatus(jsonData).then(res => {
             // 弹出成功提示
             this.$message({
               message: "修改用户状态成功",
@@ -361,7 +359,7 @@ export default {
         })
         .catch(() => {
           // 恢复状态为未修改之前的
-          this.getUserData.list[index].userStatus = $event == "1" ? "0" : "1";
+          this.getUserData.records[index].userStatus = $event == "1" ? "0" : "1";
         });
     },
     /**
@@ -399,7 +397,7 @@ export default {
         // 请求删除用户接口
         var jsonData = {};
         jsonData.userId = userId;
-        deleteUserById(jsonData).then(res => {
+        deleteById(jsonData).then(res => {
           // 弹出成功提示
           this.$message({
             message: "删除成功",
@@ -419,7 +417,7 @@ export default {
       for (var key in arg[0]) {
         jsonData[key] = arg[0][key];
       }
-      editUser(jsonData).then(res => {
+      edit(jsonData).then(res => {
         this.$message({
           type: "success",
           message: "新增用户成功"
@@ -439,7 +437,7 @@ export default {
         jsonData[key] = arg[0][key];
       }
       jsonData.userId = this.$refs.editUserFrom.getParams("userId");
-      editUser(jsonData).then(res => {
+      edit(jsonData).then(res => {
         this.$message({
           type: "success",
           message: "修改用户信息成功"

@@ -95,8 +95,8 @@ import {
   getUserList,
   getUserInfo,
   getAllRoleExceptAdmin
-} from "@/api/getUserData";
-import editAuthorityJson from "@/json/Authority/editAuthority";
+} from "@/api/childSystemAdmin/getUserData";
+import editAuthorityJson from "@/assets/JSON/Authority/editAuthority";
 import { getIconOption } from "@/api/getCommonData";
 import {
   getAuthorityTree,

@@ -35,7 +35,9 @@ var getRelateAuthByRoleIdData = {
               "checked": true,
               "children": []
           }]
-      }]
+      },
+      
+    ]
   }
 }
 Mock.mock(roleAuthorityUrlRoot + 'getRelateAuthByRoleId', 'post', getRelateAuthByRoleIdData);

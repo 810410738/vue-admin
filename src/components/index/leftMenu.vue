@@ -31,8 +31,14 @@
 </template>
 
 <script>
-import { findAuthorityByLoginRole } from "@/api/getCommonData";
+import  MenuData  from "@/assets/JSON/Menu/menu.json";
 export default {
+  props: {
+    isShowMenu: {
+      type: Boolean,
+      default: true
+    },
+  },
   data() {
     return {
       authorityList: [],
@@ -41,11 +47,9 @@ export default {
     };
   },
   created() {
-    // TODO params
-    // 获取菜单
-    findAuthorityByLoginRole({}).then(response => {
-      this.authorityList = response.extend.authorityList;
-    });
+    this.isCollapse = !this.isShowMenu;
+    // 读取本地json配置，获取菜单
+      this.authorityList = MenuData.authorityList;
   },
   methods: {},
   computed: {

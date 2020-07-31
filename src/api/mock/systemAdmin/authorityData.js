@@ -78,7 +78,31 @@ var getAuthorityTreeData = {
               "systemIdentify": "ADMIN",
               "children": []
           }]
-      }]
+      },
+      {
+        "nodeId": "3",
+        "nodePid": "-1",
+        "nodeKey": "11",
+        "nodeName": "333",
+        "nodeUrl": "1",
+        "nodeIcon": "1",
+        "nodeType": "1",
+        "orderNum": "19",
+        "systemIdentify": "ADMIN",
+        "children": [{
+            "nodeId": "4",
+            "nodePid": "1",
+            "nodeKey": "22",
+            "nodeName": "444",
+            "nodeUrl": "2",
+            "nodeIcon": "2",
+            "nodeType": "22",
+            "orderNum": "22",
+            "systemIdentify": "ADMIN",
+            "children": []
+        }]
+    }
+    ]
   }
 }
 Mock.mock(authorityUrlRoot + 'getAuthorityTree', 'post', getAuthorityTreeData);

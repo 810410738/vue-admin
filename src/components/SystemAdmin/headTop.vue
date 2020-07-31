@@ -18,8 +18,8 @@
       <el-popover placement="bottom-end" width="180" trigger="hover">
         <div class="control">
           <div class="buttonGroup">
-            <el-button round size="small" @click="returnIndex">返回导航主页</el-button>
-            <!-- <el-button round size="small" type="danger" @click="loginOut">退出系统</el-button> -->
+            <el-button round size="small" @click="checkUserInfo">个人信息</el-button>
+            <el-button round size="small" type="danger" @click="loginOut">退出系统</el-button>
           </div>
         </div>
         <el-button size="small" slot="reference" icon="el-icon-more-outline"></el-button>
@@ -67,6 +67,12 @@ export default {
         }
       });
     },
+    checkUserInfo(){
+       // 跳转到查看个人信息页面
+        this.$router.push({
+          path: "/userInfo",
+        });
+    },
     /**
      * @description 退出登录
      */
@@ -79,22 +85,6 @@ export default {
           path: "/"
         });
       });
-    },
-    /**
-     * @description 返回导航主页
-     */
-    returnIndex() {
-      var indexPage = "";
-      // 开发环境
-      if (process.env.NODE_ENV === "development") {
-       indexPage = "http://localhost:8081/publicPlatform/#/userIndex";
-      }
-      // 生产环境
-      else {
-        indexPage = window.location.host + "/publicPlatform/#/userIndex";
-      }
-      // 跳转页面
-      window.location.href = indexPage;
     }
   }
 };

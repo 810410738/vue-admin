@@ -2,7 +2,7 @@ import '@babel/polyfill'
 import Vue from 'vue';
 import App from './App.vue';
 import './plugins/element.js';
-import router from './router/systemAdmin';
+import router from './router/';
 // 引用公共样式
 import './assets/css/public.css';
 // echarts插件

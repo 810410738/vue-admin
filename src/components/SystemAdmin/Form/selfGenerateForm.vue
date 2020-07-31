@@ -13,6 +13,7 @@
     <el-form-item v-for="(item) in Form.Item" :key="item.key" :label="item.label" :prop="item.name">
       <el-input
         v-if="item.type == 'input'"
+        :show-password="item.isPassword"
         :placeholder="item.placeholder"
         :style="'width:' + item.width + '%'"
         :disabled="item.disabled"
@@ -332,8 +333,24 @@ export default {
      * formName 表单名字
      */
     getFormData() {
-      return this.Form.Data;
-    }
+      var result = {};
+      this.$refs['Form'].validate(valid => {
+        // 验证规则通过
+        if (valid) {
+          result =  this.Form.Data;
+        } else {
+          result =  null;
+        }
+      });
+        return result;
+    },
+     /**
+     * @description 重置表单
+     * 
+     */
+    resetForm() {
+      this.init();
+    },
   }
 };
 </script>

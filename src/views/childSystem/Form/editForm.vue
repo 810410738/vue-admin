@@ -78,6 +78,7 @@
                     <!-- 单行输入框 -->
                     <el-input
                       v-if="item.type == 'input'"
+                      :show-password="item.isPassword"
                       :placeholder="item.placeholder"
                       :style="'width:' + item.width + '%'"
                       :disabled="item.disabled"
