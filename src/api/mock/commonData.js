@@ -1,7 +1,8 @@
 import Mock from 'mockjs'
 import {
   urlRoot,
-  commonUrlRoot
+  commonUrlRoot,
+  commonUrlPimRoot
 } from '@/api/http.js'
 /**
  * @description 公共接口
@@ -11,22 +12,40 @@ var toLoginData = {
   "errCode": 0,
   "errMsg": "[响应成功]",
   "extend": {
-    "tokenId": "5b32ec2b-e052-4a4e-b598-75b7f263d57b"
+    "data": {
+      "currentUser": {
+        "adminId": "1",
+        "adminNum": "ADMIN",
+        "adminName": "梁振杰",
+        "primaryClass": "金融科技部",
+        "secondaryClass": "信息开发科",
+        "loginAccount": "ADMIN",
+        "loginPassword": "000000",
+        "logicDel": "0",
+        "createTime": "2020-07-28 19:35:50",
+        "modifyTime": "2020-07-28 19:35:53",
+        "adminStatus": "1",
+        "remark": null,
+        "adminRole": "superAdmin",
+        "dataScope": null
+      },
+      "tokenId": "9fa33821-2c45-4e8f-bb8a-4d1974ae04d1"
+    }
   }
 }
-Mock.mock(urlRoot + 'framework/rest/login/toLogin', 'post', toLoginData);
+Mock.mock(urlRoot + 'login/toLogin', 'post', toLoginData);
 
 // 退出登录
 var logoutData = {
   'errCode': "0"
 }
-Mock.mock(urlRoot + 'logout', 'post', logoutData);
+Mock.mock(urlRoot + 'login/toLogout', 'post', logoutData);
 
 
 
 /**--------------------------------------------------------------------------------------- */
-// 01-封装“所属机构”
-var getAllPrimaryClassData = {
+//获取管理员所属一级机构列表
+var getAdminPrimaryClassData = {
   "extend": {
     "classList": [{
         "label": "龙岗支行",
@@ -44,11 +63,11 @@ var getAllPrimaryClassData = {
   "errMsg": "success"
 
 }
-Mock.mock(commonUrlRoot + 'getPrimaryClass', 'post', getAllPrimaryClassData);
+Mock.mock(commonUrlRoot + 'getAdminPrimaryClass', 'post', getAdminPrimaryClassData);
 
 /**--------------------------------------------------------------------------------------- */
-// 02-封装“所属网点”
-var getAllSecoByPrimData = {
+// 根据一级机构获取管理员所属二级机构列表
+var getAdminSecByPrimData = {
   "extend": {
     "classList": [{
         "label": "龙岗网点",
@@ -63,13 +82,65 @@ var getAllSecoByPrimData = {
   },
   "errCode": 0,
   "errMsg": "success"
+}
+Mock.mock(commonUrlRoot + 'getAdminSecByPrim', 'post', getAdminSecByPrimData);
+/**--------------------------------------------------------------------------------------- */
+//-获取基本用户所属一级机构列表
+var getUserPrimaryClassData = {
+  "extend": {
+    "classList": [{
+        "label": "龙岗支行",
+        "value": "龙岗支行",
+      },
+
+      {
+        "label": "中心区支行",
+        "value": "中心区支行",
+      }
+
+    ]
+  },
+  "errCode": 0,
+  "errMsg": "success"
 
 }
-Mock.mock(commonUrlRoot + 'getSecByPrim', 'post', getAllSecoByPrimData);
+Mock.mock(commonUrlRoot + 'getUserPrimaryClass', 'post', getUserPrimaryClassData);
 
 /**--------------------------------------------------------------------------------------- */
+// 根据一级机构获取基本用户所属二级机构列表
+var getUserSecByPrimData = {
+  "extend": {
+    "classList": [{
+        "label": "龙岗网点",
+        "value": "龙岗网点",
+      },
+      {
+        "label": "中心区网点",
+        "value": "中心区网点",
+      }
+
+    ]
+  },
+  "errCode": 0,
+  "errMsg": "success"
+}
+Mock.mock(commonUrlRoot + 'getUserSecByPrim', 'post', getUserSecByPrimData);
+/**--------------------------------------------------------------------------------------- */
 // 02-获取数据字典数据(下拉框或者多级列表)
-var getLeafDictByCondData = {
+// var getLeafDictByCondData = {
+//   "errCode": 0,
+//   "errMsg": "[响应成功]",
+//   "extend": {
+//     "classList": [{
+//       "label": "APS-员工线上排查系统",
+//       "value": "4"
+//     }]
+//   }
+// }
+// Mock.mock(commonUrlRoot + 'getLeafDictByCond', 'post', getLeafDictByCondData);
+/**--------------------------------------------------------------------------------------- */
+// 获取当前已激活的所有子系统列表(封装为下拉框数据)-用于绑定数据
+var getActiveSubSystemData = {
   "errCode": 0,
   "errMsg": "[响应成功]",
   "extend": {
@@ -79,8 +150,20 @@ var getLeafDictByCondData = {
     }]
   }
 }
-Mock.mock(commonUrlRoot + 'getLeafDictByCond', 'post', getLeafDictByCondData);
-
+Mock.mock(commonUrlRoot + 'getActiveSubSystem', 'post', getActiveSubSystemData);
+/**--------------------------------------------------------------------------------------- */
+// 根据指定systemId获取当前已激活的所有角色列表(封装为下拉框数据)
+var getActiveRoleBySystemIdData = {
+  "errCode": 0,
+  "errMsg": "[响应成功]",
+  "extend": {
+    "classList": [{
+      "label": "管理员",
+      "value": "4"
+    }]
+  }
+}
+Mock.mock(commonUrlRoot + 'getActiveRoleBySystemId', 'post', getActiveRoleBySystemIdData);
 
 /**--------------------------------------------------------------------------------------- */
 //  03-获取当前登录用户信息
@@ -116,3 +199,22 @@ var getIconOptionData = {
   }
 }
 Mock.mock(commonUrlRoot + 'getIconOption', 'post', getIconOptionData);
+
+/**--------------------------------------------------------------------------------------- */
+// 修改个人信息
+var updatePIData = {
+  "errCode": 0,
+  "errMsg": "[响应成功]",
+  "extend": {
+  }
+}
+Mock.mock(commonUrlPimRoot + 'updatePI', 'post', updatePIData);
+/**--------------------------------------------------------------------------------------- */
+// 修改个人密码
+var updatePwdData = {
+  "errCode": 0,
+  "errMsg": "[响应成功]",
+  "extend": {
+  }
+}
+Mock.mock(commonUrlPimRoot + 'updatePwd', 'post', updatePwdData);

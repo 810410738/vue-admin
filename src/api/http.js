@@ -2,12 +2,15 @@ import axios from 'axios';
 import { MessageBox } from 'element-ui';
 
 // 访问的url
-export const urlRoot = "/sys/";
-export const commonUrlRoot = urlRoot + "framework/rest/common/";
+export const urlRoot = "/mip/admin/";
+
+export const commonUrlRoot = urlRoot + "common/screenCond/";
+export const commonUrlPimRoot = urlRoot + "common/pim/";
+
 export const dataHandleUrlRoot = urlRoot+ "dataHandle/";
 export const commentUrlRoot = urlRoot + "comment/";
 export const questionUrlRoot = urlRoot + "questionnaire/";
-export const userUrlRoot = urlRoot + "framework/rest/user/";
+export const userUrlRoot = urlRoot + "subSystem/baseUser/";
 export const roleAuthorityUrlRoot = urlRoot + "framework/rest/roleAuthority/";
 export const formDesignUrlRoot = urlRoot + "admin/system/form/";
 export const authorityUrlRoot = urlRoot + "framework/rest/roleAuthority/";

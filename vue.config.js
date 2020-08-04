@@ -19,7 +19,7 @@ module.exports = {
     devtool: 'source-map'
   },
 
-  publicPath: '/sys/',
+  publicPath: '/mip/admin',
 
   // devServer:{
   //   open:true,

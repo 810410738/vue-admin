@@ -96,8 +96,10 @@ export default {
       });
     },
     loginSuccess(response) {
-      // 把token保存到localStorage
-      localStorage.setItem("authToken", response.extend.tokenId);
+      // 把用户信息保存到vuex
+      this.$store.commit("loginUser/initLoginUser", response.extend.data.currentUser);
+      // 把tokenId保存到localStorage
+      localStorage.setItem("tokenId", response.extend.data.tokenId);
       // 把账号保存到localStorage
       if (this.isRemember) {
         localStorage.setItem("adminLoginAccount", this.userName);

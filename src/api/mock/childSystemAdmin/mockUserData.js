@@ -1,5 +1,30 @@
 import Mock from 'mockjs'
 import {userUrlRoot, dataHandleUrlRoot} from '@/api/http.js'
+
+
+/**--------------------------------------------------------------------------------------- */
+// 根据用户id和子系统id获取当前关联绑定的角色信息
+var getUserRoleByCondData = {
+  "extend": {
+    "data":{
+      "roleId":"4"
+    }
+  },
+  "errCode": 0,
+  "errMsg": "success"
+}
+Mock.mock(userUrlRoot + 'getUserRoleByCond', 'post', getUserRoleByCondData);
+/**--------------------------------------------------------------------------------------- */
+// 根据用户id和子系统id获取当前关联绑定的角色信息
+var bindUserRoleData = {
+  "extend": {
+   
+  },
+  "errCode": 0,
+  "errMsg": "success"
+}
+Mock.mock(userUrlRoot + 'bindUserRole', 'post', bindUserRoleData);
+
 /**--------------------------------------------------------------------------------------- */
 // 01-编辑用户信息(新增或修改)
 var editUserData = {

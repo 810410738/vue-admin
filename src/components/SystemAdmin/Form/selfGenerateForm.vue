@@ -266,7 +266,7 @@ export default {
           value: ""
         }
       ];
-      // this.Form.Data[this.Form.Item[index].name] = "";
+      this.Form.Data[this.Form.Item[index].name] = "";
       post(remoteURL, requestData).then(res => {
         this.Form.Item[index].options = res.extend.classList;
       });

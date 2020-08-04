@@ -26,10 +26,12 @@
 </template>
 
 <script>
-// import {
-
-// } from "@/api/systemAdmin/getAdminUserData";
-
+import {
+logout,
+updatePI,
+updatePwd
+} from "@/api/getCommonData";
+import { b64_md5 } from "@/util/MD5";
 // 表单配置数据的json
 import checkUserSelfFormJson from "@/assets/JSON/User/checkAdminUserSelfForm";
 import updatePasswordFormJson from "@/assets/JSON/User/updatePasswordForm";
@@ -54,11 +56,14 @@ export default {
      * @description
      */
     initData() {
-      // TODO
-      // 获取用户信息，并返显
       // 获取表单配置数据
       this.checkUserSelfFormData = checkUserSelfFormJson;
       this.updatePasswordFormData = updatePasswordFormJson;
+      this.$nextTick(()=>{
+        // 获取用户信息，并返显
+        this.$refs.checkUserSelfForm.setFormData(this.$store.state.loginUser);
+      })
+       
     },
     /**
      * 提交修改的事件
@@ -68,6 +73,40 @@ export default {
       for (var key in arg[0]) {
         jsonData[key] = arg[0][key];
       }
+      jsonData.adminId = this.$store.state.loginUser.adminId;
+      updatePI(jsonData).then(res=>{
+        this.$message.success('修改个人信息成功,请重新登录');
+        this.loginOut();
+      }); 
+    },
+    /**
+     * 提交修改密码的事件
+     */
+    updatePasswordSubmit(arg){
+      var jsonData = {};
+      for (var key in arg[0]) {
+        jsonData[key] = arg[0][key];
+      }
+      jsonData.oldPwd = b64_md5(jsonData.oldPwd);
+      jsonData.newPwd = b64_md5(jsonData.newPwd);
+      jsonData.adminId = this.$store.state.loginUser.adminId;
+      updatePwd(jsonData).then(res=>{
+        this.$message.success('修改密码成功,请重新登录');
+        this.loginOut();
+      }); 
+    },
+    /**
+     * 退出登录，返回登录页面
+     */
+    loginOut() {
+      logout({}).then(res => {
+        // 删除本地的token
+        localStorage.removeItem("tokenId");
+        // 跳转到登陆页面
+        this.$router.push({
+          path: "/"
+        });
+      });
     },
     /**
      * 返回主页

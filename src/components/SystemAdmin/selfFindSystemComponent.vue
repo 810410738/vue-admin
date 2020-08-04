@@ -4,7 +4,7 @@
      -->
   <div>
     <label>子系统：</label>
-    <el-select size="small" v-model="systemIdentify">
+    <el-select size="small" v-model="systemIdentify" @change="changeSystemId">
       <el-option
         v-for="item in systemIdentifyClass"
         :key="item.label"
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { getLeafDictByCond } from "@/api/getCommonData";
+import { getActiveSubSystem } from "@/api/getCommonData";
 export default {
   props: {
     isDefaultShowAll: {
@@ -49,7 +49,7 @@ export default {
       /**
        * @description 获取所有子系统分类
        */
-      getLeafDictByCond(this.requestClassData).then(res => {
+      getActiveSubSystem(this.requestClassData).then(res => {
         if(this.isDefaultShowAll){
           this.systemIdentifyClass = [
           {
@@ -69,6 +69,12 @@ export default {
           this.systemIdentify = this.systemIdentifyClass[0].value;
         }
       });
+    },
+    /**
+     * 选择了子系统触发的事件 
+     */
+    changeSystemId($event){
+      this.$emit('changeSystemId', $event);
     },
     /**
      * @description 获取选择的子系统

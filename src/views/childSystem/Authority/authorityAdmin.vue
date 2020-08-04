@@ -97,7 +97,6 @@ import {
   getAllRoleExceptAdmin
 } from "@/api/childSystemAdmin/getUserData";
 import editAuthorityJson from "@/assets/JSON/Authority/editAuthority";
-import { getIconOption } from "@/api/getCommonData";
 import {
   getAuthorityTree,
   deleteAuthorityById,
@@ -137,7 +136,6 @@ export default {
   },
   created() {
     this.initData();
-    this.getIconOption();
   },
   methods: {
     initData() {
@@ -152,9 +150,6 @@ export default {
       this.addFormData = editAuthorityJson;
       this.editFormData = editAuthorityJson;
 
-      getIconOption().then(res => {
-        this.iconOption = res.extend.classList;
-      });
     },
     /**
      * @description 新增权限点击提交回调的方法

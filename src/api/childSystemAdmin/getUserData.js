@@ -5,6 +5,12 @@ import {userUrlRoot, dataHandleUrlRoot} from '../http'
  * 
  * @description 用户模块
  */
+// 根据用户id和子系统id获取当前关联绑定的角色信息
+export const getUserRoleByCond = data => post(userUrlRoot + 'getUserRoleByCond', data);
+// 用户角色绑定
+export const bindUserRole = data => post(userUrlRoot + 'bindUserRole', data);
+
+
 // 下载用户信息模板
 export const downloadUserTemplate = data => get(dataHandleUrlRoot + 'downloadUserTemplate', data);
 // 导入用户信息

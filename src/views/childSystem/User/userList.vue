@@ -58,8 +58,8 @@
     <!-- 用户表格数据 -->
     <el-card class="primaryCard">
       <el-table :data="getUserData.records" highlight-current-row stripe>
-        <el-table-column type="index" width="100"></el-table-column>
-        <el-table-column property="userNum" label="用户编号" width="150"></el-table-column>
+        <el-table-column type="index" width="50"></el-table-column>
+        <el-table-column property="userNum" label="用户编号" width="100"></el-table-column>
         <el-table-column property="userName" label="用户姓名" width="150"></el-table-column>
         <el-table-column property="primaryClass" label="所属一级机构" width="180"></el-table-column>
         <el-table-column property="secondaryClass" label="所属二级机构" width="180"></el-table-column>
@@ -76,7 +76,7 @@
             ></el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="350">
+        <el-table-column label="操作" width="450">
           <template slot-scope="scope">
             <el-button
               type="primary"
@@ -94,6 +94,12 @@
               @click="editUserInfo(scope.row)"
               v-if="controlAuthority.edit"
             >{{controlAuthority.edit.authorityName}}</el-button>
+            <el-button
+              plain
+              size="mini"
+              icon="el-icon-edit"
+              @click="changeUserRole(scope.row)"
+            >分配角色</el-button>
             <el-button
               type="danger"
               plain
@@ -151,6 +157,20 @@
         @submit="editUserSubmit(arguments)"
       ></selfGenerateForm>
     </el-dialog>
+
+    <!-- 分配角色的对话框  -->
+     <el-dialog
+      title="分配角色"
+      :visible.sync="changeRoleDialogVisible"
+      width="30%"
+      :destroy-on-close="true"
+      center
+    >
+     <changeUserRole :userId='currentClickUserId' @finishChange='closeChangeRoleDialog(arguments)'>
+
+     </changeUserRole>
+    </el-dialog>
+    
   </div>
 </template>
 
@@ -167,16 +187,21 @@ import {
 import addUserFormJson from "@/assets/JSON//User/addUserForm";
 import editUserFormJson from "@/assets/JSON//User/editUserForm";
 import checkUserFormJson from "@/assets/JSON//User/checkUserForm";
-
+// 查找组件
 import findComponent from "@/components/index/findComponent";
+// 分配角色的组件
+import changeUserRole from "@/components/SystemAdmin/User/changeUserRole";
 import selfGenerateForm from "@/components/SystemAdmin/Form/selfGenerateForm";
 export default {
   components: {
     findComponent,
+    changeUserRole,
     selfGenerateForm
   },
   data() {
     return {
+      // 当前选择的用户id
+      currentClickUserId:"",
       // 权限列表
       authorityList: [
         {
@@ -244,6 +269,8 @@ export default {
         // 系统唯一标识
         systemIdentify: ""
       },
+      // 控制分配角色的对话框显示
+      changeRoleDialogVisible:false,
       // 控制新增用户的对话框是否出现
       addUserDialogVisible: false,
       checkUserDialogVisible: false,
@@ -264,7 +291,6 @@ export default {
       this.addUserFormData = addUserFormJson;
       this.checkUserFormData = checkUserFormJson;
       this.editUserFormData = editUserFormJson;
-
       // 获取权限列表数据
       // TODO
       // 根据权限列表数据控制按钮,先把数组转化为对象
@@ -328,6 +354,13 @@ export default {
         message: "导入用户信息失败，请重新导入",
         type: "error"
       });
+    },
+    /**
+     * 点击分配角色按钮，弹出对话框
+     */
+    changeUserRole(row){
+      this.changeRoleDialogVisible = true;
+      this.currentClickUserId = row.userId;
     },
     /**
      * @description 改变用户状态
@@ -446,6 +479,9 @@ export default {
         this.initData();
         this.editUserDialogVisible = false;
       });
+    },
+    closeChangeRoleDialog(arg){
+      this.changeRoleDialogVisible = false;
     }
   }
 };

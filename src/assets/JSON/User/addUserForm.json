@@ -12,7 +12,7 @@
     "label": "用户编号",
     "placeholder": "请输入用户编号",
     "width": "100",
-    "isClick": true,
+    "isClick": false,
     "disabled": false,
     "required": true,
     "errorText": "用户编号必须为8位数字",
@@ -43,7 +43,7 @@
     "errorText": "输入数据的格式不正确",
     "rules": [],
     "remote": false,
-    "remoteURL": "/sys/framework/rest/common/getPrimaryClass",
+    "remoteURL": "/mip/admin/common/screenCond/getUserPrimaryClass",
     "remoteParmas": [{
       "key": "systemIdentify",
       "value": "ADMIN"
@@ -59,13 +59,13 @@
     "label": "所属二级机构",
     "placeholder": "请输入所属二级机构",
     "width": "100",
-    "isClick": false,
+    "isClick": true,
     "disabled": false,
     "required": true,
     "errorText": "输入数据的格式不正确",
     "rules": [],
     "remote": false,
-    "remoteURL": "/sys/framework/rest/common/getSecByPrim",
+    "remoteURL": "/mip/admin/common/screenCond/getUserSecByPrim",
     "remoteParmas": [{
       "key": "systemIdentify",
       "value": "ADMIN"

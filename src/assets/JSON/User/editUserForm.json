@@ -43,7 +43,7 @@
     "errorText": "输入数据的格式不正确",
     "rules": [],
     "remote": false,
-    "remoteURL": "/sys/framework/rest/common/getPrimaryClass",
+    "remoteURL": "/mip/admin/common/screenCond/getUserPrimaryClass",
     "remoteParmas": [{
       "key": "systemIdentify",
       "value": "ADMIN"
@@ -65,7 +65,7 @@
     "errorText": "输入数据的格式不正确",
     "rules": [],
     "remote": false,
-    "remoteURL": "/sys/framework/rest/common/getSecByPrim",
+    "remoteURL": "/mip/admin/common/screenCond/getUserSecByPrim",
     "remoteParmas": [{
       "key": "systemIdentify",
       "value": "ADMIN"

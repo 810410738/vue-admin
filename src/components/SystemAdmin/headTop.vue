@@ -10,7 +10,7 @@
     <el-col :span="8">
       <el-tag
         class="userInfo"
-      >{{loginUser.primaryClass}}-{{loginUser.secondaryClass}}-{{loginUser.userName}}</el-tag>
+      >{{loginUser.primaryClass}}-{{loginUser.secondaryClass}}-{{loginUser.adminName}}</el-tag>
     </el-col>
 
     <el-col :span="2">
@@ -30,7 +30,7 @@
 
 <script>
 import { baseImgPath } from "@/config/env";
-import { logout, getLoginer } from "@/api/getCommonData";
+import { logout } from "@/api/getCommonData";
 
 export default {
   data() {
@@ -52,20 +52,15 @@ export default {
      * @description 初始获取数据
      */
     initData() {
-      getLoginer({}).then(res => {
-        this.loginUser = res.extend.loginUser;
-        switch (res.extend.roleType) {
-          case "0":
-            this.roleName = "系统管理员";
+        this.loginUser = this.$store.state.loginUser;
+        switch (this.loginUser.adminRole) {
+          case "superAdmin":
+            this.roleName = "超级管理员";
             break;
-          case "1":
-            this.roleName = "普通管理员";
-            break;
-          case "2":
-            this.roleName = "普通用户";
+          case "subAdmin":
+            this.roleName = "子系统管理员";
             break;
         }
-      });
     },
     checkUserInfo(){
        // 跳转到查看个人信息页面
@@ -79,7 +74,7 @@ export default {
     loginOut() {
       logout({}).then(res => {
         // 删除本地的token
-        localStorage.removeItem("authToken");
+        localStorage.removeItem("tokenId");
         // 跳转到登陆页面
         this.$router.push({
           path: "/"

@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { getAllPrimaryClass, getAllSecoByPrim } from "@/api/getCommonData";
+import { getUserPrimaryClass, getUserSecByPrim } from "@/api/getCommonData";
 export default {
   components: {
     
@@ -69,7 +69,7 @@ export default {
       /**
        * @description 获取所有一级分类
        */
-      getAllPrimaryClass({}).then(res => {
+      getUserPrimaryClass({}).then(res => {
         this.primaryClass = this.primaryClass.concat(res.extend.classList);
       });
     },
@@ -88,7 +88,7 @@ export default {
       // 获取数据
       var jsonData = {};
       jsonData.selectedParam = value;
-      getAllSecoByPrim(jsonData).then(res => {
+      getUserSecByPrim(jsonData).then(res => {
          this.secondClass =  this.secondClass.concat(res.extend.classList);
         for(var i in resultList){
           this.secondClass.push({
