@@ -29,7 +29,7 @@ export default {
       // 查找组件封装数据
       findComponentData:{
         keyword:'',
-        status:''
+        adminStatus:''
       }
     };
   },
@@ -46,7 +46,7 @@ export default {
     find(status){
       if(status!=null)
       {
-        this.findComponentData.status = status;
+        this.findComponentData.adminStatus = status;
       }
       this.$emit('find', this.findComponentData);
     }

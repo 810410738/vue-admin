@@ -81,7 +81,7 @@ var updateStatusData = {
   "errCode": 0,
   "errMsg": "success"
 }
-Mock.mock(AdminUserUrlRoot + 'updateStatus', 'post', updateStatusData);
+Mock.mock(AdminUserUrlRoot + 'updateAdminStatus', 'post', updateStatusData);
 
 /**--------------------------------------------------------------------------------------- */
 // 重置密码
@@ -91,5 +91,5 @@ var updateLoginPasswordData = {
   "errCode": 0,
   "errMsg": "success"
 }
-Mock.mock(AdminUserUrlRoot + 'updateLoginPassword', 'post', updateLoginPasswordData);
+Mock.mock(AdminUserUrlRoot + 'resetPwd', 'post', updateLoginPasswordData);
 

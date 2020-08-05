@@ -266,8 +266,7 @@ export default {
         keyword: "",
         // 当前指定页数
         pageNumber: "1",
-        // 系统唯一标识
-        systemIdentify: ""
+        userStatus:""
       },
       // 控制分配角色的对话框显示
       changeRoleDialogVisible:false,
@@ -317,7 +316,7 @@ export default {
       this.requestData.keyword = arg[0].keyword;
       this.requestData.primaryClass = arg[0].primaryClass;
       this.requestData.secondaryClass = arg[0].secondaryClass;
-      this.requestData.systemIdentify = arg[0].systemIdentify;
+      this.requestData.userStatus = arg[0].userStatus;
       this.initData();
     },
     /**

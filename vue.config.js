@@ -28,8 +28,8 @@ module.exports = {
   //   https:false,
   //   hotOnly:true,
   //   proxy:{
-  //     '/mip':{
-  //       target:'http://192.168.43.48:8080/',
+  //     '/mip/admin':{
+  //       target:'http://192.168.43.48:9082/',
   //       changOrigin:true,
   //     }
   //   }

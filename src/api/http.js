@@ -10,13 +10,15 @@ export const commonUrlPimRoot = urlRoot + "common/pim/";
 export const dataHandleUrlRoot = urlRoot+ "dataHandle/";
 export const commentUrlRoot = urlRoot + "comment/";
 export const questionUrlRoot = urlRoot + "questionnaire/";
-export const userUrlRoot = urlRoot + "subSystem/baseUser/";
 export const roleAuthorityUrlRoot = urlRoot + "framework/rest/roleAuthority/";
 export const formDesignUrlRoot = urlRoot + "admin/system/form/";
-export const authorityUrlRoot = urlRoot + "framework/rest/roleAuthority/";
-export const roleUrlRoot = urlRoot + "framework/rest/roleAuthority/";
-export const AdminUserUrlRoot = urlRoot + "framework/rest/AdminUserUrlRoot/";
-export const childSystemInfoUrlRoot = urlRoot + "framework/rest/childSystemInfoUrlRoot/";
+export const AdminUserUrlRoot = urlRoot + "system/adminUser/";
+
+
+export const userUrlRoot = urlRoot + "subSystem/baseUser/";
+export const childSystemInfoUrlRoot = urlRoot + "subSystem/config/";
+export const roleUrlRoot = urlRoot + "subSystem/role/";
+export const authorityUrlRoot = urlRoot + "subSystem/authority/";
 
 // 引入element-ui 的loading方法
 import {
@@ -42,9 +44,9 @@ axios.interceptors.request.use(
   config => {
     //在请求发出之前进行一些操作
     // 设置公共请求头的token
-    var authToken = localStorage.getItem('authToken');
-    if(authToken){
-      config.headers.common['authToken'] = authToken;
+    var tokenId = localStorage.getItem('tokenId');
+    if(tokenId){
+      config.headers.common['tokenId'] = tokenId;
     }
     showLoading();
     return config;

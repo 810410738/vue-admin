@@ -15,9 +15,9 @@ export const getById = data => post(AdminUserUrlRoot + 'getById', data);
 // 根据筛选条件分页获取用户数据
 export const getByPage = data => post(AdminUserUrlRoot + 'getByPage', data);
 // 用户账号状态修改(启用、禁用)
-export const updateStatus = data => post(AdminUserUrlRoot + 'updateStatus', data);
+export const updateStatus = data => post(AdminUserUrlRoot + 'updateAdminStatus', data);
 // 重置密码
-export const updateLoginPassword = data => post(AdminUserUrlRoot + 'updateLoginPassword', data);
+export const updateLoginPassword = data => post(AdminUserUrlRoot + 'resetPwd', data);
 
 
 

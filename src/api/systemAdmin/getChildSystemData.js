@@ -15,7 +15,7 @@ export const getById = data => post(childSystemInfoUrlRoot + 'getById', data);
 // 根据筛选条件分页获取数据
 export const getByPage = data => post(childSystemInfoUrlRoot + 'getByPage', data);
 // 状态修改(启用、禁用)
-export const updateSystemStatus = data => post(childSystemInfoUrlRoot + 'updateStatus', data);
+export const updateSystemStatus = data => post(childSystemInfoUrlRoot + 'updateSystemStatus', data);
 
 
 

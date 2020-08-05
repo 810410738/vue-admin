@@ -57,7 +57,7 @@ export default {
         primaryClass:'',
         secondaryClass:'',
         keyword:'',
-        status:''
+        userStatus:''
       }
     };
   },
@@ -101,10 +101,10 @@ export default {
     /**
      * @description 点击查找用户信息，传参到父组件 
      */
-    find(status){
-      if(status!=null)
+    find(userStatus){
+      if(userStatus!=null)
       {
-        this.findComponentData.status = status;
+        this.findComponentData.userStatus = userStatus;
       }
       this.$emit('find', this.findComponentData);
     }

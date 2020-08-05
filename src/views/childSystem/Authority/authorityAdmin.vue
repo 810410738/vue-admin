@@ -6,7 +6,7 @@
       <el-row>
         <el-col :span="6">
           <!-- 所有子系统 -->
-          <selfFindSystemComponent :isDefaultShowAll="false" ref="findSystem"></selfFindSystemComponent>
+          <selfFindSystemComponent :isDefaultShowAll="false" ref="findSystem" @changeSystemId="find(arguments)"></selfFindSystemComponent>
         </el-col>
         <el-col :span="6">
           <el-button type="success" size="small" @click="save">保存修改</el-button>
@@ -18,17 +18,22 @@
       <el-table
         :data="getAuthorityData"
         style="width: 100%"
-        row-key="nodeId"
-        :key="nodeId"
+        row-key="authorityId"
+        :key="authorityId"
         :tree-props="{children:'children',hasChildren: 'hasChildren'}"
         default-expand-all
         size="mini"
         :row-class-name="tableRowClassName"
       >
-        <el-table-column property="nodeName" label="权限名称"></el-table-column>
-        <el-table-column property="nodeUrl" label="请求地址"></el-table-column>
-        <el-table-column property label="类型"></el-table-column>
-        <el-table-column property label="权限标识"></el-table-column>
+        <el-table-column property="authorityName" label="权限名称">
+          <template slot-scope="scope">
+            <i :class="scope.row.authorityIcon"></i>
+            <span> {{scope.row.authorityName}} </span>
+          </template>
+        </el-table-column>
+        <el-table-column property="authorityUrl" label="请求地址"></el-table-column>
+        <el-table-column property="authorityType" label="类型"></el-table-column>
+        <el-table-column property="authorityKey" label="权限标识"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="success" plain size="mini" @click="edit(scope.row)">编辑</el-button>
@@ -56,7 +61,7 @@
                   size="mini"
                   type="text"
                   icon="el-icon-minus"
-                  @click="deleteOneAuthority(scope.row.nodeId)"
+                  @click="deleteOneAuthority(scope.row.authorityId)"
                 >删除</el-button>
               </div>
               <el-button slot="reference" size="mini" type="primary" plain>更多操作</el-button>
@@ -125,7 +130,7 @@ export default {
       getAuthorityData: [],
       // 请求权限列表数据的参数
       requestData: {
-        systemIdentify: ""
+        systemId: ""
       },
       // 标志已经移动过节点元素
       isMoved: false,
@@ -140,9 +145,9 @@ export default {
   methods: {
     initData() {
       this.$nextTick(() => {
-        this.requestData.systemIdentify = this.$refs.findSystem.getSystemIdentify();
+        this.requestData.systemId = this.$refs.findSystem.getSystemIdentify();
         getAuthorityTree(this.requestData).then(res => {
-          this.getAuthorityData = res.extend.authorityTree;
+          this.getAuthorityData = res.extend.dataList;
         });
       });
 
@@ -150,6 +155,13 @@ export default {
       this.addFormData = editAuthorityJson;
       this.editFormData = editAuthorityJson;
 
+    },
+    /**
+     * 查找组件触发的事件
+     * @param arg[0] 系统id
+     */
+    find(arg){
+      this.initData();
     },
     /**
      * @description 新增权限点击提交回调的方法
@@ -160,8 +172,8 @@ export default {
       for (var key in arg[0]) {
         jsonData[key] = arg[0][key];
       }
-      jsonData.authorityId = this.$refs.addForm.getParams("authorityId");
-      jsonData.systemIdentify = this.$refs.addForm.getParams("systemIdentify");
+      jsonData.parentId = this.$refs.addForm.getParams("parentId");
+      jsonData.systemId = this.$refs.addForm.getParams("systemId");
       editAuthority(jsonData).then(res => {
         this.$message({
           type: "success",
@@ -181,8 +193,7 @@ export default {
         jsonData[key] = arg[0][key];
       }
       jsonData.authorityId = this.$refs.editForm.getParams("authorityId");
-      jsonData.parentId = this.$refs.editForm.getParams("parentId");
-      jsonData.systemIdentify = this.$refs.editForm.getParams("systemIdentify");
+      jsonData.systemId = this.$refs.editForm.getParams("systemId");
       editAuthority(jsonData).then(res => {
         this.$message({
           type: "success",
@@ -252,9 +263,9 @@ export default {
     },
     /**
      * @description 点击删除按钮，删除当前的元素
-     * @param nodeId 节点id
+     * @param authorityId 节点id
      */
-    deleteOneAuthority(nodeId) {
+    deleteOneAuthority(authorityId) {
       this.$confirm("请问确定要删除该节点吗？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -263,7 +274,7 @@ export default {
       }).then(() => {
         // 请求删除接口
         var jsonData = {};
-        jsonData.authorityId = nodeId;
+        jsonData.authorityId = authorityId;
         deleteAuthorityById(jsonData).then(res => {
           // 弹出成功提示
           this.$message({
@@ -282,9 +293,8 @@ export default {
       this.editDialogVisible = true;
       this.$nextTick(() => {
         this.$refs.editForm.setFormData(row);
-        this.$refs.editForm.setParams("authorityId", row.nodeId);
-        this.$refs.editForm.setParams("parentId", row.nodePid);
-        this.$refs.editForm.setParams("systemIdentify", row.systemIdentify);
+        this.$refs.editForm.setParams("authorityId", row.authorityId);
+        this.$refs.editForm.setParams("systemId", row.systemId);
       });
     },
     /**
@@ -293,8 +303,8 @@ export default {
     newNode(row) {
       this.addDialogVisible = true;
       this.$nextTick(() => {
-        this.$refs.addForm.setParams("authorityId", row.nodeId);
-        this.$refs.addForm.setParams("systemIdentify", row.systemIdentify);
+        this.$refs.editForm.setParams("parentId", row.parentId);
+        this.$refs.addForm.setParams("systemId", row.systemId);
       });
     },
     /**

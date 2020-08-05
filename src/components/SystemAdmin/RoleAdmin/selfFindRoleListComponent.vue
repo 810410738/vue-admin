@@ -20,7 +20,7 @@
       </el-select>
     </el-col>
     <el-col :span="6">
-      <el-input placeholder="请输入角色名称或权限字符" v-model="findComponentData.keyword" size="small">
+      <el-input placeholder="请输入角色名称或角色标识" v-model="findComponentData.keyword" size="small">
         <i slot="prefix" class="el-input__icon el-icon-search"></i>
       </el-input>
     </el-col>
@@ -65,7 +65,7 @@ export default {
       ],
       // 查找组件封装数据
       findComponentData: {
-        systemIdentify: "",
+        systemId: "",
         roleStatus: "",
         keyword: ""
       }
@@ -87,6 +87,7 @@ export default {
      * @description 点击查找用户信息，传参到父组件
      */
     find() {
+      this.findComponentData.systemId = this.$refs.findSystem.getSystemIdentify();
       this.$emit("find", this.findComponentData);
     }
   }

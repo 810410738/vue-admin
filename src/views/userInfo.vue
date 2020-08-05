@@ -87,6 +87,16 @@ export default {
       for (var key in arg[0]) {
         jsonData[key] = arg[0][key];
       }
+      // 新旧密码不能相同
+      if(jsonData.oldPwd == jsonData.newPwd){
+        this.$message.warning("新密码不能与旧密码相同");
+        return ;
+      }
+      // 两次输入的新密码要相同
+      if(jsonData.newPwd != jsonData.againNewPwd){
+        this.$message.warning("两次输入的密码不一致");
+        return ;
+      }
       jsonData.oldPwd = b64_md5(jsonData.oldPwd);
       jsonData.newPwd = b64_md5(jsonData.newPwd);
       jsonData.adminId = this.$store.state.loginUser.adminId;

@@ -1,4 +1,4 @@
-import {post, get} from './http'
+import {post} from './http'
 import {urlRoot, commonUrlRoot,commonUrlPimRoot} from './http'
 
 /**

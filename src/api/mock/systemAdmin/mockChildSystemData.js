@@ -76,6 +76,6 @@ var updateStatusData = {
   "errCode": 0,
   "errMsg": "success"
 }
-Mock.mock(childSystemInfoUrlRoot + 'updateStatus', 'post', updateStatusData);
+Mock.mock(childSystemInfoUrlRoot + 'updateSystemStatus', 'post', updateStatusData);
 
 /**--------------------------------------------------------------------------------------- */

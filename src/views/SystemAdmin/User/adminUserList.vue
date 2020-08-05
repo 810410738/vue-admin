@@ -26,11 +26,16 @@
         <el-table-column property="primaryClass" label="所属机构" width="150"></el-table-column>
         <el-table-column property="secondaryClass" label="所在单位" width="150"></el-table-column>
         <el-table-column property="loginAccount" label="登陆账号" width="150"></el-table-column>
-        <el-table-column property="modifyTime" label="修改时间" width="150"></el-table-column>
+        <el-table-column property="adminRole" label="系统角色" width="150">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.adminRole== 'subAdmin'" type="primary">子系统管理员</el-tag>
+            <el-tag v-else-if="scope.row.adminRole== 'superAdmin'" type="warning">超级管理员</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column property="adminStatus" label="用户状态" width="100">
           <template slot-scope="scope">
             <el-switch
-              v-model="scope.row.userStatus"
+              v-model="scope.row.adminStatus"
               active-color="#13ce66"
               inactive-color="#ff4949"
               active-value="1"
@@ -136,6 +141,7 @@
 </template>
 
 <script>
+import { b64_md5 } from "@/util/MD5";
 import {
   edit,
   deleteById,
@@ -174,8 +180,7 @@ export default {
         keyword: "",
         // 当前指定页数
         pageNumber: "1",
-        // 系统唯一标识
-        systemIdentify: "",
+        adminStatus:"",
       },
       // 控制新增用户的对话框是否出现
       addUserDialogVisible: false,
@@ -210,14 +215,10 @@ export default {
     /**
      * @description 获取查找组件的数据，请求用户数据
      * @param arg[0].keyword
-     * @param arg[0].primaryClass
-     * @param arg[0].secondaryClass
      */
     find(arg) {
       this.requestData.keyword = arg[0].keyword;
-      this.requestData.primaryClass = arg[0].primaryClass;
-      this.requestData.secondaryClass = arg[0].secondaryClass;
-      this.requestData.systemIdentify = arg[0].systemIdentify;
+      this.requestData.adminStatus = arg[0].adminStatus;
       this.initData();
     },
     /**
@@ -236,7 +237,7 @@ export default {
         .then(() => {
           // 请求修改用户状态接口
           var jsonData = {};
-          jsonData.userStatus = $event;
+          jsonData.adminStatus = $event;
           jsonData.adminId = adminId;
           updateStatus(jsonData).then((res) => {
             // 弹出成功提示
@@ -250,7 +251,7 @@ export default {
         })
         .catch(() => {
           // 恢复状态为未修改之前的
-          this.getUserData.records[index].userStatus = $event == "1" ? "0" : "1";
+          this.getUserData.records[index].adminStatus = $event == "1" ? "0" : "1";
         });
     },
     /**
@@ -314,6 +315,7 @@ export default {
       for (var key in arg[0]) {
         jsonData[key] = arg[0][key];
       }
+      jsonData.adminRole = "subAdmin";
       edit(jsonData).then((res) => {
         this.$message({
           type: "success",
@@ -334,6 +336,7 @@ export default {
         jsonData[key] = arg[0][key];
       }
       jsonData.adminId = this.$refs.editUserFrom.getParams("adminId");
+      jsonData.adminRole = "subAdmin";
       edit(jsonData).then((res) => {
         this.$message({
           type: "success",
@@ -353,6 +356,7 @@ export default {
       for (var key in arg[0]) {
         jsonData[key] = arg[0][key];
       }
+      jsonData.loginPassword = b64_md5(jsonData.loginPassword);
       jsonData.adminId = this.$refs.resetPasswordForm.getParams("adminId");
       updateLoginPassword(jsonData).then((res) => {
         this.$message({

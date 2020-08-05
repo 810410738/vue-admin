@@ -12,18 +12,24 @@
       <el-row>
         <el-button type="warning" size="small" icon="el-icon-plus" @click="newRole">新增</el-button>
       </el-row>
-      <!-- 用户表格数据 -->
+      <!-- 表格数据 -->
       <el-table :data="tableData.records" highlight-current-row style="width: 100%" stripe>
         <el-table-column type="index" width="100"></el-table-column>
         <el-table-column property="roleName" label="角色名称" width="150"></el-table-column>
-        <el-table-column property="systemIdentify" label="系统标识" width="150"></el-table-column>
-        <el-table-column property="roleKey" label="权限字符" width="200"></el-table-column>
-        <el-table-column property="dataScope" label="数据访问权限" width="200"></el-table-column>
+        <el-table-column property="roleKey" label="角色标识" width="150"></el-table-column>
+        <el-table-column property="dataScope" label="数据访问域" width="200"></el-table-column>
+        <el-table-column property="systemName" label="归属子系统" width="200"></el-table-column>
         <el-table-column property="remark" label="描述" width="200"></el-table-column>
         <el-table-column label="状态" width="100">
           <template slot-scope="scope">
-            <el-tag v-show="scope.row.roleStatus == '1'" type="success">已启用</el-tag>
-            <el-tag v-show="scope.row.roleStatus == '0'" type="danger">未启用</el-tag>
+            <el-switch
+              v-model="scope.row.roleStatus"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              active-value="1"
+              inactive-value="0"
+              @change="changeRoleStatus($event, scope.$index, scope.row.roleId)"
+            ></el-switch>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -90,7 +96,7 @@
         ref="tree"
         :data="authorityList"
         show-checkbox
-        node-key="nodeId"
+        node-key="authorityId"
         :default-checked-keys="keys"
         :props="defaultProps"
         :default-expand-all="true"
@@ -108,14 +114,15 @@
 import {
   getAllRoleByPage,
   deleteRoleById,
-  editRole
+  editRole,
+  updateRoleStatus,
 } from "@/api/systemAdmin/getRoleData";
 import {
   getRelateAuthByRoleId,
-  changeRoleAuthority
+  changeRoleAuthority,
 } from "@/api/systemAdmin/getRoleAuthorityData";
-import newRoleJson from '@/assets/JSON//Role/newRole';
-import editRoleJson from '@/assets/JSON//Role/editRole';
+import newRoleJson from "@/assets/JSON//Role/newRole";
+import editRoleJson from "@/assets/JSON//Role/editRole";
 import selfFindRoleListComponent from "@/components/SystemAdmin/RoleAdmin/selfFindRoleListComponent";
 import selfGenerateForm from "@/components/SystemAdmin/Form/selfGenerateForm";
 selfFindRoleListComponent;
@@ -139,25 +146,26 @@ export default {
       authorityList: [],
       defaultProps: {
         children: "children",
-        label: "nodeName"
+        label: "authorityName",
       },
       // 获取所有角色列表的请求数据
       requestAllRoleData: {
         pageNumber: "",
         keyword: "",
-        systemIdentify: ""
+        systemId: "",
+        roleStatus: "",
       },
       // 更新角色权限的请求数据
       requestData: {
         roleId: "",
-        authorityList: []
+        authorityList: [],
       },
-      keys: []
+      keys: [],
     };
   },
   components: {
     selfFindRoleListComponent,
-    selfGenerateForm
+    selfGenerateForm,
   },
   created() {
     this.initData();
@@ -165,13 +173,25 @@ export default {
   methods: {
     initData() {
       // 获取所有角色列表
-      getAllRoleByPage(this.requestAllRoleData).then(res => {
+      getAllRoleByPage(this.requestAllRoleData).then((res) => {
         this.tableData = res.extend.pageData;
       });
       // 获取新增角色的表单数据
       this.newRoleFormData = newRoleJson;
       // 获取编辑角色信息的表单数据
       this.editRoleFormData = editRoleJson;
+    },
+    /**
+     * 查找组件触发的事件
+     * @param arg[0].systemId
+     * @param arg[0].roleStatus
+     * @param arg[0].keyword
+     */
+    find(arg) {
+      this.requestAllRoleData.roleStatus = arg[0].roleStatus;
+      this.requestAllRoleData.systemId = arg[0].systemId;
+      this.requestAllRoleData.keyword = arg[0].keyword;
+      this.initData();
     },
     /**
      * @description 点击新增角色的按钮
@@ -202,17 +222,22 @@ export default {
       // 获取菜单数据
       var jsonData = {};
       jsonData.roleId = row.roleId;
-      getRelateAuthByRoleId(jsonData).then(res => {
-        this.authorityList = res.extend.authorityList;
+      getRelateAuthByRoleId(jsonData).then((res) => {
+        this.authorityList = res.extend.dataList;
         // 设置选中的id数组
         var keys = [];
         for (var i in this.authorityList) {
           if (this.authorityList[i].checked == true) {
-            keys.push(this.authorityList[i].nodeId);
+            keys.push(this.authorityList[i].authorityId);
           }
           for (var j in this.authorityList[i].children) {
             if (this.authorityList[i].children[j].checked == true) {
-              keys.push(this.authorityList[i].children[j].nodeId);
+              keys.push(this.authorityList[i].children[j].authorityId);
+            }
+            for (var k in this.authorityList[i].children[j].children) {
+              if (this.authorityList[i].children[j].children[k].checked == true) {
+                keys.push(this.authorityList[i].children[j].children[k].authorityId);
+              }
             }
           }
         }
@@ -227,11 +252,10 @@ export default {
       for (var key in arg[0]) {
         jsonData[key] = arg[0][key];
       }
-      jsonData.roleId = this.$refs.editRoleForm.getParams("roleId");
-      editRole(jsonData).then(res => {
+      editRole(jsonData).then((res) => {
         this.$message({
           type: "success",
-          message: "新增成功！"
+          message: "新增成功！",
         });
         this.initData();
         this.newRoleDialogVisible = false;
@@ -245,13 +269,14 @@ export default {
       for (var key in arg[0]) {
         jsonData[key] = arg[0][key];
       }
-      editRole(jsonData).then(res => {
+      jsonData.roleId = this.$refs.editRoleForm.getParams("roleId");
+      editRole(jsonData).then((res) => {
         this.$message({
           type: "success",
-          message: "新增成功！"
+          message: "修改成功！",
         });
         this.initData();
-        this.newRoleDialogVisible = false;
+        this.editRoleDialogVisible = false;
       });
     },
     /**
@@ -286,21 +311,19 @@ export default {
         this.requestData.authorityList.length
       );
       for (var i in keys) {
-        var jsonData = {};
-        jsonData.nodeId = keys[i];
-        this.requestData.authorityList.push(jsonData);
+        this.requestData.authorityList.push(keys[i]);
       }
       this.$confirm("确定要修改该角色的权限吗?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       }).then(() => {
-        changeRoleAuthority(this.requestData).then(res => {
+        changeRoleAuthority(this.requestData).then((res) => {
           // 请求成功后关闭对话框，弹出提示
           this.changeAuthorityDialogVisible = false;
           this.$message({
             message: "修改权限成功",
-            type: "success"
+            type: "success",
           });
           // 重新获取列表，相当于刷新
           this.initData();
@@ -323,23 +346,56 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
-        center: true
+        center: true,
       }).then(() => {
         // 请求删除用户接口
         var jsonData = {};
         jsonData.roleId = roleId;
-        deleteRoleById(jsonData).then(res => {
+        deleteRoleById(jsonData).then((res) => {
           // 弹出成功提示
           this.$message({
             message: "删除成功",
-            type: "success"
+            type: "success",
           });
           // 刷新数据
           this.initData();
         });
       });
-    }
-  }
+    },
+    /**
+     * @description 改变状态
+     * @param $event 改变后的用户状态值 （0，1）
+     * @param index 角色信息的索引，代表第几个角色
+     * @param roleId 角色id
+     */
+    changeRoleStatus($event, index, roleId) {
+      this.$confirm("请问确定要修改角色状态吗？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true,
+      })
+        .then(() => {
+          // 请求修改状态接口
+          var jsonData = {};
+          jsonData.roleStatus = $event;
+          jsonData.roleId = roleId;
+          updateRoleStatus(jsonData).then((res) => {
+            // 弹出成功提示
+            this.$message({
+              message: "修改角色状态成功",
+              type: "success",
+            });
+            // 刷新数据
+            this.initData();
+          });
+        })
+        .catch(() => {
+          // 恢复状态为未修改之前的
+          this.tableData.records[index].roleStatus = $event == "1" ? "0" : "1";
+        });
+    },
+  },
 };
 </script>
 

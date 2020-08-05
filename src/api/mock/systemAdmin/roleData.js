@@ -14,7 +14,7 @@ var editRoleData = {
 
   }
 }
-Mock.mock(roleUrlRoot + 'editRole', 'post', editRoleData);
+Mock.mock(roleUrlRoot + 'edit', 'post', editRoleData);
 /**--------------------------------------------------------------------------------------- */
 // 02-根据roleId删除角色信息
 var deleteRoleByIdData = {
@@ -24,7 +24,7 @@ var deleteRoleByIdData = {
 
   }
 }
-Mock.mock(roleUrlRoot + 'deleteRoleById', 'post', deleteRoleByIdData);
+Mock.mock(roleUrlRoot + 'deleteById', 'post', deleteRoleByIdData);
 /**--------------------------------------------------------------------------------------- */
 //03-根据roleId获取角色信息
 var getRoleByIdData = {
@@ -46,7 +46,7 @@ var getRoleByIdData = {
       }
   }
 }
-Mock.mock(roleUrlRoot + 'getRoleById', 'post', getRoleByIdData);
+Mock.mock(roleUrlRoot + 'getById', 'post', getRoleByIdData);
 /**--------------------------------------------------------------------------------------- */
 //04-根据筛选条件分页获取所有角色信息
 var getAllRoleByPageData = {
@@ -65,7 +65,8 @@ var getAllRoleByPageData = {
               "remark": "角色备注",
               "dataScope": "0",
               "roleStatus": "0",
-              "systemIdentify": "ADMIN",
+              "systemId":"sdfsdfds",
+              "systemName": "ADMIN",
               "createTime": "2020-05-09T02:32:48.000+0000",
               "modifyTime": "2020-05-09T02:32:48.000+0000",
               "dataScopeValue": "",
@@ -74,17 +75,14 @@ var getAllRoleByPageData = {
       }
   }
 }
-Mock.mock(roleUrlRoot + 'getAllRoleByPage', 'post', getAllRoleByPageData);
+Mock.mock(roleUrlRoot + 'getByPage', 'post', getAllRoleByPageData);
 /**--------------------------------------------------------------------------------------- */
-//05-根据筛选条件获取有效的角色信息(已启用)
-var getActiveRoleByCondData = {
+// 05-启用/禁用角色
+var updateRoleStatusData = {
   "errCode": 0,
   "errMsg": "[响应成功]",
   "extend": {
-      "classList|3": [{
-          "label": "ADMIN-管理员",
-          "value": "878134555ea349f6bbfc1588991568444"
-      }]
+     
   }
 }
-Mock.mock(roleUrlRoot + 'getActiveRoleByCond', 'post', getActiveRoleByCondData);
+Mock.mock(roleUrlRoot + 'updateRoleStatus', 'post', updateRoleStatusData);
