@@ -10,136 +10,138 @@
     :size="Form.size"
     ref="Form"
   >
-    <el-form-item v-for="(item) in Form.Item" :key="item.key" :label="item.label" :prop="item.name">
-      <el-input
-        v-if="item.type == 'input'"
-        :show-password="item.isPassword"
-        :placeholder="item.placeholder"
-        :style="'width:' + item.width + '%'"
-        :disabled="item.disabled"
-        v-model="Form.Data[item.name]"
-      ></el-input>
-      <!-- 多行输入框 -->
-      <el-input
-        v-if="item.type == 'inputTextarea'"
-        type="textarea"
-        :rows="item.rows"
-        :placeholder="item.placeholder"
-        :style="'width:' + item.width + '%'"
-        :disabled="item.disabled"
-        v-model="Form.Data[item.name]"
-      ></el-input>
-      <!-- switch开关 -->
-      <el-switch
-        v-else-if="item.type == 'switch'"
-        :active-color="item.activeColor"
-        :inactive-color="item.inactiveColor"
-        :active-text="item.activeText"
-        :inactive-text="item.inactiveText"
-        :style="'width:' + item.width + '%'"
-        :disabled="item.disabled"
-        v-model="Form.Data[item.name]"
-        :validate-event="false"
-      ></el-switch>
-      <!-- radio单选框 -->
-      <el-radio-group
-        v-else-if="item.type == 'radio'"
-        v-model="Form.Data[item.name]"
-        :disabled="item.disabled"
-        :style="'width:' + item.width + '%'"
-      >
-        <div v-if="item.radioType == 'primary'">
-          <el-radio
-            v-for="item1 in item.options"
-            :key="item1.value"
-            :label="item1.value"
-          >{{item1.label}}</el-radio>
-        </div>
-        <div v-else-if="item.radioType == 'button'">
-          <el-radio-button
-            v-for="item1 in item.options"
-            :key="item1.value"
-            :label="item1.value"
-          >{{item1.label}}</el-radio-button>
-        </div>
-        <div v-else-if="item.radioType == 'borderButton'">
-          <el-radio
-            border
-            v-for="item1 in item.options"
-            :key="item1.value"
-            :label="item1.value"
-          >{{item1.label}}</el-radio>
-        </div>
-      </el-radio-group>
-      <!-- checkbox多选框 -->
-      <el-checkbox-group
-        v-else-if="item.type == 'checkbox'"
-        v-model="Form.Data[item.name]"
-        :style="'width:' + item.width + '%'"
-        :disabled="item.disabled"
-      >
-        <div v-if="item.checkboxType == 'primary'">
-          <el-checkbox
-            v-for="item1 in item.options"
-            :key="item1.value"
-            :label="item1.value"
-          >{{item1.label}}</el-checkbox>
-        </div>
-        <div v-else-if="item.checkboxType == 'button'">
-          <el-checkbox-button
-            v-for="item1 in item.options"
-            :key="item1.value"
-            :label="item1.value"
-          >{{item1.label}}</el-checkbox-button>
-        </div>
-        <div v-else-if="item.checkboxType == 'borderButton'">
-          <el-checkbox
-            border
-            v-for="item1 in item.options"
-            :key="item1.value"
-            :label="item1.value"
-          >{{item1.label}}</el-checkbox>
-        </div>
-      </el-checkbox-group>
-      <el-select
-        v-else-if="item.type == 'select'"
-        :placeholder="item.placeholder"
-        :style="'width:' + item.width + '%'"
-        :disabled="item.disabled"
-        v-model="Form.Data[item.name]"
-        @change="changeSelect(Form.Data[item.name], item.isLinkOptions,item.linkOptionsKey)"
-      >
-        <el-option
-          v-for="(item1,index1) in item.options"
-          :key="index1"
-          :label="item1.label"
-          :value="item1.value"
-        ></el-option>
-      </el-select>
+    <el-row v-for="(item) in Form.Item" :key="item.key">
+      <el-form-item :label="item.label" :prop="item.name">
+        <el-input
+          v-if="item.type == 'input'"
+          :show-password="item.isPassword"
+          :placeholder="item.placeholder"
+          :style="'width:' + item.width + '%'"
+          :disabled="item.disabled"
+          v-model="Form.Data[item.name]"
+        ></el-input>
+        <!-- 多行输入框 -->
+        <el-input
+          v-if="item.type == 'inputTextarea'"
+          type="textarea"
+          :rows="item.rows"
+          :placeholder="item.placeholder"
+          :style="'width:' + item.width + '%'"
+          :disabled="item.disabled"
+          v-model="Form.Data[item.name]"
+        ></el-input>
+        <!-- switch开关 -->
+        <el-switch
+          v-else-if="item.type == 'switch'"
+          :active-color="item.activeColor"
+          :inactive-color="item.inactiveColor"
+          :active-text="item.activeText"
+          :inactive-text="item.inactiveText"
+          :style="'width:' + item.width + '%'"
+          :disabled="item.disabled"
+          v-model="Form.Data[item.name]"
+          :validate-event="false"
+        ></el-switch>
+        <!-- radio单选框 -->
+        <el-radio-group
+          v-else-if="item.type == 'radio'"
+          v-model="Form.Data[item.name]"
+          :disabled="item.disabled"
+          :style="'width:' + item.width + '%'"
+        >
+          <div v-if="item.radioType == 'primary'">
+            <el-radio
+              v-for="item1 in item.options"
+              :key="item1.value"
+              :label="item1.value"
+            >{{item1.label}}</el-radio>
+          </div>
+          <div v-else-if="item.radioType == 'button'">
+            <el-radio-button
+              v-for="item1 in item.options"
+              :key="item1.value"
+              :label="item1.value"
+            >{{item1.label}}</el-radio-button>
+          </div>
+          <div v-else-if="item.radioType == 'borderButton'">
+            <el-radio
+              border
+              v-for="item1 in item.options"
+              :key="item1.value"
+              :label="item1.value"
+            >{{item1.label}}</el-radio>
+          </div>
+        </el-radio-group>
+        <!-- checkbox多选框 -->
+        <el-checkbox-group
+          v-else-if="item.type == 'checkbox'"
+          v-model="Form.Data[item.name]"
+          :style="'width:' + item.width + '%'"
+          :disabled="item.disabled"
+        >
+          <div v-if="item.checkboxType == 'primary'">
+            <el-checkbox
+              v-for="item1 in item.options"
+              :key="item1.value"
+              :label="item1.value"
+            >{{item1.label}}</el-checkbox>
+          </div>
+          <div v-else-if="item.checkboxType == 'button'">
+            <el-checkbox-button
+              v-for="item1 in item.options"
+              :key="item1.value"
+              :label="item1.value"
+            >{{item1.label}}</el-checkbox-button>
+          </div>
+          <div v-else-if="item.checkboxType == 'borderButton'">
+            <el-checkbox
+              border
+              v-for="item1 in item.options"
+              :key="item1.value"
+              :label="item1.value"
+            >{{item1.label}}</el-checkbox>
+          </div>
+        </el-checkbox-group>
+        <el-select
+          v-else-if="item.type == 'select'"
+          :placeholder="item.placeholder"
+          :style="'width:' + item.width + '%'"
+          :disabled="item.disabled"
+          v-model="Form.Data[item.name]"
+          @change="changeSelect(Form.Data[item.name], item.isLinkOptions,item.linkOptionsKey)"
+        >
+          <el-option
+            v-for="(item1,index1) in item.options"
+            :key="index1"
+            :label="item1.label"
+            :value="item1.value"
+          ></el-option>
+        </el-select>
 
-      <!-- DatePicker日期选择器 -->
-      <el-date-picker
-        v-else-if="item.type == 'DatePicker'"
-        v-model="Form.Data[item.name]"
-        :type="item.datePickerType"
-        placeholder="选择日期"
-        range-separator="至"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
-        unlink-panels
-        format="yyyy 年 MM 月 dd 日"
-        :value-format="item.format"
-      ></el-date-picker>
+        <!-- DatePicker日期选择器 -->
+        <el-date-picker
+          v-else-if="item.type == 'DatePicker'"
+          v-model="Form.Data[item.name]"
+          :type="item.datePickerType"
+          placeholder="选择日期"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          unlink-panels
+          format="yyyy 年 MM 月 dd 日"
+          :value-format="item.format"
+        ></el-date-picker>
 
-      <!-- 动态文本 -->
-      <el-tag type="info" v-else-if="item.type == 'text'">{{Form.Data[item.name]}}</el-tag>
+        <!-- 动态文本 -->
+        <el-tag :type="item.tagType" v-else-if="item.type == 'text'">{{Form.Data[item.name]}}</el-tag>
 
-      <!-- 静态文本 -->
-      <p
-        :style="{color:item.textColor, fontSize:(item.textSize + 'px'), marginLeft:(item.marginLeft + 'px')}"
-        v-if="item.type == 'staticText'"
-      >{{item.content}}</p>
-    </el-form-item>
+        <!-- 静态文本 -->
+        <p
+          :style="{color:item.textColor, fontSize:(item.textSize + 'px'), marginLeft:(item.marginLeft + 'px')}"
+          v-if="item.type == 'staticText'"
+        >{{item.content}}</p>
+      </el-form-item>
+    </el-row>
     <!-- 提交表单 -->
     <el-form-item v-if="Form.isShowButton">
       <el-button type="primary" @click="submitForm('Form')">{{Form.submitText}}</el-button>
@@ -154,13 +156,13 @@ export default {
   props: {
     formJson: {
       type: Object,
-      default: {}
-    }
+      default: {},
+    },
   },
   data() {
     return {
       Form: {},
-      params: {}
+      params: {},
     };
   },
   created() {
@@ -191,13 +193,13 @@ export default {
           this.Form.Item[i].rules.push({
             required: true,
             message: ItemNode.placeholder,
-            trigger: "blur"
+            trigger: "blur",
           });
         }
         if (ItemNode.pattern != "") {
           this.Form.Item[i].rules.push({
             pattern: ItemNode.pattern,
-            message: ItemNode.errorText
+            message: ItemNode.errorText,
           });
         }
         this.$set(this.Form.Rules, ItemNode.name, ItemNode.rules);
@@ -236,7 +238,7 @@ export default {
      * formName 表单名字
      */
     submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         // 验证规则通过
         if (valid) {
           this.$emit("submit", this.Form.Data);
@@ -263,11 +265,11 @@ export default {
       this.Form.Item[index].options = [
         {
           label: "",
-          value: ""
-        }
+          value: "",
+        },
       ];
       this.Form.Data[this.Form.Item[index].name] = "";
-      post(remoteURL, requestData).then(res => {
+      post(remoteURL, requestData).then((res) => {
         this.Form.Item[index].options = res.extend.classList;
       });
     },
@@ -311,7 +313,7 @@ export default {
     setFormData(row) {
       try {
         for (var key in this.Form.Data) {
-          if(row[key]){
+          if (row[key]) {
             this.Form.Data[key] = row[key];
           }
         }
@@ -334,24 +336,24 @@ export default {
      */
     getFormData() {
       var result = {};
-      this.$refs['Form'].validate(valid => {
+      this.$refs["Form"].validate((valid) => {
         // 验证规则通过
         if (valid) {
-          result =  this.Form.Data;
+          result = this.Form.Data;
         } else {
-          result =  null;
+          result = null;
         }
       });
-        return result;
+      return result;
     },
-     /**
+    /**
      * @description 重置表单
-     * 
+     *
      */
     resetForm() {
       this.init();
     },
-  }
+  },
 };
 </script>
 

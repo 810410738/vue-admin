@@ -25,6 +25,18 @@
           <el-input v-model="item.content"></el-input>
         </el-form-item>
       </div>
+      <!-- 动态文本的特有操作 -->
+      <div v-if="item.type == 'text'">
+        <el-form-item label="背景样式">
+          <el-select v-model="item.tagType">
+            <el-option label="灰色" value="info"></el-option>
+            <el-option label="蓝色" value="primary"></el-option>
+            <el-option label="绿色" value="success"></el-option>
+            <el-option label="黄色" value="warning"></el-option>
+            <el-option label="红色" value="danger"></el-option>
+          </el-select>
+        </el-form-item>
+      </div>
       <el-form-item label="字段名字">
         <el-input v-model="item.name"></el-input>
       </el-form-item>
@@ -41,7 +53,7 @@
       </el-form-item>
       <!-- input特有的操作 -->
       <div v-if="item.type == 'input'">
-        <el-form-item >
+        <el-form-item>
           <el-checkbox v-model="item.isPassword">是否为密码框</el-checkbox>
         </el-form-item>
       </div>

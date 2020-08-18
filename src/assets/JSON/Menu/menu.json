@@ -21,14 +21,8 @@
             "checked": true,
             "nodeUrl": "/main/checkChildSystem",
             "icon": "el-icon-s-data"
-          },
-          {
-            "nodeId": "13",
-            "nodeName": "日志管理",
-            "checked": true,
-            "nodeUrl": "/main/logAdmin",
-            "icon": "el-icon-postcard"
           }
+         
         ]
       },
       {
@@ -44,15 +38,10 @@
             "checked": true,
             "chkDisable": false,
             "icon": "el-icon-user",
-            "nodeUrl": "/main/userList"
+            "nodeUrl": "/main/userList" 
           },
+         
           {
-            "nodeId": "22",
-            "nodeName": "表单设计",
-            "checked": true,
-            "nodeUrl": "/main/DesignFormList",
-            "icon": "el-icon-s-order"
-          }, {
             "nodeId": "23",
             "nodeName": "角色管理",
             "checked": true,

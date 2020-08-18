@@ -3,8 +3,15 @@
     <h3 class="headTitle">用户信息</h3>
     <!-- 操作组件 -->
     <el-card class="primaryCard topCard">
+      <el-row>
+        <!-- 查找操作组件 -->
+        <findComponent @find="find(arguments)"></findComponent>
+      </el-row>
+    </el-card>
+    <!-- 用户表格数据 -->
+    <el-card class="primaryCard">
       <el-row class="firstRow">
-        <el-col :span="16" :offset="8">
+        <el-col :span="16">
           <!-- 操作组件 -->
           <el-button
             class="button-middle"
@@ -14,24 +21,6 @@
             icon="el-icon-download"
             v-if="controlAuthority.downloadTemplate"
           >{{controlAuthority.downloadTemplate.authorityName}}</el-button>
-          <el-upload
-            class="upload-demo"
-            action="/EOAS/dataHandle/importUser"
-            name="wenjian"
-            :show-file-list="false"
-            :on-success="uploadDone"
-            :on-error="uploadError"
-            :limit="1"
-          >
-            <el-button
-              class="button-middle"
-              type="warning"
-              size="small"
-              icon="el-icon-upload2"
-              v-if="controlAuthority.importUser"
-            >{{controlAuthority.importUser.authorityName}}</el-button>
-            <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-          </el-upload>
           <el-button
             class="button-middle"
             type="success"
@@ -49,14 +38,11 @@
             icon="el-icon-plus"
           >{{controlAuthority.newUser.authorityName}}</el-button>
         </el-col>
+        <el-col :span="8">
+          <!-- 上传的组件 -->
+          <uploadUser @uploadSuccess="initData"></uploadUser>
+        </el-col>
       </el-row>
-      <el-row>
-          <!-- 查找操作组件 -->
-          <findComponent @find="find(arguments)"></findComponent>
-      </el-row>
-    </el-card>
-    <!-- 用户表格数据 -->
-    <el-card class="primaryCard">
       <el-table :data="getUserData.records" highlight-current-row stripe>
         <el-table-column type="index" width="50"></el-table-column>
         <el-table-column property="userNum" label="用户编号" width="100"></el-table-column>
@@ -94,12 +80,7 @@
               @click="editUserInfo(scope.row)"
               v-if="controlAuthority.edit"
             >{{controlAuthority.edit.authorityName}}</el-button>
-            <el-button
-              plain
-              size="mini"
-              icon="el-icon-edit"
-              @click="changeUserRole(scope.row)"
-            >分配角色</el-button>
+            <el-button plain size="mini" icon="el-icon-edit" @click="changeUserRole(scope.row)">分配角色</el-button>
             <el-button
               type="danger"
               plain
@@ -159,18 +140,15 @@
     </el-dialog>
 
     <!-- 分配角色的对话框  -->
-     <el-dialog
+    <el-dialog
       title="分配角色"
       :visible.sync="changeRoleDialogVisible"
       width="30%"
       :destroy-on-close="true"
       center
     >
-     <changeUserRole :userId='currentClickUserId' @finishChange='closeChangeRoleDialog(arguments)'>
-
-     </changeUserRole>
+      <changeUserRole :userId="currentClickUserId" @finishChange="closeChangeRoleDialog(arguments)"></changeUserRole>
     </el-dialog>
-    
   </div>
 </template>
 
@@ -182,6 +160,7 @@ import {
   getById,
   getByPage,
   updateUserStatus,
+  downloadUserTemplate
 } from "@/api/childSystemAdmin/getUserData";
 // 表单配置数据的json
 import addUserFormJson from "@/assets/JSON//User/addUserForm";
@@ -191,54 +170,57 @@ import checkUserFormJson from "@/assets/JSON//User/checkUserForm";
 import findComponent from "@/components/index/findComponent";
 // 分配角色的组件
 import changeUserRole from "@/components/SystemAdmin/User/changeUserRole";
+import uploadUser from "@/components/SystemAdmin/User/uploadUser";
+
 import selfGenerateForm from "@/components/SystemAdmin/Form/selfGenerateForm";
 export default {
   components: {
     findComponent,
     changeUserRole,
-    selfGenerateForm
+    uploadUser,
+    selfGenerateForm,
   },
   data() {
     return {
       // 当前选择的用户id
-      currentClickUserId:"",
+      currentClickUserId: "",
       // 权限列表
       authorityList: [
         {
           authorityId: "1",
           authorityName: "下载模板",
-          authorityKey: "downloadTemplate"
+          authorityKey: "downloadTemplate",
         },
         {
           authorityId: "2",
           authorityName: "导入",
-          authorityKey: "importUser"
+          authorityKey: "importUser",
         },
         {
           authorityId: "3",
           authorityName: "导出",
-          authorityKey: "exportUser"
+          authorityKey: "exportUser",
         },
         {
           authorityId: "4",
           authorityName: "新增",
-          authorityKey: "newUser"
+          authorityKey: "newUser",
         },
         {
           authorityId: "5",
           authorityName: "查看更多",
-          authorityKey: "checkMore"
+          authorityKey: "checkMore",
         },
         {
           authorityId: "6",
           authorityName: "编辑",
-          authorityKey: "edit"
+          authorityKey: "edit",
         },
         {
           authorityId: "7",
           authorityName: "删除",
-          authorityKey: "deleteUser"
-        }
+          authorityKey: "deleteUser",
+        },
       ],
       // 根据权限列表生成的控制字段
       controlAuthority: {},
@@ -250,7 +232,7 @@ export default {
         newUserShow: false,
         checkMoreShow: false,
         editShow: false,
-        deleteUserShow: false
+        deleteUserShow: false,
       },
       // 用户表单的配置数据
       addUserFormData: {},
@@ -266,14 +248,14 @@ export default {
         keyword: "",
         // 当前指定页数
         pageNumber: "1",
-        userStatus:""
+        userStatus: "",
       },
       // 控制分配角色的对话框显示
-      changeRoleDialogVisible:false,
+      changeRoleDialogVisible: false,
       // 控制新增用户的对话框是否出现
       addUserDialogVisible: false,
       checkUserDialogVisible: false,
-      editUserDialogVisible: false
+      editUserDialogVisible: false,
     };
   },
   created() {
@@ -284,7 +266,7 @@ export default {
      * @description 初始化分页获取用户数据
      */
     initData() {
-      getByPage(this.requestData).then(res => {
+      getByPage(this.requestData).then((res) => {
         this.getUserData = res.extend.pageData;
       });
       this.addUserFormData = addUserFormJson;
@@ -295,7 +277,7 @@ export default {
       // 根据权限列表数据控制按钮,先把数组转化为对象
       for (var i in this.authorityList) {
         this.controlAuthority[this.authorityList[i].authorityKey] = {
-          authorityName: this.authorityList[i].authorityName
+          authorityName: this.authorityList[i].authorityName,
         };
       }
     },
@@ -323,7 +305,9 @@ export default {
      * @description 下载用户模板
      */
     downloadTemplate() {
-      window.location.href = "/EOAS/dataHandle/downloadUserTemplate";
+      downloadUserTemplate().then(res=>{
+
+      })
     },
     /**
      * @description 上传文件成功
@@ -342,22 +326,22 @@ export default {
       }
       this.$message({
         message: messageString,
-        type: typeString
+        type: typeString,
       });
       this.$router.push({
-        path: "/"
+        path: "/",
       });
     },
     uploadError() {
       this.$message({
         message: "导入用户信息失败，请重新导入",
-        type: "error"
+        type: "error",
       });
     },
     /**
      * 点击分配角色按钮，弹出对话框
      */
-    changeUserRole(row){
+    changeUserRole(row) {
       this.changeRoleDialogVisible = true;
       this.currentClickUserId = row.userId;
     },
@@ -372,18 +356,18 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
-        center: true
+        center: true,
       })
         .then(() => {
           // 请求修改用户状态接口
           var jsonData = {};
           jsonData.userStatus = $event;
           jsonData.userId = userId;
-          updateUserStatus(jsonData).then(res => {
+          updateUserStatus(jsonData).then((res) => {
             // 弹出成功提示
             this.$message({
               message: "修改用户状态成功",
-              type: "success"
+              type: "success",
             });
             // 刷新数据
             this.initData();
@@ -391,7 +375,8 @@ export default {
         })
         .catch(() => {
           // 恢复状态为未修改之前的
-          this.getUserData.records[index].userStatus = $event == "1" ? "0" : "1";
+          this.getUserData.records[index].userStatus =
+            $event == "1" ? "0" : "1";
         });
     },
     /**
@@ -424,16 +409,16 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
-        center: true
+        center: true,
       }).then(() => {
         // 请求删除用户接口
         var jsonData = {};
         jsonData.userId = userId;
-        deleteById(jsonData).then(res => {
+        deleteById(jsonData).then((res) => {
           // 弹出成功提示
           this.$message({
             message: "删除成功",
-            type: "success"
+            type: "success",
           });
           // 刷新数据
           this.initData();
@@ -449,10 +434,10 @@ export default {
       for (var key in arg[0]) {
         jsonData[key] = arg[0][key];
       }
-      edit(jsonData).then(res => {
+      edit(jsonData).then((res) => {
         this.$message({
           type: "success",
-          message: "新增用户成功"
+          message: "新增用户成功",
         });
         // 刷新数据
         this.initData();
@@ -469,20 +454,20 @@ export default {
         jsonData[key] = arg[0][key];
       }
       jsonData.userId = this.$refs.editUserFrom.getParams("userId");
-      edit(jsonData).then(res => {
+      edit(jsonData).then((res) => {
         this.$message({
           type: "success",
-          message: "修改用户信息成功"
+          message: "修改用户信息成功",
         });
         // 刷新数据
         this.initData();
         this.editUserDialogVisible = false;
       });
     },
-    closeChangeRoleDialog(arg){
+    closeChangeRoleDialog(arg) {
       this.changeRoleDialogVisible = false;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -496,7 +481,7 @@ export default {
   display: inline-block;
   margin: 0 1em;
 }
-.firstRow{
+.firstRow {
   margin-bottom: 1em;
 }
 </style>

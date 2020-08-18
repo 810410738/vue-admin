@@ -98,6 +98,13 @@ axios.interceptors.response.use(
       axios.get(url,{
         params:params
       }).then(res=>{
+        // 下载文件
+        var url = window.URL.createObjectURL(res.data);
+        var link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = url;
+        document.body.appendChild(link);
+        link.click();
         resolve(res.data);
       }).catch(err =>{
         reject(err.data);
@@ -110,7 +117,14 @@ axios.interceptors.response.use(
       params[key] = requestParams[key];
     }
     return new Promise((resolve, reject) =>{
-      axios.post(url, JSON.stringify(params))
+      var postParams;
+      if(Object.prototype.toString.call(params) === '[object FormData]'){
+        postParams = params;
+      }
+      else if(Object.prototype.toString.call(params) === '[object Object]'){
+        postParams = JSON.stringify(params);
+      }
+      axios.post(url, postParams)
       .then(response => {
         resolve(response.data);
       })

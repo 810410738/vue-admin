@@ -12,6 +12,7 @@ export const bindUserRole = data => post(userUrlRoot + 'bindUserRole', data);
 
 
 // 下载用户信息模板
+// export const downloadUserTemplate = data => get(dataHandleUrlRoot + 'downloadUserTemplate', data);
 export const downloadUserTemplate = data => get(dataHandleUrlRoot + 'downloadUserTemplate', data);
 // 导入用户信息
 export const importUser = data => post(dataHandleUrlRoot + 'importUser', data);

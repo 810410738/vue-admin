@@ -8,13 +8,13 @@
           <!-- 所有子系统 -->
           <selfFindSystemComponent :isDefaultShowAll="false" ref="findSystem" @changeSystemId="find(arguments)"></selfFindSystemComponent>
         </el-col>
-        <el-col :span="6">
-          <el-button type="success" size="small" @click="save">保存修改</el-button>
+        <el-col :span="3">
+          <el-button type="success" @click="newRootNode" size="small">新增根节点</el-button>
         </el-col>
       </el-row>
     </el-card>
     <el-card class="primaryCard">
-      <!-- 用户表格数据 -->
+      <!-- 表格数据 -->
       <el-table
         :data="getAuthorityData"
         style="width: 100%"
@@ -39,18 +39,6 @@
             <el-button type="success" plain size="mini" @click="edit(scope.row)">编辑</el-button>
             <el-popover placement="left-start" trigger="hover" class="moreButton">
               <div>
-                <el-button
-                  size="mini"
-                  type="text"
-                  icon="el-icon-top"
-                  @click="moveNode(scope,'up')"
-                >上移</el-button>
-                <el-button
-                  size="mini"
-                  type="text"
-                  icon="el-icon-bottom"
-                  @click="moveNode(scope,'down')"
-                >下移</el-button>
                 <el-button
                   size="mini"
                   type="text"
@@ -108,7 +96,6 @@ import {
   updateOrderNum,
   editAuthority
 } from "@/api/systemAdmin/getAuthorityData";
-import { isFirstChild, isLastChild, exchange } from "@/util/HandleTreeData";
 import selfFindSystemComponent from "@/components/SystemAdmin/selfFindSystemComponent";
 import selfGenerateForm from "@/components/SystemAdmin/Form/selfGenerateForm";
 export default {
@@ -132,8 +119,6 @@ export default {
       requestData: {
         systemId: ""
       },
-      // 标志已经移动过节点元素
-      isMoved: false,
       // 新增和编辑权限的表单配置数据
       addFormData: {},
       editFormData: {}
@@ -165,6 +150,7 @@ export default {
     },
     /**
      * @description 新增权限点击提交回调的方法
+     * 新增节点需要获取当前节点的父节点，不需要传authorityId
      * @param arg[0] 包含表单所有元素的值的对象
      */
     addSubmit(arg) {
@@ -181,10 +167,11 @@ export default {
         });
         this.initData();
         this.addDialogVisible = false;
-      });
+      })
     },
     /**
      * @description 编辑权限点击提交回调的方法
+     * 修改节点信息不需要父节点id，需要传authorityId
      * @param arg[0] 包含表单所有元素的值的对象
      */
     editSubmit(arg) {
@@ -203,49 +190,14 @@ export default {
         this.editDialogVisible = false;
       });
     },
-    /**
-     * @description 移动表单元素
-     * @parma scope 行节点对象
-     * @parma type 移动类型（up:上移，down：下移）
-     */
-    moveNode(scope, type) {
-      var currentNode = scope.row;
-      var index = scope.$index;
-      switch (type) {
-        // 上移
-        case "up":
-          if (isFirstChild(this.getAuthorityData, currentNode, index)) {
-            this.$message({
-              message: "该节点已经是当前层级第一个节点，无法继续上移",
-              type: "error"
-            });
-            return;
-          }
-          exchange(this.getAuthorityData, currentNode, type);
-          // 操作成功过的标志
-          this.isMoved = true;
-          break;
-        case "down":
-          if (isLastChild(this.getAuthorityData, currentNode, index)) {
-            this.$message({
-              message: "该节点已经是当前层级最后一个节点，无法继续下移",
-              type: "error"
-            });
-            return;
-          }
-          exchange(this.getAuthorityData, currentNode, type);
-          // 操作成功过的标志
-          this.isMoved = true;
-          break;
-      }
-    },
+    
     /**
      @description 根据当前行是否为父节点，标志不同的颜色
      @param row 当前行的对象
      @param rowIndex 当前行的索引
      */
     tableRowClassName({ row, rowIndex }) {
-      if (row.children) {
+      if (row.children.length != 0) {
         return "table-green-row";
       }
     },
@@ -287,7 +239,7 @@ export default {
       });
     },
     /**
-     * @description 点击编辑按钮，打开对话框，设置parentId和systemIdentify
+     * @description 点击编辑按钮，打开对话框，设置parentId和systemId
      */
     edit(row) {
       this.editDialogVisible = true;
@@ -298,38 +250,31 @@ export default {
       });
     },
     /**
-     * @description 点击新增按钮，打开对话框，设置parentId和systemIdentify
+     * @description 点击新增按钮，打开对话框，设置systemId和parentId
+     * @param row 
      */
     newNode(row) {
+      if(row.authorityType != "ROOT" && row.authorityType != "MENU"){
+        this.$message.warning("当前节点无法继续新增下一级节点");
+        return ;
+      }
       this.addDialogVisible = true;
       this.$nextTick(() => {
-        this.$refs.editForm.setParams("parentId", row.parentId);
+        this.$refs.addForm.setParams("parentId", row.authorityId);
         this.$refs.addForm.setParams("systemId", row.systemId);
       });
     },
-    /**
-     * @description 保存修改
+     /**
+     * @description 点击新增根节点的按钮，打开对话框，设置systemId和parentId
+     * @param row 
      */
-    save() {
-      if (!this.isMoved) {
-        this.$message({
-          type: "warning",
-          message: "当前没有改动，无需保存修改"
-        });
-        return;
-      }
-      // 向服务器发送保存请求
-      var jsonData = {};
-      jsonData.authorityTree = this.getAuthorityData;
-      updateOrderNum(jsonData).then(res => {
-        this.$message({
-          type: "success",
-          message: "保存修改成功"
-        });
-        this.isMoved = false;
-        this.initData();
+    newRootNode() {
+      this.addDialogVisible = true;
+      this.$nextTick(() => {
+        this.$refs.addForm.setParams("parentId", "0");
+        this.$refs.addForm.setParams("systemId", this.$refs.findSystem.getSystemIdentify());
       });
-    }
+    },
   }
 };
 </script>

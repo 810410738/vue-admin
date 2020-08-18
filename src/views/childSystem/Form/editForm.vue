@@ -180,7 +180,7 @@
                       :value-format="item.format"
                     ></el-date-picker>
                     <!-- 静态文本 -->
-                    <el-tag type="info" v-else-if="item.type == 'text'">显示{{item.name}}的值</el-tag>
+                    <el-tag :type="item.tagType" v-else-if="item.type == 'text'">显示{{item.name}}的值</el-tag>
                     <span v-if="item.type != 'staticText'" class="itemName">{{item.name}}</span>
                   </el-form-item>
                 </div>

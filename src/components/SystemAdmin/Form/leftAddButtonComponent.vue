@@ -94,6 +94,7 @@ export default {
         // 动态文本
         case "text":
           this.jsonData.label = "普通文本";
+          this.jsonData.tagType = "info";
           break;
         // 单行输入框
         case "input":
