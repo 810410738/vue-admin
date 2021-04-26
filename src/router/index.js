@@ -36,6 +36,7 @@ import logAdmin from '@/views/SystemAdmin/Log/logAdmin.vue'
 import pageNotFound from '@/errorPage/404';
 // 测试
 import test from '@/views/Test/test.vue'
+import websocket from '@/views/Test/websocket.vue'
 
 
 Vue.use(VueRouter)
@@ -105,6 +106,10 @@ const routes = [{
   {
     path: '/test',
     component: test
+  },
+  {
+    path: '/websocket',
+    component: websocket
   },
   {
     path: '*',

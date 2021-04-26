@@ -5,6 +5,15 @@ function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
+// cdn预加载的模块
+const externals = {
+	'vue': 'Vue',
+	'vue-router': 'VueRouter',
+	'axios': 'axios',
+	'vuex': "Vuex",
+  'element-ui': 'ELEMENT',
+}
+
 module.exports = {
   // 关闭eslint规范
   lintOnSave:false,
@@ -13,11 +22,16 @@ module.exports = {
     config.resolve.alias
       .set('@', resolve('src')) // key,value自行定义，比如.set('@@', resolve('src/components'))
       .set('assets', resolve('src/assets'))
+
+    config.when(process.env.NODE_ENV === 'production', config=>{
+      config.set('externals', externals)
+    })
   },
 
   configureWebpack: {
     devtool: 'source-map'
   },
+  productionSourceMap:false,
 
   publicPath: '/mip/admin',
 

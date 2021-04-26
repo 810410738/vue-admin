@@ -2,12 +2,15 @@ import '@babel/polyfill'
 import Vue from 'vue';
 import App from './App.vue';
 import './plugins/element.js';
-import router from './router/';
+import router from './router/index.js';
 // 引用公共样式
 import './assets/css/public.css';
 // echarts插件
-import echarts from 'echarts';
-Vue.prototype.$echarts = echarts;
+// import echarts from 'echarts';
+// Vue.prototype.$echarts = echarts;
+
+// 引入anti ui
+// import './plugins/antDesign.js';
 
 import store from './store/store' //引入状态管理 store
 // 引入FormMaking
@@ -23,7 +26,7 @@ if (process.env.NODE_ENV === "development") {
 }
 // 生产环境 
 else {
-
+  require('@/api/mock/mock.js');
 }
 Vue.config.productionTip = false
 
