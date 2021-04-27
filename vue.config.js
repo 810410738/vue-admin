@@ -20,7 +20,7 @@ module.exports = {
   },
 
   publicPath: '/mip/admin',
-
+  
   // devServer:{
   //   open:true,
   //   host:"localhost",

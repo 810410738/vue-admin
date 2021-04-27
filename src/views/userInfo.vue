@@ -51,6 +51,9 @@ export default {
   created() {
     this.initData();
   },
+  mounted () {
+     
+  },
   methods: {
     /**
      * @description
