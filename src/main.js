@@ -13,10 +13,7 @@ import './assets/css/public.css';
 // import './plugins/antDesign.js';
 
 import store from './store/store' //引入状态管理 store
-// 引入FormMaking
-// import FormMaking from 'form-making'
-// import 'form-making/dist/FormMaking.css'
-// Vue.use(FormMaking)
+
 
 
 // 开发环境

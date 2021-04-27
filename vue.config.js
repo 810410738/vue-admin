@@ -23,7 +23,7 @@ module.exports = {
       .set('@', resolve('src')) // key,value自行定义，比如.set('@@', resolve('src/components'))
       .set('assets', resolve('src/assets'))
 
-    config.when(process.env.NODE_ENV === 'production', config=>{
+    config.when(config=>{
       config.set('externals', externals)
     })
   },
