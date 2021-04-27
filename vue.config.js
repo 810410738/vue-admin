@@ -34,7 +34,7 @@ module.exports = {
   productionSourceMap:false,
 
   publicPath: '/mip/admin',
-
+  
   // devServer:{
   //   open:true,
   //   host:"localhost",
