@@ -3,7 +3,7 @@
     <!-- <div class="outer">
       <div class="inner"></div>
     </div>-->
-  <div> 
+    <!-- <div> 
      <div class="flexDiv">
       <div></div>
       <div></div>
@@ -14,13 +14,16 @@
      <div class="circle">
        
      </div>
-   </div>
+   </div> -->
   </div>
 </template>
 
 <script>
 import iconBase from "@/components/icons/iconBase";
 import iconImage from "@/components/icons/iconImage";
+
+import { buildRandomArray, sortInsert, sortShell,sortSelect,sortBubble } from "@/util/Sort.js";
+
 export default {
   created() {
     // this.init();
@@ -52,7 +55,47 @@ export default {
       console.log(this.Baby.name);
       console.log(typeof this.Baby.name);
     },
-    test() {},
+    test() {
+      var n = 10000;
+      console.log("数组长度为：" + n);
+      //实验次数
+      var times = 10;
+      for (var i = 0; i < times; i++) {
+        var data = buildRandomArray(n);
+        // var data = [2,6,1,5,10,4];
+
+        //冒泡排序
+        // console.log("before 冒泡排序",data);
+        console.time("冒泡排序");
+        sortBubble(data.concat());
+        console.timeEnd("冒泡排序");
+        // console.log("before 冒泡排序",data);
+        
+        // 选择排序
+        // console.log("before 选择排序",data);
+        console.time("选择排序");
+        sortSelect(data.concat());
+        console.timeEnd("选择排序");
+        // console.log("before 选择排序",data);
+
+
+        //直接插入排序
+        // console.log("before 直接插入",data);
+        console.time("直接插入排序");
+        sortInsert(data.concat());
+        console.timeEnd("直接插入排序");
+        // console.log("after 直接插入",data);
+
+        //希尔排序
+        // console.log("before 希尔排序",data);
+        console.time("希尔排序");
+        sortShell(data.concat());
+        console.timeEnd("希尔排序");
+        // console.log("after 希尔排序",data);
+
+        console.log("------------");
+      }
+    },
   },
 };
 </script>
@@ -74,18 +117,18 @@ div.outer {
   }
 }
 
-div.flexDiv{
-  display:flex;
+div.flexDiv {
+  display: flex;
   display: -webkit-flex;
   display: -ms-flex;
   width: 300px;
   height: 100px;
-  div{
-    flex:1;
+  div {
+    flex: 1;
     border: 1px solid black;
   }
 }
-div.circle{
+div.circle {
   background-color: #d6d6ff;
   border-radius: 50%;
   width: 50px;

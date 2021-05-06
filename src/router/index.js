@@ -20,7 +20,7 @@ const userList = () => import(/* webpackChunkName:"other-group" */ '@/views/chil
 // 权限管理
 // import authorityAdmin from '@/views/childSystem/Authority/authorityAdmin.vue'
 const authorityAdmin = () => import(/* webpackChunkName:"other-group" */ '@/views/childSystem/Authority/authorityAdmin.vue')
-// 角色管理
+// 
 // import roleAuthorityAdmin from '@/views/childSystem/Role/roleAuthorityAdmin.vue'
 const roleAuthorityAdmin = () => import(/* webpackChunkName:"other-group" */ '@/views/childSystem/Role/roleAuthorityAdmin.vue')
 // 设计表单模块
