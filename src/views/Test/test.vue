@@ -22,7 +22,7 @@
 import iconBase from "@/components/icons/iconBase";
 import iconImage from "@/components/icons/iconImage";
 
-import { buildRandomArray, sortInsert, sortShell,sortSelect,sortBubble } from "@/util/Sort.js";
+import { buildRandomArray, sortInsert, sortShell,sortSelect,sortBubble,sortQuick,sortMerge } from "@/util/Sort.js";
 
 export default {
   created() {
@@ -56,34 +56,33 @@ export default {
       console.log(typeof this.Baby.name);
     },
     test() {
-      var n = 10000;
+      var n = 50000;
       console.log("数组长度为：" + n);
       //实验次数
-      var times = 10;
+      var times = 5;
       for (var i = 0; i < times; i++) {
         var data = buildRandomArray(n);
         // var data = [2,6,1,5,10,4];
-
         //冒泡排序
         // console.log("before 冒泡排序",data);
-        console.time("冒泡排序");
-        sortBubble(data.concat());
-        console.timeEnd("冒泡排序");
+        // console.time("冒泡排序");
+        // sortBubble(data.concat());
+        // console.timeEnd("冒泡排序");
         // console.log("before 冒泡排序",data);
         
         // 选择排序
         // console.log("before 选择排序",data);
-        console.time("选择排序");
-        sortSelect(data.concat());
-        console.timeEnd("选择排序");
+        // console.time("选择排序");
+        // sortSelect(data.concat());
+        // console.timeEnd("选择排序");
         // console.log("before 选择排序",data);
 
 
         //直接插入排序
         // console.log("before 直接插入",data);
-        console.time("直接插入排序");
-        sortInsert(data.concat());
-        console.timeEnd("直接插入排序");
+        // console.time("直接插入排序");
+        // sortInsert(data.concat());
+        // console.timeEnd("直接插入排序");
         // console.log("after 直接插入",data);
 
         //希尔排序
@@ -92,6 +91,30 @@ export default {
         sortShell(data.concat());
         console.timeEnd("希尔排序");
         // console.log("after 希尔排序",data);
+
+
+        //快速排序
+        // console.log("before 快速排序",data);
+        console.time("快速排序");
+        sortQuick(data.concat());
+        console.timeEnd("快速排序");
+        // console.log("after 快速排序",data);
+
+         //随机选择枢纽数快速排序
+        // console.log("before 快速排序",data);
+        console.time("随机选择枢纽数快速排序");
+        sortQuick(data.concat(),'asc',1);
+        console.timeEnd("随机选择枢纽数快速排序");
+        // console.log("after 快速排序",data);
+
+         //归并排序
+        // console.log("before 归并排序",data);
+        console.time("归并排序");
+        sortMerge(data.concat());
+        console.timeEnd("归并排序");
+        // console.log("after 归并排序",data);
+        
+        
 
         console.log("------------");
       }
