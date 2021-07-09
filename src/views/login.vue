@@ -4,7 +4,7 @@
   -->
   <div class="body">
     <div class="main">
-      <h3 class="title">深圳建行行内系统后台管理入口</h3>
+      <h3 class="title">后台管理入口</h3>
       <div class="tips">请使用管理账号登录</div>
       <div class="form-group">
         <el-input

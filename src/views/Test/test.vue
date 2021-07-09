@@ -1,144 +1,132 @@
 <template>
   <div>
-    <div class="wrap">
-      <a href="#" class="btn-11">test</a>
-    </div>
+      <iPage
+      class="page-box"
+      ></iPage>
   </div>
 </template>
 
-<script>
-import iconBase from "@/components/icons/iconBase"
-import iconImage from "@/components/icons/iconImage"
-export default {
+<script lang="ts">
+import Vue from 'vue'
+import iView from 'iview'
+import 'iview/dist/styles/iview.css'
+Vue.use(iView)
+import iPage from '@/components/iPage/page.vue'
+import Book from './test'
+export default Vue.extend({
   created() {
     this.init();
   },
   components: {
-    iconBase,
-    iconImage
+    iPage
   },
   data() {
     return {
-     
+      test:'abc',
+      columns: [
+        {
+          dataIndex: "name",
+          key: "name",
+          slots: { title: "customTitle" },
+        },
+        {
+          dataIndex: "age",
+          key: "age",
+          slots: { title: "customTitle" },
+        },
+        {
+          dataIndex: "address",
+          key: "address",
+          slots: { title: "customTitle" },
+        },
+         {
+          dataIndex: "tags",
+          key: "tags",
+          slots: { title: "customTitle" },
+        },
+      ],
+      data: [
+        {
+          key: "1",
+          name: "John Brown",
+          age: 32,
+          address: "New York No. 1 Lake Park",
+          tags: ["nice", "developer"],
+        },
+        {
+          key: "2",
+          name: "Jim Green",
+          age: 42,
+          address: "London No. 1 Lake Park",
+          tags: ["loser"],
+        },
+        {
+          key: "3",
+          name: "Joe Black",
+          age: 32,
+          address: "Sidney No. 1 Lake Park",
+          tags: ["cool", "teacher"],
+        },
+      ],
     };
   },
   methods: {
-    init() {
-     
+    async init() {
+      let book = new Book()
+      await book.getBookData()
+    },
+    executeCustomCell(record,index){
+      return {
+        on: {
+          dblclick: () => {
+            console.log(JSON.stringify(record) + "---" + index)
+            this.copyText(record.name)
+            this.$message.success('复制成功')
+          },
+        }
       }
-    
-  }
-}; 
+    },
+    copyText (content) {
+      var oInput = document.createElement('textarea')
+      oInput.value = content
+      document.body.appendChild(oInput)
+      oInput.select()
+      document.execCommand('Copy')
+      oInput.className = 'oInput'
+      oInput.style.display = 'none'
+    },
+    testFun(x){
+      x = {
+        b:2
+      }
+      x.b = 2
+    }
+  },
+});
 </script>
 <style lang="scss" scoped>
-
-$btn-width: 250px !default;
-$btn-height: 80px !default;
-$btn-full: $btn-height+$btn-width !default;
-$btn-half: $btn-full/2 !default;
-$bg-color: #eeeeee !default;
-$btn-color:#65016b;
-
-*:before,
-*:after {
-  z-index: -1;
+.content{
+  background: gray;
+  height: 500px;
 }
-
-
-a {
-  text-decoration: none;
-  line-height: $btn-height;
-  color: black;
-}
-
-
-@media (min-width: 600px) {
-  .wrap {
-    width: 50%;
-    float: left;
-  }
-}
-
-[class^="btn-"] {
-  position: relative;
-  display: block;
-  overflow: hidden;
-  // @include size(100%, $btn-height);
-  max-width: $btn-width;
-  margin: 1rem auto;
-  text-transform: uppercase;
-  border: 1px solid currentColor;
-}
-
-@keyframes criss-cross-left {
-  0% {
-    left: -20px;
-  }
-  50% {
-    left: 50%;
-    // @include size(20px);
-  }
-  100% {
-    left: 50%;
-    // @include size($btn-width*1.5);
-  }
-}
-
-@keyframes criss-cross-right {
-  0% {
-    right: -20px;
-  }
-  50% {
-    right: 50%;
-    // @include size(20px);
-  }
-  100% {
-    right: 50%;
-    // @include size($btn-width*1.5);
-  }
-}
-
-.btn-11 {
-  position: relative;
-  color: #7c2781;
-  &:before,
-  &:after {
-    // @include absolute(50%);
-    content: '';
-    // @include size(20px);
-    background-color: $btn-color;
-    border-radius: 50%;
-  }
-  
-  &:before {
-    left: -20px;
-    transform: translate(-50%, -50%);
-    // animation: criss-cross-left 0.8s reverse;
-  }
-  
-  &:after {
-    right: -20px;
-    transform: translate(50%, -50%);
-    // animation: criss-cross-right 0.8s reverse;
-  }
-  
-  &:hover {
-    color: tint($btn-color, 75%);
-
-    &:before,
-    &:after {
-      // @include size($btn-width);
-    }
-    
-    &:before {
-      animation: criss-cross-left 0.8s both;
-      animation-direction: alternate;
-    }
-    
-    &:after {
-      animation: criss-cross-right 0.8s both;
-      animation-direction: alternate;
-    }
-  }
-}
+.page-box{
+          margin: 18px auto;
+          text-align: center;
+          padding-bottom: 18px;
+          /deep/ {
+            .ivu-page-item a{
+              margin: 0px;
+            }
+            .ivu-page-item{
+              &.ivu-page-item-active{
+                a {
+                  background-color: #FF6B2D;
+                }
+              }
+              a{
+                margin: 0px;
+              }
+            }
+          }
+        }
 </style>

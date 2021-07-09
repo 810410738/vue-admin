@@ -2,9 +2,12 @@ import '@babel/polyfill'
 import Vue from 'vue';
 import App from './App.vue';
 import './plugins/element.js';
-import router from './router/';
+import router from './router';
 // 引用公共样式
 import './assets/css/public.css';
+import Ant from 'ant-design-vue/dist/antd'
+import 'ant-design-vue/dist/antd.css'
+Vue.use(Ant)
 // echarts插件
 import echarts from 'echarts';
 Vue.prototype.$echarts = echarts;
