@@ -14,7 +14,7 @@
     "core-js": "^3.4.3",
     "echarts": "^4.6.0",
     "element-ui": "^2.4.5",
-    "gsap": "^3.2.6",
+    "gsap": "^3.6.0",
     "iview": "^3.5.4",
     "less-loader": "^5.0.0",
     "mockjs": "^1.1.0",
